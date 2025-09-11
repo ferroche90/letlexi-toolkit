@@ -91,7 +91,6 @@ Absolutely! The plugin includes full ARIA support, keyboard navigation, focus ma
 * Font scaling controls with localStorage persistence
 * Full accessibility support (ARIA, keyboard navigation)
 * Server-side rendering for first section
-* Backward compatibility layer for existing implementations
 * Security hardening with input validation and output escaping
 * Internationalization support with POT file generation
 

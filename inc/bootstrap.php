@@ -43,7 +43,6 @@ function include_helper_files() {
 		'inc/helpers/acf.php',
 		'inc/helpers/render.php',
 		'inc/helpers/security.php',
-		'inc/helpers/compat.php',
 		'inc/assets/enqueue.php',
 		'inc/rest/sections-route.php',
 		'inc/elementor/register.php',
