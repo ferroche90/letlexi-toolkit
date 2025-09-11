@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: LetLexi Toolkit
- * Plugin URI: https://your-website.com/letlexi-toolkit
+ * Plugin URI: https://letlexi.com/
  * Description: Custom Elementor widgets, REST endpoints, and helpers for LetLexi legal resources.
  * Version: 1.0.0
- * Author: Your Name
- * Author URI: https://your-website.com
+ * Author: LetLexi
+ * Author URI: https://letlexi.com/
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: letlexi
