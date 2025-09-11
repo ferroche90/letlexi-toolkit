@@ -58,6 +58,14 @@ msgstr ""
 msgid "Reset Font Size"
 msgstr ""
 
+#: inc/assets/enqueue.php:62
+msgid "Print dialog opened"
+msgstr ""
+
+#: inc/assets/enqueue.php:63
+msgid "Citation copied!"
+msgstr ""
+
 #: inc/elementor/register.php:27
 msgid "LetLexi"
 msgstr ""
@@ -472,4 +480,287 @@ msgstr ""
 
 #: inc/shortcode/section-navigator.php:77
 msgid "No sections found for this document."
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:425
+msgid "Colors"
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:431
+msgid "Primary Color"
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:445
+msgid "Secondary Color"
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:459
+msgid "Text Color"
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:471
+msgid "Link Color"
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:483
+msgid "Link Hover Color"
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:499
+msgid "Backgrounds"
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:505
+msgid "TOC Background"
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:517
+msgid "Content Background"
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:529
+msgid "Section Background"
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:545
+msgid "Typography"
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:555
+msgid "Section Headings"
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:564
+msgid "Body Text"
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:573
+msgid "TOC Links"
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:582
+msgid "Buttons"
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:593
+msgid "Spacing"
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:600
+msgid "Section Margin"
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:617
+msgid "TOC Padding"
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:635
+msgid "Content Padding"
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:653
+msgid "Gap Between Panes"
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:687
+msgid "Borders & Shadows"
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:696
+msgid "TOC Border"
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:704
+msgid "Section Border"
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:712
+msgid "TOC Shadow"
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:720
+msgid "Section Shadow"
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:733
+msgid "Navigation"
+msgstr ""
+
+# Header & Document Info
+msgid "Header & Document Info"
+msgstr ""
+
+msgid "Header Background"
+msgstr ""
+
+msgid "Document Label Typography"
+msgstr ""
+
+msgid "Query Label Typography"
+msgstr ""
+
+msgid "Header Padding"
+msgstr ""
+
+# Section Headers
+msgid "Section Headers"
+msgstr ""
+
+msgid "Section Header Background"
+msgstr ""
+
+msgid "Section Header Border Color"
+msgstr ""
+
+msgid "Section Header Padding"
+msgstr ""
+
+msgid "Section Header Margin"
+msgstr ""
+
+# Status Badges
+msgid "Status Badges"
+msgstr ""
+
+msgid "Badge Typography"
+msgstr ""
+
+msgid "Badge Padding"
+msgstr ""
+
+msgid "Badge Border Radius"
+msgstr ""
+
+msgid "Active Badge Color"
+msgstr ""
+
+msgid "Active Badge Background"
+msgstr ""
+
+msgid "Repealed Badge Color"
+msgstr ""
+
+msgid "Repealed Badge Background"
+msgstr ""
+
+msgid "Superseded Badge Color"
+msgstr ""
+
+msgid "Superseded Badge Background"
+msgstr ""
+
+msgid "Pending Badge Color"
+msgstr ""
+
+msgid "Pending Badge Background"
+msgstr ""
+
+# Commentary
+msgid "Commentary"
+msgstr ""
+
+msgid "Commentary Background"
+msgstr ""
+
+msgid "Commentary Border Color"
+msgstr ""
+
+msgid "Commentary Padding"
+msgstr ""
+
+msgid "Commentary Border Radius"
+msgstr ""
+
+# Font Controls
+msgid "Font Controls"
+msgstr ""
+
+msgid "Font Control Background"
+msgstr ""
+
+msgid "Font Control Hover Background"
+msgstr ""
+
+msgid "Font Control Padding"
+msgstr ""
+
+msgid "Font Control Border Radius"
+msgstr ""
+
+# Jump Selector
+msgid "Jump Selector"
+msgstr ""
+
+msgid "Select Background"
+msgstr ""
+
+msgid "Select Border Color"
+msgstr ""
+
+msgid "Select Padding"
+msgstr ""
+
+msgid "Select Border Radius"
+msgstr ""
+
+# Loading & Error States
+msgid "Loading & Error States"
+msgstr ""
+
+msgid "Loading Text Color"
+msgstr ""
+
+msgid "Error Text Color"
+msgstr ""
+
+msgid "State Message Padding"
+msgstr ""
+
+# Editor Preview
+msgid "Sample Constitution Article"
+msgstr ""
+
+msgid "Section 1. Sample Section"
+msgstr ""
+
+msgid "Section 2. Another Section"
+msgstr ""
+
+msgid "Section 3. Final Section"
+msgstr ""
+
+msgid "This is a sample section content that demonstrates how the section navigator will look in the Elementor editor. The actual content will be loaded from your constitution article when viewed on the frontend."
+msgstr ""
+
+msgid "Show Commentary"
+msgstr ""
+
+msgid "This is sample commentary content that would appear when the commentary toggle is activated."
+msgstr ""
+
+msgid "Section 1"
+msgstr ""
+
+msgid "Section 2"
+msgstr ""
+
+msgid "Section 3"
+msgstr ""
+
+msgid "Editor Preview:"
+msgstr ""
+
+msgid "This is how the section navigator will appear. The actual content will be loaded from your constitution article on the frontend."
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:741
+msgid "Button Padding"
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:760
+msgid "Button Border Radius"
+msgstr ""
+
+#: inc/elementor/widgets/class-lexi-elementor-section-navigator.php:785
+msgid "Button Hover Color"
 msgstr ""

@@ -32,6 +32,9 @@
     var fontResetBtn = document.querySelector('.lexi-font__reset');
     var tocToggle = document.querySelector('.lexi-toc__toggle');
     var tocList = document.querySelector('.lexi-toc__list');
+    var toc = document.querySelector('.lexi-toc');
+    var printBtn = document.querySelector('.lexi-print-btn');
+    var copyCitationBtn = document.querySelector('.lexi-copy-citation-btn');
     
     // Initialize on DOM ready
     function init() {
@@ -70,7 +73,8 @@
         
         // Check for hash like #sec-5
         var hash = window.location.hash;
-        var hashMatch = hash.match(/#sec-(\d+)/);
+        // Support both #sec-5 and #sec-123-5 by capturing the last number
+        var hashMatch = hash.match(/#sec-(?:\d+-)?(\d+)/);
         if (hashMatch) {
             return Math.max(0, Math.min(parseInt(hashMatch[1], 10), totalSections - 1));
         }
@@ -150,7 +154,25 @@
             tocToggle.addEventListener('click', function() {
                 var isExpanded = this.getAttribute('aria-expanded') === 'true';
                 this.setAttribute('aria-expanded', !isExpanded);
+                // Toggle both patterns to support different CSS expectations
                 docWrapper.classList.toggle('toc-expanded', !isExpanded);
+                if (toc) {
+                    toc.classList.toggle('expanded', !isExpanded);
+                }
+            });
+        }
+
+        // Print button functionality
+        if (printBtn) {
+            printBtn.addEventListener('click', function() {
+                printCurrentSection();
+            });
+        }
+
+        // Copy citation button functionality
+        if (copyCitationBtn) {
+            copyCitationBtn.addEventListener('click', function() {
+                copyCitationToClipboard();
             });
         }
         
@@ -341,12 +363,152 @@
         }
     }
     
+    // Print current section
+    function printCurrentSection() {
+        var currentSection = contentBody.querySelector('.lexi-section[data-section-index="' + currentIndex + '"]');
+        if (!currentSection) {
+            announceToScreenReader(i18n.error || 'Error: Section not found');
+            return;
+        }
+
+        // Create a new window for printing
+        var printWindow = window.open('', '_blank', 'width=800,height=600');
+        if (!printWindow) {
+            announceToScreenReader(i18n.error || 'Error: Could not open print window');
+            return;
+        }
+
+        // Get the document title and current section title
+        var docTitle = document.title;
+        var sectionTitle = currentSection.querySelector('h1, h2, h3, h4, h5, h6');
+        var sectionTitleText = sectionTitle ? sectionTitle.textContent : 'Section ' + (currentIndex + 1);
+
+        // Build print content
+        var printContent = '<!DOCTYPE html><html><head><title>' + 
+            escapeHtml(docTitle + ' - ' + sectionTitleText) + 
+            '</title><style>' +
+            'body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }' +
+            'h1, h2, h3, h4, h5, h6 { color: #333; margin-top: 0; }' +
+            '.lexi-section { margin-bottom: 20px; }' +
+            '.lexi-commentary-section { margin-top: 15px; padding: 10px; background: #f8f9fa; border-left: 3px solid #007cba; }' +
+            '.lexi-commentary-toggle { display: none; }' +
+            '.lexi-commentary-content { display: block !important; }' +
+            '@media print { body { margin: 0; } }' +
+            '</style></head><body>' +
+            '<h1>' + escapeHtml(sectionTitleText) + '</h1>' +
+            currentSection.innerHTML +
+            '</body></html>';
+
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+        
+        // Wait for content to load, then print
+        printWindow.onload = function() {
+            printWindow.focus();
+            printWindow.print();
+            printWindow.close();
+        };
+
+        announceToScreenReader(i18n.printSuccess || 'Print dialog opened');
+    }
+
+    // Copy citation to clipboard
+    function copyCitationToClipboard() {
+        var currentSection = contentBody.querySelector('.lexi-section[data-section-index="' + currentIndex + '"]');
+        if (!currentSection) {
+            announceToScreenReader(i18n.error || 'Error: Section not found');
+            return;
+        }
+
+        // Get section title
+        var sectionTitle = currentSection.querySelector('h1, h2, h3, h4, h5, h6');
+        var sectionTitleText = sectionTitle ? sectionTitle.textContent : 'Section ' + (currentIndex + 1);
+
+        // Get document title and URL
+        var docTitle = document.title;
+        var docUrl = window.location.href;
+
+        // Build citation text
+        var citation = sectionTitleText + '. ' + docTitle + '. Available at: ' + docUrl + ' (Accessed: ' + new Date().toLocaleDateString() + ')';
+
+        // Copy to clipboard
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(citation).then(function() {
+                announceToScreenReader(i18n.citationCopied || 'Citation copied to clipboard');
+                showTemporaryMessage(i18n.citationCopied || 'Citation copied!');
+            }).catch(function(err) {
+                console.error('Failed to copy citation: ', err);
+                fallbackCopyToClipboard(citation);
+            });
+        } else {
+            fallbackCopyToClipboard(citation);
+        }
+    }
+
+    // Fallback copy method for older browsers
+    function fallbackCopyToClipboard(text) {
+        var textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {
+            var successful = document.execCommand('copy');
+            if (successful) {
+                announceToScreenReader(i18n.citationCopied || 'Citation copied to clipboard');
+                showTemporaryMessage(i18n.citationCopied || 'Citation copied!');
+            } else {
+                announceToScreenReader(i18n.error || 'Error: Could not copy citation');
+            }
+        } catch (err) {
+            console.error('Fallback copy failed: ', err);
+            announceToScreenReader(i18n.error || 'Error: Could not copy citation');
+        }
+        
+        document.body.removeChild(textArea);
+    }
+
+    // Show temporary message
+    function showTemporaryMessage(message) {
+        var messageEl = document.createElement('div');
+        messageEl.className = 'lexi-temp-message';
+        messageEl.textContent = message;
+        messageEl.style.cssText = 
+            'position: fixed; top: 20px; right: 20px; background: #28a745; color: white; ' +
+            'padding: 10px 15px; border-radius: 4px; z-index: 10000; font-size: 14px; ' +
+            'box-shadow: 0 2px 10px rgba(0,0,0,0.2); transition: opacity 0.3s ease;';
+        
+        document.body.appendChild(messageEl);
+        
+        // Fade out after 3 seconds
+        setTimeout(function() {
+            messageEl.style.opacity = '0';
+            setTimeout(function() {
+                if (messageEl.parentNode) {
+                    messageEl.parentNode.removeChild(messageEl);
+                }
+            }, 300);
+        }, 3000);
+    }
+
+    // Escape HTML to prevent XSS
+    function escapeHtml(text) {
+        var div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
     // Screen reader announcement
     function announceToScreenReader(message) {
-        var announcer = document.getElementById('lexi-announcer');
+        var announcerId = 'lexi-announcer-' + postId;
+        var announcer = document.getElementById(announcerId);
         if (!announcer) {
             announcer = document.createElement('div');
-            announcer.id = 'lexi-announcer';
+            announcer.id = announcerId;
             announcer.setAttribute('aria-live', 'polite');
             announcer.setAttribute('aria-atomic', 'true');
             announcer.style.position = 'absolute';

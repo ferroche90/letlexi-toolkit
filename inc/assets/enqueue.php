@@ -14,6 +14,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Register assets (styles and scripts) so Elementor can enqueue them by handle
+ *
+ * @since 1.0.0
+ */
+function register_assets() {
+	// Register CSS.
+	wp_register_style(
+		'letlexi-section-nav',
+		LEXI_URL . 'assets/css/lexi-section-nav.css',
+		array(),
+		LEXI_VERSION
+	);
+
+	// Register JS.
+	wp_register_script(
+		'letlexi-section-nav',
+		LEXI_URL . 'assets/js/lexi-section-nav.js',
+		array(),
+		LEXI_VERSION,
+		true // In footer.
+	);
+}
+
+/**
  * Register and enqueue assets for section navigation
  *
  * @since 1.0.0
@@ -59,31 +83,19 @@ function enqueue_assets() {
 			'increaseFontSize'  => __( 'Increase Font Size', 'letlexi' ),
 			'decreaseFontSize'  => __( 'Decrease Font Size', 'letlexi' ),
 			'resetFontSize'     => __( 'Reset Font Size', 'letlexi' ),
+			'printSuccess'      => __( 'Print dialog opened', 'letlexi' ),
+			'citationCopied'    => __( 'Citation copied!', 'letlexi' ),
 		),
 	);
 
-	// Register and enqueue CSS.
-	wp_register_style(
-		'letlexi-section-nav',
-		LEXI_URL . 'assets/css/lexi-section-nav.css',
-		array(),
-		LEXI_VERSION
-	);
+	// Ensure assets are registered before enqueuing (for safety if hook order changes).
+	register_assets();
+
+	// Enqueue CSS.
 	wp_enqueue_style( 'letlexi-section-nav' );
 
-	// Register and enqueue JavaScript.
-	wp_register_script(
-		'letlexi-section-nav',
-		LEXI_URL . 'assets/js/lexi-section-nav.js',
-		array(),
-		LEXI_VERSION,
-		true // In footer.
-	);
-
-	// Localize script.
+	// Localize and enqueue JS.
 	wp_localize_script( 'letlexi-section-nav', 'letlexiSectionNav', $localize_data );
-
-	// Enqueue the script.
 	wp_enqueue_script( 'letlexi-section-nav' );
 
 	/**
@@ -150,6 +162,12 @@ function enqueue_admin_assets( $hook ) {
 	// This is a placeholder for future admin functionality.
 }
 
-// Hook into WordPress.
+// Hook registrations so Elementor editor can find handles.
+add_action( 'init', __NAMESPACE__ . '\register_assets' );
+add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\register_assets', 1 );
+add_action( 'elementor/frontend/after_register_styles', __NAMESPACE__ . '\register_assets' );
+add_action( 'elementor/frontend/after_register_scripts', __NAMESPACE__ . '\register_assets' );
+
+// Hook enqueue on frontend where needed.
 add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\enqueue_assets' );
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\enqueue_admin_assets' );

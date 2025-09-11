@@ -79,7 +79,7 @@ function lexi_render_section_html( $post_id, $index, $args = array() ) {
 	$html = '<div class="' . esc_attr( $classes ) . '" data-section-index="' . esc_attr( $index ) . '"';
 
 	if ( ! empty( $section_number ) ) {
-		$html .= ' id="sec-' . esc_attr( $section_number ) . '"';
+		$html .= ' id="sec-' . esc_attr( $post_id ) . '-' . esc_attr( $section_number ) . '"';
 	}
 
 	$html .= '>';
@@ -108,10 +108,12 @@ function lexi_render_section_html( $post_id, $index, $args = array() ) {
 
 		$html .= '</h2>';
 
-		// Status badge.
+		// Status badge (supports both class systems: lexi-badge--* and lexi-status-*).
 		if ( ! empty( $section_status ) ) {
-			$status_class = 'lexi-badge--' . esc_attr( strtolower( $section_status ) );
-			$html .= '<span class="lexi-badge ' . esc_attr( $status_class ) . '">';
+			$status_slug = strtolower( $section_status );
+			$badge_class = 'lexi-badge--' . $status_slug;
+			$status_class = 'lexi-status-' . $status_slug;
+			$html .= '<span class="lexi-badge ' . esc_attr( $badge_class ) . ' lexi-status-badge ' . esc_attr( $status_class ) . '">';
 			$html .= esc_html( $section_status );
 			$html .= '</span>';
 		}
@@ -129,10 +131,10 @@ function lexi_render_section_html( $post_id, $index, $args = array() ) {
 	// Commentary (collapsible).
 	if ( $args['show_commentary'] && ! empty( $section_commentary ) ) {
 		$html .= '<div class="lexi-commentary-section">';
-		$html .= '<button type="button" class="lexi-commentary-toggle" aria-expanded="false" aria-controls="commentary-' . esc_attr( $index ) . '">';
+		$html .= '<button type="button" class="lexi-commentary-toggle" aria-expanded="false" aria-controls="commentary-' . esc_attr( $post_id ) . '-' . esc_attr( $index ) . '">';
 		$html .= esc_html__( 'Show Commentary', 'letlexi' );
 		$html .= '</button>';
-		$html .= '<div class="lexi-commentary-content" id="commentary-' . esc_attr( $index ) . '" aria-hidden="true">';
+		$html .= '<div class="lexi-commentary-content" id="commentary-' . esc_attr( $post_id ) . '-' . esc_attr( $index ) . '" aria-hidden="true">';
 		$html .= $section_commentary; // Already sanitized with wp_kses_post.
 		$html .= '</div>';
 		$html .= '</div>';
@@ -236,37 +238,40 @@ function lexi_build_shell_html( $post_id, $settings = array() ) {
 	$toc_html = lexi_build_toc_structure( $sections, $resolved_settings );
 	$font_controls_html = lexi_build_font_controls( $resolved_settings );
 	$content_html = lexi_build_content_area( $post_id, $display_args, $resolved_settings );
-	$footer_nav_html = lexi_build_footer_navigation( $resolved_settings, count( $sections ) );
+	$footer_nav_html = lexi_build_footer_navigation( $post_id, $resolved_settings, count( $sections ) );
 
-	// Assemble the complete shell.
+	// Assemble the complete shell with 2-column layout.
 	$html = '<div class="lexi-doc">';
 
-	// Reader Header.
-	$html .= $header_html;
-
-	// Font Controls.
-	$html .= $font_controls_html;
-
-	// TOC Sidebar.
+	// Left Column: TOC.
 	$html .= '<div class="lexi-toc">';
-	$html .= '<button type="button" class="lexi-toc__toggle" aria-expanded="false" aria-controls="lexi-toc-list">';
+	$html .= '<button type="button" class="lexi-toc__toggle" aria-expanded="false" aria-controls="lexi-toc-list-' . esc_attr( $post_id ) . '">';
 	$html .= esc_html( $resolved_settings['toc_heading'] );
 	$html .= '</button>';
-	$html .= '<ul class="lexi-toc__list" id="lexi-toc-list">';
+	$html .= '<ul class="lexi-toc__list" id="lexi-toc-list-' . esc_attr( $post_id ) . '">';
 	$html .= $toc_html;
 	$html .= '</ul>';
 	$html .= '</div>';
 
-	// Main Content Area.
+	// Right Column: Document Info, Controls, and Main Content.
 	$html .= '<div class="lexi-doc__main">';
+	
+	// Document info and controls above content.
+	$html .= $header_html;
+	$html .= $font_controls_html;
+	
+	// Main content area.
 	$html .= '<div class="lexi-doc__body">';
 	$html .= $content_html;
 	$html .= '</div>';
 
+	// ARIA Live Region for announcements.
+	$html .= '<div id="lexi-announcer-' . esc_attr( $post_id ) . '" class="lexi-announcer" aria-live="polite" aria-atomic="true"></div>';
+
 	// Footer Navigation.
 	$html .= $footer_nav_html;
-
 	$html .= '</div>'; // .lexi-doc__main.
+
 	$html .= '</div>'; // .lexi-doc.
 
 	/**
@@ -524,7 +529,7 @@ function lexi_build_toc_structure( $sections, $settings ) {
  * @return string Font controls HTML.
  */
 function lexi_build_font_controls( $settings ) {
-	$html = '<div class="lexi-font-controls">';
+	$html = '<div class="lexi-font-controls lexi-font">';
 	$html .= '<span class="lexi-font-label">' . esc_html__( 'Font Size:', 'letlexi' ) . '</span>';
 
 	$html .= '<button type="button" class="lexi-font__dec" aria-label="' . esc_attr( $settings['font_decrease_label'] ) . '">';
@@ -572,12 +577,13 @@ function lexi_build_content_area( $post_id, $display_args, $settings ) {
  *
  * @since 1.0.0
  *
+ * @param int   $post_id        The post ID for unique element IDs.
  * @param array $settings       Resolved settings.
  * @param int   $total_sections Total number of sections.
  * @return string Footer navigation HTML.
  */
-function lexi_build_footer_navigation( $settings, $total_sections ) {
-	$html = '<div class="lexi-footer-nav">';
+function lexi_build_footer_navigation( $post_id, $settings, $total_sections ) {
+	$html = '<div class="lexi-nav lexi-footer-nav">';
 
 	// Previous button.
 	$html .= '<button type="button" class="lexi-nav__prev" disabled aria-label="' . esc_attr( $settings['previous_label'] ) . '">';
@@ -587,8 +593,8 @@ function lexi_build_footer_navigation( $settings, $total_sections ) {
 
 	// Jump select.
 	$html .= '<div class="lexi-jump">';
-	$html .= '<label for="lexi-jump-select">' . esc_html__( 'Jump to:', 'letlexi' ) . '</label>';
-	$html .= '<select id="lexi-jump-select" class="lexi-jump__select" aria-label="' . esc_attr__( 'Select section to jump to', 'letlexi' ) . '">';
+	$html .= '<label for="lexi-jump-select-' . esc_attr( $post_id ) . '">' . esc_html__( 'Jump to:', 'letlexi' ) . '</label>';
+	$html .= '<select id="lexi-jump-select-' . esc_attr( $post_id ) . '" class="lexi-jump__select" aria-label="' . esc_attr__( 'Select section to jump to', 'letlexi' ) . '">';
 
 	for ( $i = 0; $i < $total_sections; $i++ ) {
 		$html .= '<option value="' . esc_attr( $i ) . '">';

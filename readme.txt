@@ -17,7 +17,7 @@ LetLexi Toolkit provides a comprehensive solution for displaying legal documents
 = Key Features =
 
 * **Section Navigator Widget** - Interactive navigation through document sections
-* **Elementor Integration** - Custom widget with full control panel
+* **Elementor Integration** - Custom widget with full control panel and comprehensive styling options
 * **REST API Endpoints** - Dynamic section loading via AJAX
 * **ACF Integration** - Works with ACF repeater fields for content management
 * **Shortcode Support** - Fallback shortcode for non-Elementor usage
@@ -66,7 +66,31 @@ The plugin expects a repeater field named 'sections' with these subfields:
 
 = Can I customize the styling? =
 
-Yes! All styles are scoped under `.lexi-doc` and use CSS custom properties for easy customization. The plugin includes comprehensive CSS variables for colors, spacing, and typography.
+Yes! The Elementor widget includes comprehensive styling controls in the Style tab, allowing you to customize:
+
+* **Colors**: Primary/secondary colors, text colors, link colors, backgrounds
+* **Typography**: Font families, sizes, weights for headings, body text, TOC links, and buttons
+* **Spacing**: Margins, padding, gaps between elements
+* **Borders & Shadows**: Custom borders and box shadows for TOC and sections
+* **Navigation**: Button styling, padding, border radius, hover effects
+* **Header & Document Info**: Header backgrounds, typography for document/query labels, padding
+* **Section Headers**: Background colors, border colors, padding, margins
+* **Status Badges**: Typography, padding, border radius, and individual colors for Active, Repealed, Superseded, and Pending states
+* **Commentary**: Background colors, border colors, padding, border radius
+* **Font Controls**: Background colors, hover states, padding, border radius
+* **Jump Selector**: Background colors, border colors, padding, border radius
+* **Loading & Error States**: Text colors and padding for loading/error messages
+
+All styles are also scoped under `.lexi-doc` and use comprehensive CSS custom properties for advanced customization via CSS. The plugin includes a complete design token system with variables for:
+
+* **Colors**: `--lexi-color-primary`, `--lexi-color-secondary`, `--lexi-color-bg-primary`, `--lexi-color-text-primary`, etc.
+* **Typography**: `--lexi-font-size-base`, `--lexi-font-weight-semibold`, `--lexi-line-height-base`, etc.
+* **Spacing**: `--lexi-spacing-sm`, `--lexi-spacing-lg`, `--lexi-spacing-xl`, etc.
+* **Border Radius**: `--lexi-radius-sm`, `--lexi-radius-md`, `--lexi-radius-lg`, etc.
+* **Shadows**: `--lexi-shadow-sm`, `--lexi-shadow-md`, `--lexi-shadow-lg`, etc.
+* **Transitions**: `--lexi-transition-fast`, `--lexi-transition-normal`
+
+This allows themes and users to easily override colors, spacing, and typography without editing the plugin files directly.
 
 = Is this accessible? =
 

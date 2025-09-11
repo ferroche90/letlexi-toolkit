@@ -7,48 +7,192 @@
 
 /* Lexi Section Navigator Styles */
 .lexi-doc {
+    /* Typography Variables */
     --lexi-font-scale: 1;
-    font-size: calc(16px * var(--lexi-font-scale));
-    line-height: 1.6;
+    --lexi-font-size-base: 16px;
+    --lexi-font-size-sm: 0.875em;
+    --lexi-font-size-lg: 1.125em;
+    --lexi-font-size-xl: 1.25em;
+    --lexi-font-size-2xl: 1.5em;
+    --lexi-font-size-3xl: 1.75em;
+    --lexi-font-weight-normal: 400;
+    --lexi-font-weight-medium: 500;
+    --lexi-font-weight-semibold: 600;
+    --lexi-line-height-base: 1.6;
+    --lexi-line-height-tight: 1.2;
+    --lexi-line-height-relaxed: 1.4;
+    
+    /* Color Variables */
+    --lexi-color-primary: #007cba;
+    --lexi-color-primary-hover: #005a87;
+    --lexi-color-secondary: #6c757d;
+    --lexi-color-secondary-hover: #5a6268;
+    --lexi-color-success: #28a745;
+    --lexi-color-success-hover: #218838;
+    --lexi-color-success-bg: #d4edda;
+    --lexi-color-success-text: #155724;
+    --lexi-color-success-border: #c3e6cb;
+    --lexi-color-danger: #dc3545;
+    --lexi-color-danger-bg: #f8d7da;
+    --lexi-color-danger-text: #721c24;
+    --lexi-color-danger-border: #f5c6cb;
+    --lexi-color-warning: #856404;
+    --lexi-color-warning-bg: #fff3cd;
+    --lexi-color-warning-border: #ffeaa7;
+    --lexi-color-info: #0c5460;
+    --lexi-color-info-bg: #d1ecf1;
+    --lexi-color-info-border: #bee5eb;
+    --lexi-color-text-primary: #212529;
+    --lexi-color-text-secondary: #495057;
+    --lexi-color-text-muted: #6c757d;
+    --lexi-color-bg-primary: #ffffff;
+    --lexi-color-bg-secondary: #f8f9fa;
+    --lexi-color-bg-tertiary: #e9ecef;
+    --lexi-color-border: #e9ecef;
+    --lexi-color-border-light: #f0f0f0;
+    --lexi-color-border-input: #ced4da;
+    
+    /* Spacing Variables */
+    --lexi-spacing-xs: 0.25rem;
+    --lexi-spacing-sm: 0.5rem;
+    --lexi-spacing-md: 0.75rem;
+    --lexi-spacing-lg: 1rem;
+    --lexi-spacing-xl: 1.5rem;
+    --lexi-spacing-2xl: 2rem;
+    --lexi-spacing-3xl: 3rem;
+    
+    /* Border Radius Variables */
+    --lexi-radius-sm: 4px;
+    --lexi-radius-md: 6px;
+    --lexi-radius-lg: 8px;
+    --lexi-radius-xl: 20px;
+    
+    /* Shadow Variables */
+    --lexi-shadow-sm: 0 1px 0 rgba(0,0,0,0.05) inset;
+    --lexi-shadow-md: 0 2px 4px rgba(0,0,0,0.1);
+    --lexi-shadow-lg: 0 4px 8px rgba(0,0,0,0.2);
+    --lexi-shadow-xl: 0 2px 10px rgba(0,0,0,0.2);
+    
+    /* Transition Variables */
+    --lexi-transition-fast: 0.2s;
+    --lexi-transition-normal: 0.3s;
+    
+    /* Layout Variables */
+    --lexi-max-width: 1200px;
+    --lexi-toc-width: 280px;
+    --lexi-z-index-modal: 10000;
+    
+    /* Apply base styles */
+    font-size: calc(var(--lexi-font-size-base) * var(--lexi-font-scale));
+    line-height: var(--lexi-line-height-base);
     display: flex;
-    gap: 2rem;
-    max-width: 1200px;
+    gap: var(--lexi-spacing-2xl);
+    max-width: var(--lexi-max-width);
     margin: 0 auto;
-    padding: 1rem;
+    padding: var(--lexi-spacing-lg);
+}
+
+/* Ensure styles also apply inside Elementor editor preview */
+.elementor-editor-active .elementor-widget-lexi_section_navigator .lexi-doc {
+    max-width: 100%;
+}
+
+/* Reader Header (above content) */
+.lexi-reader-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--lexi-spacing-lg);
+    align-items: center;
+    margin-bottom: var(--lexi-spacing-lg);
+}
+
+.lexi-document-info {
+    display: flex;
+    align-items: baseline;
+    gap: var(--lexi-spacing-md);
+    flex-wrap: wrap;
+}
+
+.lexi-document-label {
+    font-weight: var(--lexi-font-weight-semibold);
+    color: var(--lexi-color-text-secondary);
+}
+
+.lexi-document-title {
+    margin: 0;
+    font-size: var(--lexi-font-size-3xl);
+    line-height: var(--lexi-line-height-tight);
+    color: var(--lexi-color-text-primary);
+}
+
+.lexi-query-display {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--lexi-spacing-sm);
+    padding: var(--lexi-spacing-sm) 0;
+    color: var(--lexi-color-text-muted);
+}
+
+.lexi-query-label { 
+    font-weight: var(--lexi-font-weight-semibold); 
+}
+
+.lexi-document-actions {
+    display: flex;
+    gap: var(--lexi-spacing-sm);
+}
+
+.lexi-print-btn,
+.lexi-copy-citation-btn {
+    background: var(--lexi-color-primary);
+    color: var(--lexi-color-bg-primary);
+    border: none;
+    padding: var(--lexi-spacing-sm) var(--lexi-spacing-md);
+    border-radius: var(--lexi-radius-md);
+    cursor: pointer;
+    font-size: var(--lexi-font-size-sm);
+    transition: background-color var(--lexi-transition-fast), transform var(--lexi-transition-fast);
+}
+
+.lexi-print-btn:hover,
+.lexi-copy-citation-btn:hover {
+    background: var(--lexi-color-primary-hover);
+    transform: translateY(-1px);
 }
 
 /* Left TOC Pane */
 .lexi-toc {
-    flex: 0 0 280px;
+    flex: 0 0 var(--lexi-toc-width);
     position: sticky;
-    top: 2rem;
+    top: var(--lexi-spacing-2xl);
     height: fit-content;
-    background: #f8f9fa;
-    border-radius: 8px;
-    padding: 1.5rem;
-    border: 1px solid #e9ecef;
+    background: var(--lexi-color-bg-secondary);
+    border-radius: var(--lexi-radius-lg);
+    padding: var(--lexi-spacing-xl);
+    border: 1px solid var(--lexi-color-border);
 }
 
 .lexi-toc__toggle {
     display: none;
-    background: #007cba;
-    color: white;
+    background: var(--lexi-color-primary);
+    color: var(--lexi-color-bg-primary);
     border: none;
-    padding: 0.75rem 1rem;
-    border-radius: 4px;
+    padding: var(--lexi-spacing-md) var(--lexi-spacing-lg);
+    border-radius: var(--lexi-radius-sm);
     cursor: pointer;
-    font-size: 0.9em;
+    font-size: var(--lexi-font-size-sm);
     width: 100%;
-    margin-bottom: 1rem;
-    transition: background-color 0.2s;
+    margin-bottom: var(--lexi-spacing-lg);
+    transition: background-color var(--lexi-transition-fast);
 }
 
 .lexi-toc__toggle:hover {
-    background: #005a87;
+    background: var(--lexi-color-primary-hover);
 }
 
 .lexi-toc__toggle:focus {
-    outline: 2px solid #007cba;
+    outline: 2px solid var(--lexi-color-primary);
     outline-offset: 2px;
 }
 
@@ -60,30 +204,33 @@
 
 .lexi-toc__link {
     display: block;
-    padding: 0.75rem 1rem;
-    color: #495057;
+    padding: var(--lexi-spacing-md) var(--lexi-spacing-lg);
+    color: var(--lexi-color-text-secondary);
     text-decoration: none;
-    border-radius: 4px;
-    margin-bottom: 0.25rem;
-    transition: all 0.2s;
+    border-radius: var(--lexi-radius-sm);
+    margin-bottom: var(--lexi-spacing-xs);
+    transition: all var(--lexi-transition-fast);
     border-left: 3px solid transparent;
+    font-size: 0.95em;
+    line-height: var(--lexi-line-height-relaxed);
 }
 
 .lexi-toc__link:hover {
-    background: #e9ecef;
-    color: #007cba;
+    background: var(--lexi-color-bg-tertiary);
+    color: var(--lexi-color-primary);
 }
 
 .lexi-toc__link:focus {
-    outline: 2px solid #007cba;
+    outline: 2px solid var(--lexi-color-primary);
     outline-offset: 2px;
 }
 
 .lexi-toc__link.active {
-    background: #007cba;
-    color: white;
-    border-left-color: #005a87;
-    font-weight: 500;
+    background: var(--lexi-color-primary);
+    color: var(--lexi-color-bg-primary);
+    border-left-color: var(--lexi-color-primary-hover);
+    font-weight: var(--lexi-font-weight-medium);
+    box-shadow: var(--lexi-shadow-sm);
 }
 
 /* Right Main Content */
@@ -93,67 +240,84 @@
 }
 
 .lexi-doc__body {
-    background: white;
-    border-radius: 8px;
-    padding: 2rem;
-    border: 1px solid #e9ecef;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background: var(--lexi-color-bg-primary);
+    border-radius: var(--lexi-radius-lg);
+    padding: var(--lexi-spacing-2xl);
+    border: 1px solid var(--lexi-color-border);
+    box-shadow: var(--lexi-shadow-md);
+}
+
+/* Font Controls (above content) */
+.lexi-font-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--lexi-spacing-sm);
+    margin: var(--lexi-spacing-sm) 0 var(--lexi-spacing-lg);
+}
+
+.lexi-font-label { 
+    color: var(--lexi-color-text-muted); 
+    font-size: var(--lexi-font-size-sm); 
 }
 
 /* Section Content */
 .lexi-section {
-    margin-bottom: 2rem;
+    margin-bottom: var(--lexi-spacing-2xl);
 }
 
 .lexi-section-header {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 2px solid #f0f0f0;
+    gap: var(--lexi-spacing-lg);
+    margin-bottom: var(--lexi-spacing-xl);
+    padding-bottom: var(--lexi-spacing-lg);
+    border-bottom: 2px solid var(--lexi-color-border-light);
+}
+
+.lexi-section-content {
+    font-size: 1em;
 }
 
 .lexi-section-title {
     margin: 0;
-    font-size: 1.5em;
-    font-weight: 600;
-    color: #333;
+    font-size: var(--lexi-font-size-2xl);
+    font-weight: var(--lexi-font-weight-semibold);
+    color: var(--lexi-color-text-primary);
 }
 
 /* Status Badges */
 .lexi-badge {
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
+    padding: var(--lexi-spacing-xs) var(--lexi-spacing-md);
+    border-radius: var(--lexi-radius-xl);
     font-size: 0.75em;
-    font-weight: 600;
+    font-weight: var(--lexi-font-weight-semibold);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     white-space: nowrap;
 }
 
 .lexi-badge--active {
-    background: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
+    background: var(--lexi-color-success-bg);
+    color: var(--lexi-color-success-text);
+    border: 1px solid var(--lexi-color-success-border);
 }
 
 .lexi-badge--repealed {
-    background: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
+    background: var(--lexi-color-danger-bg);
+    color: var(--lexi-color-danger-text);
+    border: 1px solid var(--lexi-color-danger-border);
 }
 
 .lexi-badge--superseded {
-    background: #fff3cd;
-    color: #856404;
-    border: 1px solid #ffeaa7;
+    background: var(--lexi-color-warning-bg);
+    color: var(--lexi-color-warning);
+    border: 1px solid var(--lexi-color-warning-border);
 }
 
 .lexi-badge--pending {
-    background: #d1ecf1;
-    color: #0c5460;
-    border: 1px solid #bee5eb;
+    background: var(--lexi-color-info-bg);
+    color: var(--lexi-color-info);
+    border: 1px solid var(--lexi-color-info-border);
 }
 
 /* Navigation Controls */
@@ -161,44 +325,44 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 2rem 0;
-    gap: 1rem;
+    margin: var(--lexi-spacing-2xl) 0;
+    gap: var(--lexi-spacing-lg);
 }
 
 .lexi-nav__prev,
 .lexi-nav__next {
-    background: #007cba;
-    color: white;
+    background: var(--lexi-color-primary);
+    color: var(--lexi-color-bg-primary);
     border: none;
-    padding: 1rem 1.5rem;
-    border-radius: 8px;
+    padding: var(--lexi-spacing-lg) var(--lexi-spacing-xl);
+    border-radius: var(--lexi-radius-lg);
     cursor: pointer;
-    font-size: 0.9em;
-    font-weight: 500;
+    font-size: var(--lexi-font-size-sm);
+    font-weight: var(--lexi-font-weight-semibold);
     min-width: 120px;
-    transition: all 0.2s;
+    transition: all var(--lexi-transition-fast);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: var(--lexi-spacing-sm);
 }
 
 .lexi-nav__prev:hover:not(:disabled),
 .lexi-nav__next:hover:not(:disabled) {
-    background: #005a87;
+    background: var(--lexi-color-primary-hover);
     transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    box-shadow: var(--lexi-shadow-lg);
 }
 
 .lexi-nav__prev:focus,
 .lexi-nav__next:focus {
-    outline: 2px solid #007cba;
+    outline: 2px solid var(--lexi-color-primary);
     outline-offset: 2px;
 }
 
 .lexi-nav__prev:disabled,
 .lexi-nav__next:disabled {
-    background: #6c757d;
+    background: var(--lexi-color-secondary);
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
@@ -218,20 +382,20 @@
 .lexi-jump {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--lexi-spacing-sm);
 }
 
 .lexi-jump__select {
-    padding: 0.5rem;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-    background: white;
-    font-size: 0.9em;
+    padding: var(--lexi-spacing-sm);
+    border: 1px solid var(--lexi-color-border-input);
+    border-radius: var(--lexi-radius-sm);
+    background: var(--lexi-color-bg-primary);
+    font-size: var(--lexi-font-size-sm);
     min-width: 100px;
 }
 
 .lexi-jump__select:focus {
-    outline: 2px solid #007cba;
+    outline: 2px solid var(--lexi-color-primary);
     outline-offset: 2px;
 }
 
@@ -239,65 +403,65 @@
 .lexi-font {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    margin: 1rem 0;
+    gap: var(--lexi-spacing-sm);
+    margin: var(--lexi-spacing-lg) 0;
 }
 
 .lexi-font__inc,
 .lexi-font__dec,
 .lexi-font__reset {
-    background: #6c757d;
-    color: white;
+    background: var(--lexi-color-secondary);
+    color: var(--lexi-color-bg-primary);
     border: none;
-    padding: 0.5rem 0.75rem;
-    border-radius: 4px;
+    padding: var(--lexi-spacing-sm) var(--lexi-spacing-md);
+    border-radius: var(--lexi-radius-sm);
     cursor: pointer;
     font-size: 0.8em;
     min-width: 2rem;
-    transition: background-color 0.2s;
+    transition: background-color var(--lexi-transition-fast);
 }
 
 .lexi-font__inc:hover,
 .lexi-font__dec:hover,
 .lexi-font__reset:hover {
-    background: #5a6268;
+    background: var(--lexi-color-secondary-hover);
 }
 
 .lexi-font__inc:focus,
 .lexi-font__dec:focus,
 .lexi-font__reset:focus {
-    outline: 2px solid #007cba;
+    outline: 2px solid var(--lexi-color-primary);
     outline-offset: 2px;
 }
 
 /* Commentary */
 .lexi-commentary-toggle {
-    background: #28a745;
-    color: white;
+    background: var(--lexi-color-success);
+    color: var(--lexi-color-bg-primary);
     border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
+    padding: 0.6rem var(--lexi-spacing-lg);
+    border-radius: var(--lexi-radius-md);
     cursor: pointer;
-    font-size: 0.9em;
-    transition: background-color 0.2s;
-    margin: 1rem 0;
+    font-size: var(--lexi-font-size-sm);
+    transition: background-color var(--lexi-transition-fast);
+    margin: var(--lexi-spacing-lg) 0;
 }
 
 .lexi-commentary-toggle:hover {
-    background: #218838;
+    background: var(--lexi-color-success-hover);
 }
 
 .lexi-commentary-toggle:focus {
-    outline: 2px solid #28a745;
+    outline: 2px solid var(--lexi-color-success);
     outline-offset: 2px;
 }
 
 .lexi-commentary-content {
-    margin-top: 1rem;
-    padding: 1rem;
-    background: #f8f9fa;
-    border-left: 4px solid #28a745;
-    border-radius: 0 4px 4px 0;
+    margin-top: var(--lexi-spacing-lg);
+    padding: var(--lexi-spacing-lg);
+    background: var(--lexi-color-bg-secondary);
+    border-left: 4px solid var(--lexi-color-success);
+    border-radius: 0 var(--lexi-radius-sm) var(--lexi-radius-sm) 0;
 }
 
 .lexi-commentary-content[aria-hidden='true'] {
@@ -308,24 +472,49 @@
 .lexi-loading,
 .lexi-error {
     text-align: center;
-    padding: 2rem;
-    color: #666;
+    padding: var(--lexi-spacing-2xl);
+    color: var(--lexi-color-text-muted);
 }
 
 .lexi-error {
-    color: #dc3545;
+    color: var(--lexi-color-danger);
+}
+
+/* ARIA Live Region */
+.lexi-announcer {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+/* Temporary Messages */
+.lexi-temp-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--lexi-color-success);
+    color: var(--lexi-color-bg-primary);
+    padding: 10px 15px;
+    border-radius: var(--lexi-radius-sm);
+    z-index: var(--lexi-z-index-modal);
+    font-size: 14px;
+    box-shadow: var(--lexi-shadow-xl);
+    transition: opacity var(--lexi-transition-normal) ease;
+    max-width: 300px;
+    word-wrap: break-word;
 }
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
     .lexi-doc {
         flex-direction: column;
-        padding: 0.5rem;
-        gap: 1rem;
+        padding: var(--lexi-spacing-sm);
+        gap: var(--lexi-spacing-lg);
     }
     
     .lexi-toc {
-        flex: none;
         position: static;
         order: -1;
     }
@@ -343,18 +532,26 @@
     }
     
     .lexi-doc__body {
-        padding: 1rem;
+        padding: var(--lexi-spacing-lg);
+    }
+
+    .lexi-reader-header {
+        grid-template-columns: 1fr;
+    }
+    
+    .lexi-document-actions {
+        justify-content: flex-start;
     }
     
     .lexi-section-header {
         flex-direction: column;
         align-items: flex-start;
-        gap: 0.5rem;
+        gap: var(--lexi-spacing-sm);
     }
     
     .lexi-nav {
         flex-direction: column;
-        gap: 1rem;
+        gap: var(--lexi-spacing-lg);
     }
     
     .lexi-nav__prev,
@@ -367,17 +564,24 @@
     }
 }
 
+/* Distinct outline in Elementor editor to clarify widget boundary */
+.elementor-editor-active .elementor-widget-lexi_section_navigator .lexi-doc__body,
+.elementor-editor-active .elementor-widget-lexi_section_navigator .lexi-toc {
+    outline: 1px dashed var(--lexi-color-border-input);
+    outline-offset: 2px;
+}
+
 @media (max-width: 480px) {
     .lexi-doc {
-        padding: 0.25rem;
+        padding: var(--lexi-spacing-xs);
     }
     
     .lexi-doc__body {
-        padding: 0.75rem;
+        padding: var(--lexi-spacing-md);
     }
     
     .lexi-toc {
-        padding: 1rem;
+        padding: var(--lexi-spacing-lg);
     }
 }
 
@@ -394,6 +598,21 @@
     .lexi-badge {
         border: 1px solid currentColor;
     }
+    
+    /* Enhance focus visibility in high contrast mode */
+    .lexi-toc__link:focus,
+    .lexi-nav__prev:focus,
+    .lexi-nav__next:focus,
+    .lexi-font__inc:focus,
+    .lexi-font__dec:focus,
+    .lexi-font__reset:focus,
+    .lexi-commentary-toggle:focus,
+    .lexi-print-btn:focus,
+    .lexi-copy-citation-btn:focus,
+    .lexi-toc__toggle:focus,
+    .lexi-jump__select:focus {
+        outline-width: 3px;
+    }
 }
 
 /* Reduced motion support */
@@ -404,12 +623,20 @@
     .lexi-font__inc,
     .lexi-font__dec,
     .lexi-font__reset,
-    .lexi-commentary-toggle {
+    .lexi-commentary-toggle,
+    .lexi-print-btn,
+    .lexi-copy-citation-btn,
+    .lexi-toc__toggle {
         transition: none;
     }
     
     .lexi-nav__prev:hover:not(:disabled),
     .lexi-nav__next:hover:not(:disabled) {
+        transform: none;
+    }
+    
+    .lexi-print-btn:hover,
+    .lexi-copy-citation-btn:hover {
         transform: none;
     }
 }
