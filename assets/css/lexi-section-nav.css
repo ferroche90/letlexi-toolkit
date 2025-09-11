@@ -1,0 +1,415 @@
+/**
+ * Lexi Section Navigator Styles
+ *
+ * @package LetLexi\Toolkit
+ * @version 1.0.0
+ */
+
+/* Lexi Section Navigator Styles */
+.lexi-doc {
+    --lexi-font-scale: 1;
+    font-size: calc(16px * var(--lexi-font-scale));
+    line-height: 1.6;
+    display: flex;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+/* Left TOC Pane */
+.lexi-toc {
+    flex: 0 0 280px;
+    position: sticky;
+    top: 2rem;
+    height: fit-content;
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    border: 1px solid #e9ecef;
+}
+
+.lexi-toc__toggle {
+    display: none;
+    background: #007cba;
+    color: white;
+    border: none;
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    width: 100%;
+    margin-bottom: 1rem;
+    transition: background-color 0.2s;
+}
+
+.lexi-toc__toggle:hover {
+    background: #005a87;
+}
+
+.lexi-toc__toggle:focus {
+    outline: 2px solid #007cba;
+    outline-offset: 2px;
+}
+
+.lexi-toc__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.lexi-toc__link {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: #495057;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-bottom: 0.25rem;
+    transition: all 0.2s;
+    border-left: 3px solid transparent;
+}
+
+.lexi-toc__link:hover {
+    background: #e9ecef;
+    color: #007cba;
+}
+
+.lexi-toc__link:focus {
+    outline: 2px solid #007cba;
+    outline-offset: 2px;
+}
+
+.lexi-toc__link.active {
+    background: #007cba;
+    color: white;
+    border-left-color: #005a87;
+    font-weight: 500;
+}
+
+/* Right Main Content */
+.lexi-doc__main {
+    flex: 1;
+    min-width: 0;
+}
+
+.lexi-doc__body {
+    background: white;
+    border-radius: 8px;
+    padding: 2rem;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Section Content */
+.lexi-section {
+    margin-bottom: 2rem;
+}
+
+.lexi-section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.lexi-section-title {
+    margin: 0;
+    font-size: 1.5em;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Status Badges */
+.lexi-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.lexi-badge--active {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.lexi-badge--repealed {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.lexi-badge--superseded {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.lexi-badge--pending {
+    background: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+/* Navigation Controls */
+.lexi-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2rem 0;
+    gap: 1rem;
+}
+
+.lexi-nav__prev,
+.lexi-nav__next {
+    background: #007cba;
+    color: white;
+    border: none;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: 500;
+    min-width: 120px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.lexi-nav__prev:hover:not(:disabled),
+.lexi-nav__next:hover:not(:disabled) {
+    background: #005a87;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.lexi-nav__prev:focus,
+.lexi-nav__next:focus {
+    outline: 2px solid #007cba;
+    outline-offset: 2px;
+}
+
+.lexi-nav__prev:disabled,
+.lexi-nav__next:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.lexi-nav__prev::before {
+    content: '←';
+    font-size: 1.2em;
+}
+
+.lexi-nav__next::after {
+    content: '→';
+    font-size: 1.2em;
+}
+
+/* Jump Select */
+.lexi-jump {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.lexi-jump__select {
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    background: white;
+    font-size: 0.9em;
+    min-width: 100px;
+}
+
+.lexi-jump__select:focus {
+    outline: 2px solid #007cba;
+    outline-offset: 2px;
+}
+
+/* Font Controls */
+.lexi-font {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+.lexi-font__inc,
+.lexi-font__dec,
+.lexi-font__reset {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8em;
+    min-width: 2rem;
+    transition: background-color 0.2s;
+}
+
+.lexi-font__inc:hover,
+.lexi-font__dec:hover,
+.lexi-font__reset:hover {
+    background: #5a6268;
+}
+
+.lexi-font__inc:focus,
+.lexi-font__dec:focus,
+.lexi-font__reset:focus {
+    outline: 2px solid #007cba;
+    outline-offset: 2px;
+}
+
+/* Commentary */
+.lexi-commentary-toggle {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.2s;
+    margin: 1rem 0;
+}
+
+.lexi-commentary-toggle:hover {
+    background: #218838;
+}
+
+.lexi-commentary-toggle:focus {
+    outline: 2px solid #28a745;
+    outline-offset: 2px;
+}
+
+.lexi-commentary-content {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-left: 4px solid #28a745;
+    border-radius: 0 4px 4px 0;
+}
+
+.lexi-commentary-content[aria-hidden='true'] {
+    display: none;
+}
+
+/* Loading and Error States */
+.lexi-loading,
+.lexi-error {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+}
+
+.lexi-error {
+    color: #dc3545;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .lexi-doc {
+        flex-direction: column;
+        padding: 0.5rem;
+        gap: 1rem;
+    }
+    
+    .lexi-toc {
+        flex: none;
+        position: static;
+        order: -1;
+    }
+    
+    .lexi-toc__toggle {
+        display: block;
+    }
+    
+    .lexi-toc__list {
+        display: none;
+    }
+    
+    .lexi-doc.toc-expanded .lexi-toc__list {
+        display: block;
+    }
+    
+    .lexi-doc__body {
+        padding: 1rem;
+    }
+    
+    .lexi-section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .lexi-nav {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .lexi-nav__prev,
+    .lexi-nav__next {
+        width: 100%;
+    }
+    
+    .lexi-jump {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .lexi-doc {
+        padding: 0.25rem;
+    }
+    
+    .lexi-doc__body {
+        padding: 0.75rem;
+    }
+    
+    .lexi-toc {
+        padding: 1rem;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .lexi-toc__link {
+        border: 1px solid currentColor;
+    }
+    
+    .lexi-toc__link.active {
+        border: 2px solid currentColor;
+    }
+    
+    .lexi-badge {
+        border: 1px solid currentColor;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .lexi-toc__link,
+    .lexi-nav__prev,
+    .lexi-nav__next,
+    .lexi-font__inc,
+    .lexi-font__dec,
+    .lexi-font__reset,
+    .lexi-commentary-toggle {
+        transition: none;
+    }
+    
+    .lexi-nav__prev:hover:not(:disabled),
+    .lexi-nav__next:hover:not(:disabled) {
+        transform: none;
+    }
+}
