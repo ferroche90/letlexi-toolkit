@@ -17,7 +17,8 @@ LetLexi Toolkit provides a comprehensive solution for displaying legal documents
 = Key Features =
 
 * **Section Navigator Widget** - Interactive navigation through document sections
-* **Elementor Integration** - Custom widget with full control panel and comprehensive styling options
+* **Extensible Widget System** - Auto-loading system for easy addition of new Elementor widgets
+* **Elementor Integration** - Custom widgets with full control panel and comprehensive styling options
 * **REST API Endpoints** - Dynamic section loading via AJAX
 * **ACF Integration** - Works with ACF repeater fields for content management
 * **Shortcode Support** - Fallback shortcode for non-Elementor usage
@@ -96,6 +97,34 @@ This allows themes and users to easily override colors, spacing, and typography 
 
 Absolutely! The plugin includes full ARIA support, keyboard navigation, focus management, and screen reader announcements.
 
+= How do I add new Elementor widgets? =
+
+The plugin includes an auto-loading system that makes it easy to add new Elementor widgets:
+
+1. **Create a new widget file** in `inc/elementor/widgets/` following the naming convention: `class-lexi-elementor-{widget-name}.php`
+2. **Extend the base widget class** `Lexi_Elementor_Widget_Base` for common functionality
+3. **Implement required methods** like `get_name()`, `get_title()`, `register_controls()`, and `render()`
+4. **The widget is automatically detected and registered** - no need to modify core plugin files
+
+Example widget structure:
+```php
+namespace LetLexi\Toolkit\Elementor;
+
+class Lexi_Elementor_My_Widget extends Lexi_Elementor_Widget_Base {
+    public function get_name() {
+        return 'lexi_my_widget';
+    }
+    
+    public function get_title() {
+        return __('My Widget (Lexi)', 'letlexi');
+    }
+    
+    // Implement other required methods...
+}
+```
+
+The base widget class provides common controls for typography, borders, shadows, backgrounds, and spacing, making widget development faster and more consistent.
+
 == Screenshots ==
 
 1. Section Navigator in Elementor
@@ -104,6 +133,16 @@ Absolutely! The plugin includes full ARIA support, keyboard navigation, focus ma
 4. Font size controls and accessibility features
 
 == Changelog ==
+
+= 1.1.0 =
+* **NEW**: Auto-loading system for Elementor widgets
+* **NEW**: Base widget class with common functionality
+* **NEW**: Example widget demonstrating the extensible system
+* **NEW**: Comprehensive CSS custom properties system
+* **NEW**: Enhanced accessibility with high contrast and reduced motion support
+* **IMPROVED**: WordPress CSS Coding Standards compliance
+* **IMPROVED**: Better theme customization through CSS variables
+* **IMPROVED**: Documentation for widget development
 
 = 1.0.0 =
 * Initial release
@@ -119,6 +158,9 @@ Absolutely! The plugin includes full ARIA support, keyboard navigation, focus ma
 * Internationalization support with POT file generation
 
 == Upgrade Notice ==
+
+= 1.1.0 =
+Major update with auto-loading widget system and enhanced CSS customization. The new system makes it easy to add custom Elementor widgets without modifying core plugin files. Includes comprehensive CSS custom properties for better theme integration.
 
 = 1.0.0 =
 Initial release of LetLexi Toolkit. No upgrade required.

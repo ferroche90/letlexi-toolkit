@@ -31,6 +31,90 @@ function register_elementor_category( $elements_manager ) {
 }
 
 /**
+ * Auto-load all Elementor widget classes from the widgets directory
+ *
+ * @since 1.0.0
+ *
+ * @return array Array of loaded widget class names.
+ */
+function auto_load_elementor_widgets() {
+	$widgets_dir = LEXI_PATH . 'inc/elementor/widgets/';
+	$loaded_widgets = array();
+
+	// Check if the widgets directory exists.
+	if ( ! is_dir( $widgets_dir ) ) {
+		return $loaded_widgets;
+	}
+
+	// Get all PHP files in the widgets directory.
+	$widget_files = glob( $widgets_dir . '*.php' );
+
+	if ( empty( $widget_files ) ) {
+		return $loaded_widgets;
+	}
+
+	// Sort files to ensure base class is loaded first.
+	usort( $widget_files, function( $a, $b ) {
+		$a_basename = basename( $a );
+		$b_basename = basename( $b );
+		
+		// Base class should be loaded first.
+		if ( strpos( $a_basename, 'widget-base' ) !== false ) {
+			return -1;
+		}
+		if ( strpos( $b_basename, 'widget-base' ) !== false ) {
+			return 1;
+		}
+		
+		// Otherwise, maintain alphabetical order.
+		return strcmp( $a_basename, $b_basename );
+	});
+
+	// First, load the base class if it exists.
+	$base_class_file = $widgets_dir . 'class-lexi-elementor-widget-base.php';
+	if ( file_exists( $base_class_file ) ) {
+		require_once $base_class_file;
+	}
+
+	// Load each widget file.
+	foreach ( $widget_files as $widget_file ) {
+		// Skip if it's not a valid PHP file.
+		if ( ! is_file( $widget_file ) || pathinfo( $widget_file, PATHINFO_EXTENSION ) !== 'php' ) {
+			continue;
+		}
+
+		// Skip README files.
+		if ( strpos( basename( $widget_file ), 'README' ) !== false ) {
+			continue;
+		}
+
+		// Skip base class file as it's already loaded.
+		if ( strpos( basename( $widget_file ), 'widget-base' ) !== false ) {
+			continue;
+		}
+
+		// Require the widget file.
+		require_once $widget_file;
+
+		// Extract class name from filename.
+		$filename = basename( $widget_file, '.php' );
+		$class_name = str_replace( 'class-', '', $filename );
+		$class_name = str_replace( '-', '_', $class_name );
+		$class_name = 'LetLexi\\Toolkit\\Elementor\\' . ucwords( $class_name, '_' );
+
+		// Check if the class exists and extends Widget_Base.
+		if ( class_exists( $class_name ) ) {
+			$reflection = new \ReflectionClass( $class_name );
+			if ( $reflection->isSubclassOf( '\Elementor\Widget_Base' ) ) {
+				$loaded_widgets[] = $class_name;
+			}
+		}
+	}
+
+	return $loaded_widgets;
+}
+
+/**
  * Register Elementor widgets
  *
  * @since 1.0.0
@@ -43,15 +127,14 @@ function register_elementor_widgets( $widgets_manager ) {
 		return;
 	}
 
-	// Require the widget class.
-	$widget_file = LEXI_PATH . 'inc/elementor/widgets/class-lexi-elementor-section-navigator.php';
-	if ( file_exists( $widget_file ) ) {
-		require_once $widget_file;
-	}
+	// Auto-load all widget classes.
+	$loaded_widgets = auto_load_elementor_widgets();
 
-	// Register the widget.
-	if ( class_exists( '\LetLexi\Toolkit\Elementor\Lexi_Elementor_Section_Navigator' ) ) {
-		$widgets_manager->register( new \LetLexi\Toolkit\Elementor\Lexi_Elementor_Section_Navigator() );
+	// Register each loaded widget.
+	foreach ( $loaded_widgets as $widget_class ) {
+		if ( class_exists( $widget_class ) ) {
+			$widgets_manager->register( new $widget_class() );
+		}
 	}
 }
 
