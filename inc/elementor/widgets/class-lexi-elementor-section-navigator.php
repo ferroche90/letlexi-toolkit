@@ -286,6 +286,746 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 
 		$this->end_controls_section();
 
+		// STYLE: TOC
+		$this->start_controls_section(
+			'lexi_style_toc_section',
+			array(
+				'label' => __( 'TOC', 'letlexi' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			)
+		);
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Background::get_type(),
+			array(
+				'name'     => 'toc_background_ctrl',
+				'label'    => __( 'Background', 'letlexi' ),
+				'selector' => '{{WRAPPER}} .lexi-toc',
+			)
+		);
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Border::get_type(),
+			array(
+				'name'     => 'toc_border_ctrl',
+				'label'    => __( 'Border', 'letlexi' ),
+				'selector' => '{{WRAPPER}} .lexi-toc',
+			)
+		);
+
+		$this->add_control(
+			'toc_radius',
+			array(
+				'label'     => __( 'Border Radius', 'letlexi' ),
+				'type'      => Controls_Manager::SLIDER,
+				'size_units'=> array( 'px', '%' ),
+				'range'     => array(
+					'px' => array( 'min' => 0, 'max' => 50 ),
+					'%'  => array( 'min' => 0, 'max' => 100 ),
+				),
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-toc' => 'border-radius: {{SIZE}}{{UNIT}};',
+				),
+			)
+		);
+
+		$this->add_responsive_control(
+			'toc_padding_ctrl',
+			array(
+				'label'      => __( 'Padding', 'letlexi' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', 'em', 'rem' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .lexi-toc' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Typography::get_type(),
+			array(
+				'name'     => 'toc_link_typography',
+				'label'    => __( 'Link Typography', 'letlexi' ),
+				'selector' => '{{WRAPPER}} .lexi-toc__link',
+			)
+		);
+
+		$this->add_control(
+			'toc_link_color',
+			array(
+				'label'     => __( 'Link Color', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-toc__link' => 'color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->add_control(
+			'toc_link_hover_color',
+			array(
+				'label'     => __( 'Link Hover Color', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-toc__link:hover' => 'color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->add_control(
+			'toc_link_active_color',
+			array(
+				'label'     => __( 'Active Link Color', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-toc__link.active' => 'color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->add_responsive_control(
+			'toc_item_spacing',
+			array(
+				'label'     => __( 'Item Spacing', 'letlexi' ),
+				'type'      => Controls_Manager::SLIDER,
+				'size_units'=> array( 'px', 'em', 'rem' ),
+				'range'     => array( 'px' => array( 'min' => 0, 'max' => 30 ) ),
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-toc__link' => 'margin-bottom: {{SIZE}}{{UNIT}};',
+				),
+			)
+		);
+
+		$this->end_controls_section();
+
+		// STYLE: Header (Document & Query)
+		$this->start_controls_section(
+			'lexi_style_header_section',
+			array(
+				'label' => __( 'Header', 'letlexi' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			)
+		);
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Typography::get_type(),
+			array(
+				'name'     => 'document_label_typo_new',
+				'label'    => __( 'Document Label Typography', 'letlexi' ),
+				'selector' => '{{WRAPPER}} .lexi-document-label',
+			)
+		);
+
+		$this->add_control(
+			'document_label_color_new',
+			array(
+				'label'     => __( 'Document Label Color', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-document-label' => 'color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Typography::get_type(),
+			array(
+				'name'     => 'document_title_typo_new',
+				'label'    => __( 'Document Title Typography', 'letlexi' ),
+				'selector' => '{{WRAPPER}} .lexi-document-title',
+			)
+		);
+
+		$this->add_control(
+			'document_title_color_new',
+			array(
+				'label'     => __( 'Document Title Color', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-document-title' => 'color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Typography::get_type(),
+			array(
+				'name'     => 'query_label_typo_new',
+				'label'    => __( 'Query Label Typography', 'letlexi' ),
+				'selector' => '{{WRAPPER}} .lexi-query-label',
+			)
+		);
+
+		$this->add_control(
+			'query_label_color_new',
+			array(
+				'label'     => __( 'Query Label Color', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-query-label' => 'color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Typography::get_type(),
+			array(
+				'name'     => 'query_text_typo_new',
+				'label'    => __( 'Query Text Typography', 'letlexi' ),
+				'selector' => '{{WRAPPER}} .lexi-query-text',
+			)
+		);
+
+		$this->add_control(
+			'query_text_color_new',
+			array(
+				'label'     => __( 'Query Text Color', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-query-text' => 'color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->add_responsive_control(
+			'header_spacing_stack',
+			array(
+				'label'      => __( 'Header Spacing', 'letlexi' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', 'em', 'rem' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .lexi-reader-header' => 'margin-bottom: {{BOTTOM}}{{UNIT}}; padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+
+		$this->end_controls_section();
+
+		// STYLE: Print & Copy buttons
+		$this->start_controls_section(
+			'lexi_style_action_buttons_section',
+			array(
+				'label' => __( 'Print & Copy Buttons', 'letlexi' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			)
+		);
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Typography::get_type(),
+			array(
+				'name'     => 'action_btn_typo',
+				'label'    => __( 'Typography', 'letlexi' ),
+				'selector' => '{{WRAPPER}} .lexi-print-btn, {{WRAPPER}} .lexi-copy-citation-btn',
+			)
+		);
+
+		$this->add_control(
+			'action_btn_text_color',
+			array(
+				'label'     => __( 'Text Color', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-print-btn, {{WRAPPER}} .lexi-copy-citation-btn' => 'color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->add_control(
+			'action_btn_bg',
+			array(
+				'label'     => __( 'Background', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-print-btn, {{WRAPPER}} .lexi-copy-citation-btn' => 'background-color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->add_control(
+			'action_btn_bg_hover',
+			array(
+				'label'     => __( 'Background Hover', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-print-btn:hover, {{WRAPPER}} .lexi-copy-citation-btn:hover' => 'background-color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Border::get_type(),
+			array(
+				'name'     => 'action_btn_border',
+				'selector' => '{{WRAPPER}} .lexi-print-btn, {{WRAPPER}} .lexi-copy-citation-btn',
+			)
+		);
+
+		$this->add_control(
+			'action_btn_radius',
+			array(
+				'label'     => __( 'Border Radius', 'letlexi' ),
+				'type'      => Controls_Manager::SLIDER,
+				'size_units'=> array( 'px', '%' ),
+				'range'     => array( 'px' => array( 'min' => 0, 'max' => 50 ) ),
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-print-btn, {{WRAPPER}} .lexi-copy-citation-btn' => 'border-radius: {{SIZE}}{{UNIT}};',
+				),
+			)
+		);
+
+		$this->add_responsive_control(
+			'action_btn_padding',
+			array(
+				'label'      => __( 'Padding', 'letlexi' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', 'em', 'rem' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .lexi-print-btn, {{WRAPPER}} .lexi-copy-citation-btn' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+
+		$this->end_controls_section();
+
+		// STYLE: Font size controls
+		$this->start_controls_section(
+			'lexi_style_font_controls_section_new',
+			array(
+				'label' => __( 'Font Size Controls', 'letlexi' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			)
+		);
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Typography::get_type(),
+			array(
+				'name'     => 'font_controls_typo',
+				'selector' => '{{WRAPPER}} .lexi-font__inc, {{WRAPPER}} .lexi-font__dec, {{WRAPPER}} .lexi-font__reset',
+			)
+		);
+
+		$this->add_control(
+			'font_controls_color',
+			array(
+				'label'     => __( 'Text Color', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-font__inc, {{WRAPPER}} .lexi-font__dec, {{WRAPPER}} .lexi-font__reset' => 'color: {{VALUE}}',
+				),
+			)
+		);
+		$this->add_control(
+			'font_controls_bg',
+			array(
+				'label'     => __( 'Background', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-font__inc, {{WRAPPER}} .lexi-font__dec, {{WRAPPER}} .lexi-font__reset' => 'background-color: {{VALUE}}',
+				),
+			)
+		);
+		$this->add_control(
+			'font_controls_bg_hover',
+			array(
+				'label'     => __( 'Background Hover', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-font__inc:hover, {{WRAPPER}} .lexi-font__dec:hover, {{WRAPPER}} .lexi-font__reset:hover' => 'background-color: {{VALUE}}',
+				),
+			)
+		);
+		$this->add_group_control(
+			\Elementor\Group_Control_Border::get_type(),
+			array(
+				'name'     => 'font_controls_border',
+				'selector' => '{{WRAPPER}} .lexi-font__inc, {{WRAPPER}} .lexi-font__dec, {{WRAPPER}} .lexi-font__reset',
+			)
+		);
+		$this->add_control(
+			'font_controls_radius',
+			array(
+				'label'     => __( 'Border Radius', 'letlexi' ),
+				'type'      => Controls_Manager::SLIDER,
+				'size_units'=> array( 'px', '%' ),
+				'range'     => array( 'px' => array( 'min' => 0, 'max' => 30 ) ),
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-font__inc, {{WRAPPER}} .lexi-font__dec, {{WRAPPER}} .lexi-font__reset' => 'border-radius: {{SIZE}}{{UNIT}};',
+				),
+			)
+		);
+		$this->add_responsive_control(
+			'font_controls_padding',
+			array(
+				'label'      => __( 'Padding', 'letlexi' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', 'em', 'rem' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .lexi-font__inc, {{WRAPPER}} .lexi-font__dec, {{WRAPPER}} .lexi-font__reset' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+		$this->end_controls_section();
+
+		// STYLE: Section Content & Commentary
+		$this->start_controls_section(
+			'lexi_style_section_content',
+			array(
+				'label' => __( 'Section Content', 'letlexi' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			)
+		);
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Background::get_type(),
+			array(
+				'name'     => 'content_bg',
+				'selector' => '{{WRAPPER}} .lexi-doc__body',
+			)
+		);
+		$this->add_group_control(
+			\Elementor\Group_Control_Border::get_type(),
+			array(
+				'name'     => 'content_border',
+				'selector' => '{{WRAPPER}} .lexi-doc__body',
+			)
+		);
+		$this->add_control(
+			'content_radius',
+			array(
+				'label'     => __( 'Border Radius', 'letlexi' ),
+				'type'      => Controls_Manager::SLIDER,
+				'size_units'=> array( 'px', '%' ),
+				'range'     => array( 'px' => array( 'min' => 0, 'max' => 50 ) ),
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-doc__body' => 'border-radius: {{SIZE}}{{UNIT}};',
+				),
+			)
+		);
+		$this->add_responsive_control(
+			'content_padding',
+			array(
+				'label'      => __( 'Padding', 'letlexi' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', 'em', 'rem' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .lexi-doc__body' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Typography::get_type(),
+			array(
+				'name'     => 'section_text_typo',
+				'label'    => __( 'Text Typography', 'letlexi' ),
+				'selector' => '{{WRAPPER}} .lexi-section',
+			)
+		);
+
+		$this->add_control(
+			'commentary_heading',
+			array(
+				'label' => __( 'Commentary Button', 'letlexi' ),
+				'type'  => Controls_Manager::HEADING,
+			)
+		);
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Typography::get_type(),
+			array(
+				'name'     => 'commentary_btn_typo',
+				'selector' => '{{WRAPPER}} .lexi-commentary-toggle',
+			)
+		);
+
+		$this->add_control(
+			'commentary_btn_text_color',
+			array(
+				'label'     => __( 'Text Color', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-commentary-toggle' => 'color: {{VALUE}}',
+				),
+			)
+		);
+		$this->add_control(
+			'commentary_btn_bg',
+			array(
+				'label'     => __( 'Background', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-commentary-toggle' => 'background-color: {{VALUE}}',
+				),
+			)
+		);
+		$this->add_control(
+			'commentary_btn_bg_hover',
+			array(
+				'label'     => __( 'Background Hover', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-commentary-toggle:hover' => 'background-color: {{VALUE}}',
+				),
+			)
+		);
+		$this->add_group_control(
+			\Elementor\Group_Control_Border::get_type(),
+			array(
+				'name'     => 'commentary_btn_border',
+				'selector' => '{{WRAPPER}} .lexi-commentary-toggle',
+			)
+		);
+		$this->add_control(
+			'commentary_btn_radius',
+			array(
+				'label'     => __( 'Border Radius', 'letlexi' ),
+				'type'      => Controls_Manager::SLIDER,
+				'size_units'=> array( 'px', '%' ),
+				'range'     => array( 'px' => array( 'min' => 0, 'max' => 50 ) ),
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-commentary-toggle' => 'border-radius: {{SIZE}}{{UNIT}};',
+				),
+			)
+		);
+
+		$this->end_controls_section();
+
+		// STYLE: Jump To
+		$this->start_controls_section(
+			'lexi_style_jump_section',
+			array(
+				'label' => __( 'Jump To', 'letlexi' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			)
+		);
+		$this->add_group_control(
+			\Elementor\Group_Control_Typography::get_type(),
+			array(
+				'name'     => 'jump_label_typo',
+				'selector' => '{{WRAPPER}} .lexi-jump label',
+			)
+		);
+		$this->add_control(
+			'jump_label_color',
+			array(
+				'label'     => __( 'Label Color', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-jump label' => 'color: {{VALUE}}',
+				),
+			)
+		);
+		$this->add_group_control(
+			\Elementor\Group_Control_Typography::get_type(),
+			array(
+				'name'     => 'jump_select_typo',
+				'selector' => '{{WRAPPER}} .lexi-jump__select',
+			)
+		);
+		$this->add_control(
+			'jump_select_text_color',
+			array(
+				'label'     => __( 'Select Text Color', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-jump__select' => 'color: {{VALUE}}',
+				),
+			)
+		);
+		$this->add_control(
+			'jump_select_bg',
+			array(
+				'label'     => __( 'Select Background', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-jump__select' => 'background-color: {{VALUE}}',
+				),
+			)
+		);
+		$this->add_group_control(
+			\Elementor\Group_Control_Border::get_type(),
+			array(
+				'name'     => 'jump_select_border',
+				'selector' => '{{WRAPPER}} .lexi-jump__select',
+			)
+		);
+		$this->add_control(
+			'jump_select_radius',
+			array(
+				'label'     => __( 'Select Border Radius', 'letlexi' ),
+				'type'      => Controls_Manager::SLIDER,
+				'size_units'=> array( 'px', '%' ),
+				'range'     => array( 'px' => array( 'min' => 0, 'max' => 30 ) ),
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-jump__select' => 'border-radius: {{SIZE}}{{UNIT}};',
+				),
+			)
+		);
+		$this->end_controls_section();
+
+		// STYLE: Next & Previous buttons
+		$this->start_controls_section(
+			'lexi_style_nav_buttons_section',
+			array(
+				'label' => __( 'Next & Previous Buttons', 'letlexi' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			)
+		);
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Typography::get_type(),
+			array(
+				'name'     => 'nav_btn_typo',
+				'selector' => '{{WRAPPER}} .lexi-nav__prev, {{WRAPPER}} .lexi-nav__next',
+			)
+		);
+		$this->add_control(
+			'nav_btn_text_color',
+			array(
+				'label'     => __( 'Text Color', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-nav__prev, {{WRAPPER}} .lexi-nav__next' => 'color: {{VALUE}}',
+				),
+			)
+		);
+		$this->add_control(
+			'nav_btn_bg',
+			array(
+				'label'     => __( 'Background', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-nav__prev, {{WRAPPER}} .lexi-nav__next' => 'background-color: {{VALUE}}',
+				),
+			)
+		);
+		$this->add_control(
+			'nav_btn_bg_hover',
+			array(
+				'label'     => __( 'Background Hover', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-nav__prev:hover:not(:disabled), {{WRAPPER}} .lexi-nav__next:hover:not(:disabled)' => 'background-color: {{VALUE}}',
+				),
+			)
+		);
+		$this->add_group_control(
+			\Elementor\Group_Control_Border::get_type(),
+			array(
+				'name'     => 'nav_btn_border',
+				'selector' => '{{WRAPPER}} .lexi-nav__prev, {{WRAPPER}} .lexi-nav__next',
+			)
+		);
+		$this->add_control(
+			'nav_btn_radius',
+			array(
+				'label'     => __( 'Border Radius', 'letlexi' ),
+				'type'      => Controls_Manager::SLIDER,
+				'size_units'=> array( 'px', '%' ),
+				'range'     => array( 'px' => array( 'min' => 0, 'max' => 50 ) ),
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-nav__prev, {{WRAPPER}} .lexi-nav__next' => 'border-radius: {{SIZE}}{{UNIT}};',
+				),
+			)
+		);
+		$this->add_responsive_control(
+			'nav_btn_padding',
+			array(
+				'label'      => __( 'Padding', 'letlexi' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', 'em', 'rem' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .lexi-nav__prev, {{WRAPPER}} .lexi-nav__next' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+		$this->end_controls_section();
+		// Layout Section.
+		$this->start_controls_section(
+			'layout_section',
+			array(
+				'label' => __( 'Layout', 'letlexi' ),
+				'tab'   => Controls_Manager::TAB_CONTENT,
+			)
+		);
+
+		$this->add_control(
+			'toc_position',
+			array(
+				'label'   => __( 'TOC Position', 'letlexi' ),
+				'type'    => Controls_Manager::SELECT,
+				'default' => 'left',
+				'options' => array(
+					'left'  => __( 'Left', 'letlexi' ),
+					'right' => __( 'Right', 'letlexi' ),
+					'below' => __( 'Below Content', 'letlexi' ),
+				),
+			)
+		);
+
+		$this->add_responsive_control(
+			'toc_width',
+			array(
+				'label'      => __( 'TOC Width', 'letlexi' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => array( 'px', 'rem' ),
+				'range'      => array(
+					'px'  => array( 'min' => 160, 'max' => 600 ),
+					'rem' => array( 'min' => 10, 'max' => 40 ),
+				),
+				'default'    => array( 'unit' => 'px', 'size' => 280 ),
+				'selectors'  => array(
+					'{{WRAPPER}} .lexi-doc' => '--lexi-toc-width: {{SIZE}}{{UNIT}};',
+				),
+			)
+		);
+
+		$this->add_responsive_control(
+			'max_width',
+			array(
+				'label'      => __( 'Container Max Width', 'letlexi' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => array( 'px', 'rem', '%' ),
+				'range'      => array(
+					'px'  => array( 'min' => 600, 'max' => 2000 ),
+					'rem' => array( 'min' => 40, 'max' => 160 ),
+					'%'   => array( 'min' => 50, 'max' => 100 ),
+				),
+				'selectors'  => array(
+					'{{WRAPPER}} .lexi-doc' => '--lexi-max-width: {{SIZE}}{{UNIT}};',
+				),
+			)
+		);
+
+		$this->add_control(
+			'toc_sticky',
+			array(
+				'label'   => __( 'Sticky TOC', 'letlexi' ),
+				'type'    => Controls_Manager::SWITCHER,
+				'default' => 'yes',
+			)
+		);
+
+		$this->add_responsive_control(
+			'toc_sticky_offset',
+			array(
+				'label'      => __( 'Sticky Top Offset', 'letlexi' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => array( 'px', 'rem' ),
+				'range'      => array(
+					'px'  => array( 'min' => 0, 'max' => 200 ),
+					'rem' => array( 'min' => 0, 'max' => 10 ),
+				),
+				'default'    => array( 'unit' => 'rem', 'size' => 2 ),
+				'selectors'  => array(
+					'{{WRAPPER}} .lexi-doc' => '--lexi-toc-sticky-top: {{SIZE}}{{UNIT}};',
+				),
+				'condition'  => array( 'toc_sticky' => 'yes' ),
+			)
+		);
+
+		$this->end_controls_section();
+
 		// Display Options Section.
 		$this->start_controls_section(
 			'display_section',
@@ -503,514 +1243,6 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 				'default'     => '',
 				'description' => __( 'ACF subfield name for amendment history', 'letlexi' ),
 				'dynamic'     => array( 'active' => true ),
-			)
-		);
-
-		$this->end_controls_section();
-
-		// Style Section - Colors
-		$this->start_controls_section(
-			'style_colors_section',
-			array(
-				'label' => __( 'Colors', 'letlexi' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
-			)
-		);
-
-		$this->add_control(
-			'primary_color',
-			array(
-				'label'     => __( 'Primary Color', 'letlexi' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => '#007cba',
-				'selectors' => array(
-					'{{WRAPPER}} .lexi-nav__prev, {{WRAPPER}} .lexi-nav__next' => 'background-color: {{VALUE}}',
-					'{{WRAPPER}} .lexi-toc__link.active' => 'color: {{VALUE}}',
-					'{{WRAPPER}} .lexi-commentary-toggle' => 'background-color: {{VALUE}}',
-					'{{WRAPPER}} .lexi-jump__select:focus' => 'outline-color: {{VALUE}}',
-				),
-			)
-		);
-
-		$this->add_control(
-			'secondary_color',
-			array(
-				'label'     => __( 'Secondary Color', 'letlexi' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => '#28a745',
-				'selectors' => array(
-					'{{WRAPPER}} .lexi-commentary-section' => 'border-left-color: {{VALUE}}',
-					'{{WRAPPER}} .lexi-badge--active' => 'background-color: {{VALUE}}',
-				),
-			)
-		);
-
-		$this->add_control(
-			'text_color',
-			array(
-				'label'     => __( 'Text Color', 'letlexi' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => '#343a40',
-				'selectors' => array(
-					'{{WRAPPER}} .lexi-doc' => 'color: {{VALUE}}',
-				),
-			)
-		);
-
-		$this->add_control(
-			'link_color',
-			array(
-				'label'     => __( 'Link Color', 'letlexi' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => '#007cba',
-				'selectors' => array(
-					'{{WRAPPER}} .lexi-toc__link' => 'color: {{VALUE}}',
-				),
-			)
-		);
-
-		$this->add_control(
-			'link_hover_color',
-			array(
-				'label'     => __( 'Link Hover Color', 'letlexi' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => '#0056b3',
-				'selectors' => array(
-					'{{WRAPPER}} .lexi-toc__link:hover' => 'color: {{VALUE}}',
-				),
-			)
-		);
-
-		$this->end_controls_section();
-
-		// Style Section - Backgrounds
-		$this->start_controls_section(
-			'style_backgrounds_section',
-			array(
-				'label' => __( 'Backgrounds', 'letlexi' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
-			)
-		);
-
-		$this->add_control(
-			'toc_background',
-			array(
-				'label'     => __( 'TOC Background', 'letlexi' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => '#f8f9fa',
-				'selectors' => array(
-					'{{WRAPPER}} .lexi-toc' => 'background-color: {{VALUE}}',
-				),
-			)
-		);
-
-		$this->add_control(
-			'content_background',
-			array(
-				'label'     => __( 'Content Background', 'letlexi' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => '#ffffff',
-				'selectors' => array(
-					'{{WRAPPER}} .lexi-doc__main' => 'background-color: {{VALUE}}',
-				),
-			)
-		);
-
-		$this->add_control(
-			'section_background',
-			array(
-				'label'     => __( 'Section Background', 'letlexi' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => '#ffffff',
-				'selectors' => array(
-					'{{WRAPPER}} .lexi-section' => 'background-color: {{VALUE}}',
-				),
-			)
-		);
-
-		$this->end_controls_section();
-
-		// Style Section - Typography
-		$this->start_controls_section(
-			'style_typography_section',
-			array(
-				'label' => __( 'Typography', 'letlexi' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
-			)
-		);
-
-		$this->add_group_control(
-			\Elementor\Group_Control_Typography::get_type(),
-			array(
-				'name'     => 'heading_typography',
-				'label'    => __( 'Section Headings', 'letlexi' ),
-				'selector' => '{{WRAPPER}} .lexi-section h1, {{WRAPPER}} .lexi-section h2, {{WRAPPER}} .lexi-section h3, {{WRAPPER}} .lexi-section h4, {{WRAPPER}} .lexi-section h5, {{WRAPPER}} .lexi-section h6',
-			)
-		);
-
-		$this->add_group_control(
-			\Elementor\Group_Control_Typography::get_type(),
-			array(
-				'name'     => 'body_typography',
-				'label'    => __( 'Body Text', 'letlexi' ),
-				'selector' => '{{WRAPPER}} .lexi-section p, {{WRAPPER}} .lexi-section div, {{WRAPPER}} .lexi-section span',
-			)
-		);
-
-		$this->add_group_control(
-			\Elementor\Group_Control_Typography::get_type(),
-			array(
-				'name'     => 'toc_typography',
-				'label'    => __( 'TOC Links', 'letlexi' ),
-				'selector' => '{{WRAPPER}} .lexi-toc__link',
-			)
-		);
-
-		$this->add_group_control(
-			\Elementor\Group_Control_Typography::get_type(),
-			array(
-				'name'     => 'button_typography',
-				'label'    => __( 'Buttons', 'letlexi' ),
-				'selector' => '{{WRAPPER}} .lexi-nav__prev, {{WRAPPER}} .lexi-nav__next, {{WRAPPER}} .lexi-commentary-toggle',
-			)
-		);
-
-		$this->end_controls_section();
-
-		// Style Section - Spacing
-		$this->start_controls_section(
-			'style_spacing_section',
-			array(
-				'label' => __( 'Spacing', 'letlexi' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
-			)
-		);
-
-		$this->add_responsive_control(
-			'section_margin',
-			array(
-				'label'      => __( 'Section Margin', 'letlexi' ),
-				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => array( 'px', 'em', '%' ),
-				'default'    => array(
-					'top'    => '0',
-					'right'  => '0',
-					'bottom' => '2rem',
-					'left'   => '0',
-				),
-				'selectors'  => array(
-					'{{WRAPPER}} .lexi-section' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				),
-			)
-		);
-
-		$this->add_responsive_control(
-			'toc_padding',
-			array(
-				'label'      => __( 'TOC Padding', 'letlexi' ),
-				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => array( 'px', 'em', '%' ),
-				'default'    => array(
-					'top'    => '1.5rem',
-					'right'  => '1.5rem',
-					'bottom' => '1.5rem',
-					'left'   => '1.5rem',
-				),
-				'selectors'  => array(
-					'{{WRAPPER}} .lexi-toc' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				),
-			)
-		);
-
-		$this->add_responsive_control(
-			'content_padding',
-			array(
-				'label'      => __( 'Content Padding', 'letlexi' ),
-				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => array( 'px', 'em', '%' ),
-				'default'    => array(
-					'top'    => '0',
-					'right'  => '0',
-					'bottom' => '0',
-					'left'   => '0',
-				),
-				'selectors'  => array(
-					'{{WRAPPER}} .lexi-doc__main' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				),
-			)
-		);
-
-		$this->add_responsive_control(
-			'gap_between_panes',
-			array(
-				'label'      => __( 'Gap Between Panes', 'letlexi' ),
-				'type'       => Controls_Manager::SLIDER,
-				'size_units' => array( 'px', 'em', 'rem' ),
-				'range'      => array(
-					'px' => array(
-						'min' => 0,
-						'max' => 100,
-					),
-					'em' => array(
-						'min' => 0,
-						'max' => 10,
-					),
-					'rem' => array(
-						'min' => 0,
-						'max' => 10,
-					),
-				),
-				'default'    => array(
-					'unit' => 'rem',
-					'size' => 2,
-				),
-				'selectors'  => array(
-					'{{WRAPPER}} .lexi-doc' => 'gap: {{SIZE}}{{UNIT}};',
-				),
-			)
-		);
-
-		$this->end_controls_section();
-
-		// Style Section - Borders & Shadows
-		$this->start_controls_section(
-			'style_borders_section',
-			array(
-				'label' => __( 'Borders & Shadows', 'letlexi' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
-			)
-		);
-
-		$this->add_group_control(
-			\Elementor\Group_Control_Border::get_type(),
-			array(
-				'name'     => 'toc_border',
-				'label'    => __( 'TOC Border', 'letlexi' ),
-				'selector' => '{{WRAPPER}} .lexi-toc',
-			)
-		);
-
-		$this->add_group_control(
-			\Elementor\Group_Control_Border::get_type(),
-			array(
-				'name'     => 'section_border',
-				'label'    => __( 'Section Border', 'letlexi' ),
-				'selector' => '{{WRAPPER}} .lexi-section',
-			)
-		);
-
-		$this->add_group_control(
-			\Elementor\Group_Control_Box_Shadow::get_type(),
-			array(
-				'name'     => 'toc_shadow',
-				'label'    => __( 'TOC Shadow', 'letlexi' ),
-				'selector' => '{{WRAPPER}} .lexi-toc',
-			)
-		);
-
-		$this->add_group_control(
-			\Elementor\Group_Control_Box_Shadow::get_type(),
-			array(
-				'name'     => 'section_shadow',
-				'label'    => __( 'Section Shadow', 'letlexi' ),
-				'selector' => '{{WRAPPER}} .lexi-section',
-			)
-		);
-
-		$this->end_controls_section();
-
-		// Style Section - Navigation
-		$this->start_controls_section(
-			'style_navigation_section',
-			array(
-				'label' => __( 'Navigation', 'letlexi' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
-			)
-		);
-
-		$this->add_responsive_control(
-			'nav_button_padding',
-			array(
-				'label'      => __( 'Button Padding', 'letlexi' ),
-				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => array( 'px', 'em', '%' ),
-				'default'    => array(
-					'top'    => '1rem',
-					'right'  => '1.5rem',
-					'bottom' => '1rem',
-					'left'   => '1.5rem',
-				),
-				'selectors'  => array(
-					'{{WRAPPER}} .lexi-nav__prev, {{WRAPPER}} .lexi-nav__next' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				),
-			)
-		);
-
-		$this->add_control(
-			'nav_button_radius',
-			array(
-				'label'      => __( 'Button Border Radius', 'letlexi' ),
-				'type'       => Controls_Manager::SLIDER,
-				'size_units' => array( 'px', '%' ),
-				'range'      => array(
-					'px' => array(
-						'min' => 0,
-						'max' => 50,
-					),
-					'%'  => array(
-						'min' => 0,
-						'max' => 100,
-					),
-				),
-				'default'    => array(
-					'unit' => 'px',
-					'size' => 8,
-				),
-				'selectors'  => array(
-					'{{WRAPPER}} .lexi-nav__prev, {{WRAPPER}} .lexi-nav__next' => 'border-radius: {{SIZE}}{{UNIT}};',
-				),
-			)
-		);
-
-		$this->add_control(
-			'nav_button_hover_color',
-			array(
-				'label'     => __( 'Button Hover Color', 'letlexi' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => '#0056b3',
-				'selectors' => array(
-					'{{WRAPPER}} .lexi-nav__prev:hover:not(:disabled), {{WRAPPER}} .lexi-nav__next:hover:not(:disabled)' => 'background-color: {{VALUE}}',
-				),
-			)
-		);
-
-		$this->end_controls_section();
-
-		// Style Section - Header & Document Info
-		$this->start_controls_section(
-			'style_header_section',
-			array(
-				'label' => __( 'Header & Document Info', 'letlexi' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
-			)
-		);
-
-		$this->add_control(
-			'header_background',
-			array(
-				'label'     => __( 'Header Background', 'letlexi' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => '#ffffff',
-				'selectors' => array(
-					'{{WRAPPER}} .lexi-reader-header' => 'background-color: {{VALUE}}',
-				),
-			)
-		);
-
-		$this->add_group_control(
-			\Elementor\Group_Control_Typography::get_type(),
-			array(
-				'name'     => 'document_label_typography',
-				'label'    => __( 'Document Label Typography', 'letlexi' ),
-				'selector' => '{{WRAPPER}} .lexi-document-label',
-			)
-		);
-
-		$this->add_group_control(
-			\Elementor\Group_Control_Typography::get_type(),
-			array(
-				'name'     => 'query_label_typography',
-				'label'    => __( 'Query Label Typography', 'letlexi' ),
-				'selector' => '{{WRAPPER}} .lexi-query-label',
-			)
-		);
-
-		$this->add_responsive_control(
-			'header_padding',
-			array(
-				'label'      => __( 'Header Padding', 'letlexi' ),
-				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => array( 'px', 'em', '%' ),
-				'default'    => array(
-					'top'    => '1rem',
-					'right'  => '1rem',
-					'bottom' => '1rem',
-					'left'   => '1rem',
-				),
-				'selectors'  => array(
-					'{{WRAPPER}} .lexi-reader-header' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				),
-			)
-		);
-
-		$this->end_controls_section();
-
-		// Style Section - Section Headers
-		$this->start_controls_section(
-			'style_section_headers_section',
-			array(
-				'label' => __( 'Section Headers', 'letlexi' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
-			)
-		);
-
-		$this->add_control(
-			'section_header_background',
-			array(
-				'label'     => __( 'Section Header Background', 'letlexi' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => '#ffffff',
-				'selectors' => array(
-					'{{WRAPPER}} .lexi-section-header' => 'background-color: {{VALUE}}',
-				),
-			)
-		);
-
-		$this->add_control(
-			'section_header_border_color',
-			array(
-				'label'     => __( 'Section Header Border Color', 'letlexi' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => '#f0f0f0',
-				'selectors' => array(
-					'{{WRAPPER}} .lexi-section-header' => 'border-bottom-color: {{VALUE}}',
-				),
-			)
-		);
-
-		$this->add_responsive_control(
-			'section_header_padding',
-			array(
-				'label'      => __( 'Section Header Padding', 'letlexi' ),
-				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => array( 'px', 'em', '%' ),
-				'default'    => array(
-					'top'    => '0',
-					'right'  => '0',
-					'bottom' => '1rem',
-					'left'   => '0',
-				),
-				'selectors'  => array(
-					'{{WRAPPER}} .lexi-section-header' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				),
-			)
-		);
-
-		$this->add_responsive_control(
-			'section_header_margin',
-			array(
-				'label'      => __( 'Section Header Margin', 'letlexi' ),
-				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => array( 'px', 'em', '%' ),
-				'default'    => array(
-					'top'    => '0',
-					'right'  => '0',
-					'bottom' => '1.5rem',
-					'left'   => '0',
-				),
-				'selectors'  => array(
-					'{{WRAPPER}} .lexi-section-header' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				),
 			)
 		);
 
@@ -1255,164 +1487,6 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 
 		$this->end_controls_section();
 
-		// Style Section - Font Controls
-		$this->start_controls_section(
-			'style_font_controls_section',
-			array(
-				'label' => __( 'Font Controls', 'letlexi' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
-			)
-		);
-
-		$this->add_control(
-			'font_control_background',
-			array(
-				'label'     => __( 'Font Control Background', 'letlexi' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => '#6c757d',
-				'selectors' => array(
-					'{{WRAPPER}} .lexi-font__inc, {{WRAPPER}} .lexi-font__dec, {{WRAPPER}} .lexi-font__reset' => 'background-color: {{VALUE}}',
-				),
-			)
-		);
-
-		$this->add_control(
-			'font_control_hover_background',
-			array(
-				'label'     => __( 'Font Control Hover Background', 'letlexi' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => '#5a6268',
-				'selectors' => array(
-					'{{WRAPPER}} .lexi-font__inc:hover, {{WRAPPER}} .lexi-font__dec:hover, {{WRAPPER}} .lexi-font__reset:hover' => 'background-color: {{VALUE}}',
-				),
-			)
-		);
-
-		$this->add_responsive_control(
-			'font_control_padding',
-			array(
-				'label'      => __( 'Font Control Padding', 'letlexi' ),
-				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => array( 'px', 'em', '%' ),
-				'default'    => array(
-					'top'    => '0.5rem',
-					'right'  => '0.75rem',
-					'bottom' => '0.5rem',
-					'left'   => '0.75rem',
-				),
-				'selectors'  => array(
-					'{{WRAPPER}} .lexi-font__inc, {{WRAPPER}} .lexi-font__dec, {{WRAPPER}} .lexi-font__reset' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				),
-			)
-		);
-
-		$this->add_control(
-			'font_control_border_radius',
-			array(
-				'label'      => __( 'Font Control Border Radius', 'letlexi' ),
-				'type'       => Controls_Manager::SLIDER,
-				'size_units' => array( 'px', '%' ),
-				'range'      => array(
-					'px' => array(
-						'min' => 0,
-						'max' => 50,
-					),
-					'%'  => array(
-						'min' => 0,
-						'max' => 100,
-					),
-				),
-				'default'    => array(
-					'unit' => 'px',
-					'size' => 4,
-				),
-				'selectors'  => array(
-					'{{WRAPPER}} .lexi-font__inc, {{WRAPPER}} .lexi-font__dec, {{WRAPPER}} .lexi-font__reset' => 'border-radius: {{SIZE}}{{UNIT}};',
-				),
-			)
-		);
-
-		$this->end_controls_section();
-
-		// Style Section - Jump Selector
-		$this->start_controls_section(
-			'style_jump_selector_section',
-			array(
-				'label' => __( 'Jump Selector', 'letlexi' ),
-				'tab'   => Controls_Manager::TAB_STYLE,
-			)
-		);
-
-		$this->add_control(
-			'jump_select_background',
-			array(
-				'label'     => __( 'Select Background', 'letlexi' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => '#ffffff',
-				'selectors' => array(
-					'{{WRAPPER}} .lexi-jump__select' => 'background-color: {{VALUE}}',
-				),
-			)
-		);
-
-		$this->add_control(
-			'jump_select_border_color',
-			array(
-				'label'     => __( 'Select Border Color', 'letlexi' ),
-				'type'      => Controls_Manager::COLOR,
-				'default'   => '#ced4da',
-				'selectors' => array(
-					'{{WRAPPER}} .lexi-jump__select' => 'border-color: {{VALUE}}',
-				),
-			)
-		);
-
-		$this->add_responsive_control(
-			'jump_select_padding',
-			array(
-				'label'      => __( 'Select Padding', 'letlexi' ),
-				'type'       => Controls_Manager::DIMENSIONS,
-				'size_units' => array( 'px', 'em', '%' ),
-				'default'    => array(
-					'top'    => '0.5rem',
-					'right'  => '0.5rem',
-					'bottom' => '0.5rem',
-					'left'   => '0.5rem',
-				),
-				'selectors'  => array(
-					'{{WRAPPER}} .lexi-jump__select' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				),
-			)
-		);
-
-		$this->add_control(
-			'jump_select_border_radius',
-			array(
-				'label'      => __( 'Select Border Radius', 'letlexi' ),
-				'type'       => Controls_Manager::SLIDER,
-				'size_units' => array( 'px', '%' ),
-				'range'      => array(
-					'px' => array(
-						'min' => 0,
-						'max' => 50,
-					),
-					'%'  => array(
-						'min' => 0,
-						'max' => 100,
-					),
-				),
-				'default'    => array(
-					'unit' => 'px',
-					'size' => 4,
-				),
-				'selectors'  => array(
-					'{{WRAPPER}} .lexi-jump__select' => 'border-radius: {{SIZE}}{{UNIT}};',
-				),
-			)
-		);
-
-		$this->end_controls_section();
-
 		// Style Section - Loading & Error States
 		$this->start_controls_section(
 			'style_states_section',
@@ -1476,6 +1550,12 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 		$settings = $this->get_settings_for_display();
 
 		$post_id = get_the_ID();
+
+		// Apply layout class to widget wrapper for live preview and frontend.
+		$toc_position = isset( $settings['toc_position'] ) ? $settings['toc_position'] : 'left';
+		if ( in_array( $toc_position, array( 'left', 'right', 'below' ), true ) ) {
+			$this->add_render_attribute( '_wrapper', 'class', 'lexi-toc-' . $toc_position );
+		}
 
 		$is_manual = isset( $settings['data_source'] ) && $settings['data_source'] === 'manual' && ! empty( $settings['manual_sections'] );
 

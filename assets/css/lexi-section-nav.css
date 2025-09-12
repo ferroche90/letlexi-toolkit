@@ -92,6 +92,35 @@
     padding: var(--lexi-spacing-lg);
 }
 
+/* Layout variants */
+.lexi-doc.lexi-toc-left {
+    flex-direction: row; /* default: TOC first (left), main second (right) */
+}
+
+.lexi-doc.lexi-toc-right {
+    flex-direction: row-reverse;
+}
+
+.lexi-doc.lexi-toc-below {
+    flex-direction: column;
+}
+
+/* Support Elementor wrapper class prefix for live preview */
+.elementor-widget-lexi_section_navigator.lexi-toc-left .lexi-doc,
+.lexi-toc-left .lexi-doc {
+    flex-direction: row;
+}
+
+.elementor-widget-lexi_section_navigator.lexi-toc-right .lexi-doc,
+.lexi-toc-right .lexi-doc {
+    flex-direction: row-reverse;
+}
+
+.elementor-widget-lexi_section_navigator.lexi-toc-below .lexi-doc,
+.lexi-toc-below .lexi-doc {
+    flex-direction: column;
+}
+
 /* Ensure styles also apply inside Elementor editor preview */
 .elementor-editor-active .elementor-widget-lexi_section_navigator .lexi-doc {
     max-width: 100%;
@@ -165,12 +194,18 @@
 .lexi-toc {
     flex: 0 0 var(--lexi-toc-width);
     position: sticky;
-    top: var(--lexi-spacing-2xl);
+    top: var(--lexi-toc-sticky-top, var(--lexi-spacing-2xl));
     height: fit-content;
     background: var(--lexi-color-bg-secondary);
     border-radius: var(--lexi-radius-lg);
     padding: var(--lexi-spacing-xl);
     border: 1px solid var(--lexi-color-border);
+}
+
+.lexi-doc.lexi-toc-below .lexi-toc {
+    position: static;
+    order: 2;
+    width: 100%;
 }
 
 .lexi-toc__toggle {

@@ -254,10 +254,19 @@ function lexi_build_shell_html( $post_id, $settings = array() ) {
 	$content_html = lexi_build_content_area( $post_id, $display_args, $resolved_settings, $sections );
 	$footer_nav_html = lexi_build_footer_navigation( $post_id, $resolved_settings, count( $sections ) );
 
-	// Assemble the complete shell with 2-column layout.
-	$html = '<div class="lexi-doc">';
+	// Assemble the complete shell; add layout classes.
+	$doc_classes = array( 'lexi-doc' );
+	$position = isset( $resolved_settings['toc_position'] ) ? $resolved_settings['toc_position'] : 'left';
+	if ( $position === 'right' ) {
+		$doc_classes[] = 'lexi-toc-right';
+	} elseif ( $position === 'below' ) {
+		$doc_classes[] = 'lexi-toc-below';
+	} else {
+		$doc_classes[] = 'lexi-toc-left';
+	}
+	$html = '<div class="' . esc_attr( implode( ' ', $doc_classes ) ) . '">';
 
-	// Left Column: TOC.
+	// TOC Pane.
 	$html .= '<div class="lexi-toc">';
 	$html .= '<button type="button" class="lexi-toc__toggle" aria-expanded="false" aria-controls="lexi-toc-list-' . esc_attr( $post_id ) . '">';
 	$html .= esc_html( $resolved_settings['toc_heading'] );
