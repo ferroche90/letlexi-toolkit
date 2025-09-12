@@ -117,6 +117,81 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			)
 		);
 
+		// Data Source.
+		$this->add_control(
+			'data_source',
+			array(
+				'label'   => __( 'Data Source', 'letlexi' ),
+				'type'    => Controls_Manager::SELECT,
+				'default' => 'acf',
+				'options' => array(
+					'acf'    => __( 'ACF (Automatic)', 'letlexi' ),
+					'manual' => __( 'Manual (Enter content)', 'letlexi' ),
+				),
+			)
+		);
+
+		// Manual Sections (when data source = manual).
+		$manual_repeater = new \Elementor\Repeater();
+		$manual_repeater->add_control(
+			'm_section_number',
+			array(
+				'label'   => __( 'Section Number', 'letlexi' ),
+				'type'    => Controls_Manager::TEXT,
+				'dynamic' => array( 'active' => true ),
+			)
+		);
+		$manual_repeater->add_control(
+			'm_section_title',
+			array(
+				'label'   => __( 'Section Title', 'letlexi' ),
+				'type'    => Controls_Manager::TEXT,
+				'dynamic' => array( 'active' => true ),
+			)
+		);
+		$manual_repeater->add_control(
+			'm_section_status',
+			array(
+				'label'   => __( 'Section Status', 'letlexi' ),
+				'type'    => Controls_Manager::SELECT,
+				'default' => '',
+				'options' => array(
+					''            => __( 'None', 'letlexi' ),
+					'active'      => __( 'Active', 'letlexi' ),
+					'repealed'    => __( 'Repealed', 'letlexi' ),
+					'superseded'  => __( 'Superseded', 'letlexi' ),
+					'pending'     => __( 'Pending', 'letlexi' ),
+				),
+			)
+		);
+		$manual_repeater->add_control(
+			'm_section_content',
+			array(
+				'label'   => __( 'Section Content', 'letlexi' ),
+				'type'    => Controls_Manager::WYSIWYG,
+				'dynamic' => array( 'active' => true ),
+			)
+		);
+		$manual_repeater->add_control(
+			'm_section_commentary',
+			array(
+				'label'   => __( 'Section Commentary', 'letlexi' ),
+				'type'    => Controls_Manager::WYSIWYG,
+				'dynamic' => array( 'active' => true ),
+			)
+		);
+
+		$this->add_control(
+			'manual_sections',
+			array(
+				'label'       => __( 'Manual Sections', 'letlexi' ),
+				'type'        => Controls_Manager::REPEATER,
+				'fields'      => $manual_repeater->get_controls(),
+				'title_field' => '{{{ m_section_number }}} {{{ m_section_title }}}',
+				'condition'   => array( 'data_source' => 'manual' ),
+			)
+		);
+
 		// Document Label.
 		$this->add_control(
 			'document_label',
@@ -291,8 +366,9 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			array(
 				'label'       => __( 'ACF Toggle: Commentary', 'letlexi' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => 'show_commentary',
+				'default'     => '',
 				'description' => __( 'ACF field name for article-level commentary toggle', 'letlexi' ),
+				'dynamic'     => array( 'active' => true ),
 			)
 		);
 
@@ -301,8 +377,9 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			array(
 				'label'       => __( 'ACF Toggle: Cross References', 'letlexi' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => 'show_cross_references',
+				'default'     => '',
 				'description' => __( 'ACF field name for article-level cross references toggle', 'letlexi' ),
+				'dynamic'     => array( 'active' => true ),
 			)
 		);
 
@@ -311,8 +388,9 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			array(
 				'label'       => __( 'ACF Toggle: Case Law', 'letlexi' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => 'show_case_law',
+				'default'     => '',
 				'description' => __( 'ACF field name for article-level case law toggle', 'letlexi' ),
+				'dynamic'     => array( 'active' => true ),
 			)
 		);
 
@@ -321,8 +399,9 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			array(
 				'label'       => __( 'ACF Toggle: Amendments', 'letlexi' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => 'show_amendment_history',
+				'default'     => '',
 				'description' => __( 'ACF field name for article-level amendments toggle', 'letlexi' ),
+				'dynamic'     => array( 'active' => true ),
 			)
 		);
 
@@ -332,8 +411,9 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			array(
 				'label'       => __( 'ACF Repeater: Sections', 'letlexi' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => 'sections',
+				'default'     => '',
 				'description' => __( 'ACF repeater field name for sections', 'letlexi' ),
+				'dynamic'     => array( 'active' => true ),
 			)
 		);
 
@@ -343,8 +423,9 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			array(
 				'label'       => __( 'ACF Field: Section Number', 'letlexi' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => 'section_number',
+				'default'     => '',
 				'description' => __( 'ACF subfield name for section number', 'letlexi' ),
+				'dynamic'     => array( 'active' => true ),
 			)
 		);
 
@@ -353,8 +434,9 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			array(
 				'label'       => __( 'ACF Field: Section Title', 'letlexi' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => 'section_title',
+				'default'     => '',
 				'description' => __( 'ACF subfield name for section title', 'letlexi' ),
+				'dynamic'     => array( 'active' => true ),
 			)
 		);
 
@@ -363,8 +445,9 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			array(
 				'label'       => __( 'ACF Field: Section Status', 'letlexi' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => 'section_status',
+				'default'     => '',
 				'description' => __( 'ACF subfield name for section status', 'letlexi' ),
+				'dynamic'     => array( 'active' => true ),
 			)
 		);
 
@@ -373,8 +456,9 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			array(
 				'label'       => __( 'ACF Field: Section Content', 'letlexi' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => 'section_content',
+				'default'     => '',
 				'description' => __( 'ACF subfield name for section content', 'letlexi' ),
+				'dynamic'     => array( 'active' => true ),
 			)
 		);
 
@@ -383,8 +467,9 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			array(
 				'label'       => __( 'ACF Field: Section Commentary', 'letlexi' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => 'section_commentary',
+				'default'     => '',
 				'description' => __( 'ACF subfield name for section commentary', 'letlexi' ),
+				'dynamic'     => array( 'active' => true ),
 			)
 		);
 
@@ -393,8 +478,9 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			array(
 				'label'       => __( 'ACF Field: Cross References', 'letlexi' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => 'cross_references',
+				'default'     => '',
 				'description' => __( 'ACF subfield name for cross references', 'letlexi' ),
+				'dynamic'     => array( 'active' => true ),
 			)
 		);
 
@@ -403,8 +489,9 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			array(
 				'label'       => __( 'ACF Field: Case Law References', 'letlexi' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => 'case_law_references',
+				'default'     => '',
 				'description' => __( 'ACF subfield name for case law references', 'letlexi' ),
+				'dynamic'     => array( 'active' => true ),
 			)
 		);
 
@@ -413,8 +500,9 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			array(
 				'label'       => __( 'ACF Field: Amendment History', 'letlexi' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => 'amendment_history',
+				'default'     => '',
 				'description' => __( 'ACF subfield name for amendment history', 'letlexi' ),
+				'dynamic'     => array( 'active' => true ),
 			)
 		);
 
@@ -1389,14 +1477,28 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 
 		$post_id = get_the_ID();
 
-		// Validate post type.
-		if ( ! Toolkit\lexi_supports_section_navigation( $post_id ) ) {
-			echo '<div class="lexi-error">' . esc_html__( 'This widget can only be used on posts that have ACF sections and are of a supported post type.', 'letlexi' ) . '</div>';
+		$is_manual = isset( $settings['data_source'] ) && $settings['data_source'] === 'manual' && ! empty( $settings['manual_sections'] );
+
+		// Validate only when not manual. In frontend, fail silently; in editor, show a hint.
+		if ( ! $is_manual && ! Toolkit\lexi_supports_section_navigation( $post_id ) ) {
+			$in_editor = ( class_exists( '\\Elementor\\Plugin' ) && 
+				isset( \Elementor\Plugin::$instance->editor ) && 
+				method_exists( \Elementor\Plugin::$instance->editor, 'is_edit_mode' ) && 
+				\Elementor\Plugin::$instance->editor->is_edit_mode() );
+			if ( $in_editor ) {
+				echo '<div class="lexi-error">' . esc_html__( 'No content found. Add Manual Sections or map ACF fields via dynamic tags.', 'letlexi' ) . '</div>';
+			}
 			return;
 		}
 
 		// Resolve settings and defaults.
 		$resolved_settings = $this->resolve_settings( $settings );
+
+		// In manual mode, pass manual sections in settings for renderer to use.
+		if ( $is_manual ) {
+			$resolved_settings['manual_sections'] = $this->normalize_manual_sections( $settings['manual_sections'] );
+			$resolved_settings['loading_strategy'] = 'preload';
+		}
 
 		// Build and output the HTML.
 		echo Toolkit\lexi_build_shell_html( $post_id, $resolved_settings );
@@ -1412,33 +1514,65 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 	 */
 	private function resolve_settings( $settings ) {
 		$defaults = array(
-			'document_label'        => __( 'Document:', 'letlexi' ),
-			'query_format'          => '%constitution% Art. %article%, Section %section%',
-			'print_label'           => __( 'Print', 'letlexi' ),
-			'copy_citation_label'   => __( 'Copy Citation', 'letlexi' ),
-			'toc_heading'           => __( 'Table of Contents', 'letlexi' ),
-			'previous_label'        => __( 'Previous', 'letlexi' ),
-			'next_label'            => __( 'Next', 'letlexi' ),
+			'data_source'             => 'acf',
+			'manual_sections'         => array(),
+			'document_label'        => '',
+			'query_format'          => '',
+			'print_label'           => '',
+			'copy_citation_label'   => '',
+			'toc_heading'           => '',
+			'previous_label'        => '',
+			'next_label'            => '',
 			'show_commentary'       => 'yes',
 			'show_cross_refs'       => 'yes',
 			'show_case_law'         => 'yes',
 			'show_amendments'       => 'yes',
 			'loading_strategy'      => 'ajax',
-			'acf_toggle_commentary' => 'show_commentary',
-			'acf_toggle_crossrefs'  => 'show_cross_references',
-			'acf_toggle_caselaw'    => 'show_case_law',
-			'acf_toggle_amendments' => 'show_amendment_history',
-			'acf_repeater_sections' => 'sections',
-			'acf_field_section_number'     => 'section_number',
-			'acf_field_section_title'      => 'section_title',
-			'acf_field_section_status'     => 'section_status',
-			'acf_field_section_content'    => 'section_content',
-			'acf_field_section_commentary' => 'section_commentary',
-			'acf_field_cross_references'   => 'cross_references',
-			'acf_field_case_law_references' => 'case_law_references',
-			'acf_field_amendment_history'  => 'amendment_history',
+			'acf_toggle_commentary' => '',
+			'acf_toggle_crossrefs'  => '',
+			'acf_toggle_caselaw'    => '',
+			'acf_toggle_amendments' => '',
+			'acf_repeater_sections' => '',
+			'acf_field_section_number'     => '',
+			'acf_field_section_title'      => '',
+			'acf_field_section_status'     => '',
+			'acf_field_section_content'    => '',
+			'acf_field_section_commentary' => '',
+			'acf_field_cross_references'   => '',
+			'acf_field_case_law_references' => '',
+			'acf_field_amendment_history'  => '',
 		);
 
 		return wp_parse_args( $settings, $defaults );
+	}
+
+	/**
+	 * Normalize manual sections structure to match renderer expectations
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param array $manual_sections Sections from Elementor control.
+	 * @return array Normalized sections.
+	 */
+	private function normalize_manual_sections( $manual_sections ) {
+		$normalized = array();
+		if ( empty( $manual_sections ) || ! is_array( $manual_sections ) ) {
+			return $normalized;
+		}
+
+		foreach ( $manual_sections as $section ) {
+			$normalized[] = array(
+				'section_number'     => isset( $section['m_section_number'] ) ? $section['m_section_number'] : '',
+				'section_title'      => isset( $section['m_section_title'] ) ? $section['m_section_title'] : '',
+				'section_status'     => isset( $section['m_section_status'] ) ? $section['m_section_status'] : '',
+				'section_content'    => isset( $section['m_section_content'] ) ? $section['m_section_content'] : '',
+				'section_commentary' => isset( $section['m_section_commentary'] ) ? $section['m_section_commentary'] : '',
+				'cross_references'   => array(),
+				'case_law_references'=> array(),
+				'amendment_history'  => array(),
+			);
+		}
+
+		return $normalized;
 	}
 }

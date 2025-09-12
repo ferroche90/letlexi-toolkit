@@ -24,15 +24,22 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return string The rendered HTML or empty string on error.
  */
 function lexi_render_section_html( $post_id, $index, $args = array() ) {
-	// Validate post type.
-	if ( ! lexi_supports_section_navigation( $post_id ) ) {
-		return '';
-	}
+	// Prefer manual sections if provided.
+	$manual_sections = isset( $args['manual_sections'] ) && is_array( $args['manual_sections'] ) ? $args['manual_sections'] : null;
 
-	// Load all sections.
-	$sections = lexi_get_sections( $post_id );
-	if ( empty( $sections ) || ! is_array( $sections ) ) {
-		return '';
+	if ( null !== $manual_sections ) {
+		$sections = $manual_sections;
+	} else {
+		// Validate post type.
+		if ( ! lexi_supports_section_navigation( $post_id ) ) {
+			return '';
+		}
+
+		// Load all sections.
+		$sections = lexi_get_sections( $post_id );
+		if ( empty( $sections ) || ! is_array( $sections ) ) {
+			return '';
+		}
 	}
 
 	// Sanitize and validate index.
@@ -213,15 +220,22 @@ function lexi_render_section_html( $post_id, $index, $args = array() ) {
  * @return string The complete HTML shell structure.
  */
 function lexi_build_shell_html( $post_id, $settings = array() ) {
-	// Validate post type.
-	if ( ! lexi_supports_section_navigation( $post_id ) ) {
-		return '<div class="lexi-error">' . esc_html__( 'This post does not support section navigation. Please ensure it has ACF sections and is a supported post type.', 'letlexi' ) . '</div>';
-	}
+	// Detect manual sections mode.
+	$manual_sections = isset( $settings['manual_sections'] ) && is_array( $settings['manual_sections'] ) ? $settings['manual_sections'] : null;
 
-	// Get sections for TOC and validation.
-	$sections = lexi_get_sections( $post_id );
-	if ( empty( $sections ) ) {
-		return '<div class="lexi-error">' . esc_html__( 'No sections found for this document.', 'letlexi' ) . '</div>';
+	if ( null !== $manual_sections ) {
+		$sections = $manual_sections;
+	} else {
+		// Validate post type.
+		if ( ! lexi_supports_section_navigation( $post_id ) ) {
+			return '<div class="lexi-error">' . esc_html__( 'This post does not support section navigation. Please ensure it has ACF sections and is a supported post type.', 'letlexi' ) . '</div>';
+		}
+
+		// Get sections for TOC and validation.
+		$sections = lexi_get_sections( $post_id );
+		if ( empty( $sections ) ) {
+			return '<div class="lexi-error">' . esc_html__( 'No sections found for this document.', 'letlexi' ) . '</div>';
+		}
 	}
 
 	// Resolve settings with defaults.
@@ -237,7 +251,7 @@ function lexi_build_shell_html( $post_id, $settings = array() ) {
 	$header_html = lexi_build_reader_header( $post_id, $resolved_settings );
 	$toc_html = lexi_build_toc_structure( $sections, $resolved_settings );
 	$font_controls_html = lexi_build_font_controls( $resolved_settings );
-	$content_html = lexi_build_content_area( $post_id, $display_args, $resolved_settings );
+	$content_html = lexi_build_content_area( $post_id, $display_args, $resolved_settings, $sections );
 	$footer_nav_html = lexi_build_footer_navigation( $post_id, $resolved_settings, count( $sections ) );
 
 	// Assemble the complete shell with 2-column layout.
@@ -559,7 +573,15 @@ function lexi_build_font_controls( $settings ) {
  * @param array $settings     Resolved settings.
  * @return string Content area HTML.
  */
-function lexi_build_content_area( $post_id, $display_args, $settings ) {
+function lexi_build_content_area( $post_id, $display_args, $settings, $sections = null ) {
+	// If manual sections mode, always SSR first section from provided data.
+	$has_manual = isset( $settings['manual_sections'] ) && is_array( $settings['manual_sections'] );
+
+	if ( $has_manual ) {
+		$display_args['manual_sections'] = $settings['manual_sections'];
+		return lexi_render_section_html( $post_id, 0, $display_args );
+	}
+
 	// Build initial section content based on loading strategy.
 	if ( $settings['loading_strategy'] === 'preload' ) {
 		// Server-side render first section.

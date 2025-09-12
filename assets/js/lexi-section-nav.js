@@ -46,8 +46,14 @@
         // Set up event listeners
         bindEvents();
         
-        // Load initial section if not already rendered
-        if (initialIndex >= 0 && !hasContent()) {
+        // Derive totalSections from DOM when not provided (manual/pre-rendered mode)
+        if (!totalSections) {
+            var tocItems = document.querySelectorAll('.lexi-toc__link');
+            totalSections = tocItems ? tocItems.length : 0;
+        }
+
+        // Load initial section if not already rendered and API is available
+        if (initialIndex >= 0 && !hasContent() && restUrl && postId && totalSections > 0) {
             navigateTo(initialIndex, false);
         } else {
             updateNavigation();
@@ -236,6 +242,20 @@
             contentBody.innerHTML = '<div class="lexi-loading" aria-live="polite">' + (i18n.loading || 'Loading...') + '</div>';
         }
         
+        // If REST configuration is missing, try switching sections client-side
+        if (!restUrl || !postId) {
+            var ssrSection = document.querySelector('.lexi-section[data-section-index="' + index + '"]');
+            if (ssrSection) {
+                // When sections are pre-rendered (manual/preload), show only target section
+                var allSections = document.querySelectorAll('.lexi-section');
+                allSections.forEach(function(s) { s.style.display = 'none'; });
+                ssrSection.style.display = '';
+                updateNavigation();
+                isNavigating = false;
+                return;
+            }
+        }
+
         // Fetch from API
         var url = restUrl + '?post=' + postId + '&index=' + index;
         
