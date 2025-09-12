@@ -83,11 +83,6 @@ function auto_load_elementor_widgets() {
 			continue;
 		}
 
-		// Skip README files.
-		if ( strpos( basename( $widget_file ), 'README' ) !== false ) {
-			continue;
-		}
-
 		// Skip base class file as it's already loaded.
 		if ( strpos( basename( $widget_file ), 'widget-base' ) !== false ) {
 			continue;

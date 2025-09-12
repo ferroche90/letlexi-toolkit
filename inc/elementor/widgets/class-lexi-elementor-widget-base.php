@@ -17,6 +17,11 @@ use Elementor\Group_Control_Typography;
 use Elementor\Group_Control_Border;
 use Elementor\Group_Control_Box_Shadow;
 use Elementor\Group_Control_Background;
+use Elementor\Group_Control_Image_Size;
+use Elementor\Group_Control_Text_Shadow;
+use Elementor\Group_Control_Css_Filter;
+use Elementor\Scheme_Color;
+use Elementor\Scheme_Typography;
 
 // Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {
