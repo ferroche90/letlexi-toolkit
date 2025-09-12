@@ -3,7 +3,7 @@
  * Plugin Name: LetLexi Toolkit
  * Plugin URI: https://webatix.com/
  * Description: Custom Elementor widgets, REST endpoints, and helpers for LetLexi legal resources.
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: Webatix
  * Author URI: https://webatix.com/
  * License: GPL v2 or later
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Define plugin constants.
 if ( ! defined( 'LEXI_VERSION' ) ) {
-	define( 'LEXI_VERSION', '1.0.0' );
+	define( 'LEXI_VERSION', '1.1.0' );
 }
 
 if ( ! defined( 'LEXI_PATH' ) ) {

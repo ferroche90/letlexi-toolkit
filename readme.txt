@@ -8,40 +8,46 @@ Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Custom Elementor widgets, REST endpoints, and helpers for LetLexi legal resources with section navigation and ACF integration.
+Universal section navigation system for any post type with ACF integration. Works with constitution articles, law documents, statutes, and any custom post type.
 
 == Description ==
 
-LetLexi Toolkit provides a comprehensive solution for displaying legal documents with interactive section navigation. Built specifically for constitution articles and legal content, it offers seamless integration with Elementor, Advanced Custom Fields (ACF), and WordPress REST API.
+LetLexi Toolkit provides a comprehensive solution for displaying structured documents with interactive section navigation. Originally built for legal documents, it now works with any post type that has ACF sections, offering seamless integration with Elementor, Advanced Custom Fields (ACF), and WordPress REST API.
 
 = Key Features =
 
+* **Universal Post Type Support** - Works with any post type (posts, pages, custom post types)
 * **Section Navigator Widget** - Interactive navigation through document sections
 * **Extensible Widget System** - Auto-loading system for easy addition of new Elementor widgets
 * **Elementor Integration** - Custom widgets with full control panel and comprehensive styling options
 * **REST API Endpoints** - Dynamic section loading via AJAX
 * **ACF Integration** - Works with ACF repeater fields for content management
+* **Configurable Field Names** - Use custom ACF field names for different post types
 * **Shortcode Support** - Fallback shortcode for non-Elementor usage
 * **Responsive Design** - Mobile-friendly two-pane layout
 * **Accessibility** - ARIA support, keyboard navigation, screen reader friendly
 * **Font Controls** - User-adjustable font scaling with persistence
 * **Server-Side Rendering** - Works without JavaScript enabled
+* **Developer-Friendly** - Extensive filters and hooks for customization
 
 = Use Cases =
 
 * Constitution articles and legal documents
+* Law documents, statutes, and regulations
 * Multi-section content with table of contents
 * Interactive legal reference materials
 * Academic papers with section navigation
+* Technical documentation with sections
 * Any content requiring structured section browsing
+* Custom post types with ACF sections
 
 == Installation ==
 
 1. Upload the `letlexi-toolkit` folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Ensure Advanced Custom Fields (ACF) is installed and activated
-4. Create a custom post type called 'constitution_article' (or use the filter to modify)
-5. Add ACF repeater fields named 'sections' with subfields for content
+4. Create ACF repeater fields named 'sections' with subfields for content (or configure custom field names)
+5. Add your post types to the supported list (or use the default supported types)
 6. Use the Elementor widget or shortcode to display your content
 
 = Requirements =
@@ -135,14 +141,18 @@ The base widget class provides common controls for typography, borders, shadows,
 == Changelog ==
 
 = 1.1.0 =
+* **NEW**: Universal post type support - works with any post type, not just constitution_article
+* **NEW**: Configurable ACF field names - use different field names for different post types
+* **NEW**: Enhanced validation system with better error messages
+* **NEW**: Developer configuration file with extensive customization options
 * **NEW**: Auto-loading system for Elementor widgets
 * **NEW**: Base widget class with common functionality
-* **NEW**: Example widget demonstrating the extensible system
 * **NEW**: Comprehensive CSS custom properties system
 * **NEW**: Enhanced accessibility with high contrast and reduced motion support
 * **IMPROVED**: WordPress CSS Coding Standards compliance
 * **IMPROVED**: Better theme customization through CSS variables
 * **IMPROVED**: Documentation for widget development
+* **IMPROVED**: Backward compatibility maintained for existing installations
 
 = 1.0.0 =
 * Initial release
@@ -238,15 +248,70 @@ const config = window.letlexiSectionNav;
 // - config.i18n: Internationalized strings
 ```
 
+== Configuration ==
+
+### Adding Custom Post Types
+
+Add support for your custom post types:
+
+```php
+// In your theme's functions.php
+add_filter( 'lexi/supported_post_types', function( $post_types ) {
+    $custom_post_types = array(
+        'law_document',      // Your custom post type
+        'legal_article',     // Another custom post type
+    );
+    
+    return array_merge( $post_types, $custom_post_types );
+});
+```
+
+### Using Custom ACF Field Names
+
+Use different field names for different post types:
+
+```php
+add_filter( 'lexi/sections_field_name', function( $field_name, $post_id ) {
+    $post_type = get_post_type( $post_id );
+    
+    switch ( $post_type ) {
+        case 'law_document':
+            return 'law_sections';
+        case 'statute':
+            return 'statute_sections';
+        default:
+            return $field_name; // Default: 'sections'
+    }
+}, 10, 2 );
+```
+
+### Custom Validation
+
+Add custom validation logic:
+
+```php
+add_filter( 'lexi/supports_section_navigation', function( $supports, $post_id, $post, $post_type, $has_sections ) {
+    if ( $post_type === 'my_custom_post_type' ) {
+        $enable_sections = get_post_meta( $post_id, 'enable_sections', true );
+        return $has_sections && $enable_sections === 'yes';
+    }
+    
+    return $supports;
+}, 10, 5 );
+```
+
 == Hooks and Filters ==
 
 The plugin provides several hooks for customization:
 
 **Filters:**
+* `lexi/supported_post_types` - Configure supported post types
+* `lexi/sections_field_name` - Customize ACF field name
+* `lexi/supports_section_navigation` - Custom validation logic
 * `letlexi/should_enqueue` - Control when assets are enqueued
 * `letlexi/section_html` - Modify individual section HTML
 * `letlexi/shell_html` - Modify the complete shell HTML
-* `letlexi/is_constitution_article` - Extend post type checking
+* `letlexi/is_constitution_article` - Extend post type checking (deprecated)
 * `letlexi/get_sections` - Modify section data retrieval
 
 **Actions:**

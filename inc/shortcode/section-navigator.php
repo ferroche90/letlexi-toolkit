@@ -59,11 +59,11 @@ function handle_shortcode( $atts, $content = '' ) {
 	}
 
 	// Validate post type.
-	if ( ! lexi_is_constitution_article( $post_id ) ) {
+	if ( ! lexi_supports_section_navigation( $post_id ) ) {
 		// Return admin notice for editors, empty for regular users.
 		if ( current_user_can( 'edit_posts' ) ) {
 			return '<div class="lexi-error lexi-admin-notice">' . 
-				   esc_html__( 'This shortcode can only be used on constitution article pages.', 'letlexi' ) . 
+				   esc_html__( 'This shortcode can only be used on posts that have ACF sections and are of a supported post type.', 'letlexi' ) . 
 				   '</div>';
 		}
 		return '';

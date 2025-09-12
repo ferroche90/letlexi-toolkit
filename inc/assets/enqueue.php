@@ -54,7 +54,7 @@ function enqueue_assets() {
 	}
 
 	// Validate post type.
-	if ( ! lexi_is_constitution_article( $post_id ) ) {
+	if ( ! lexi_supports_section_navigation( $post_id ) ) {
 		return;
 	}
 
@@ -132,8 +132,8 @@ function should_enqueue_assets() {
 		return false;
 	}
 
-	// Check if we're on a constitution article page.
-	if ( is_singular( 'constitution_article' ) ) {
+	// Check if we're on a page that supports section navigation.
+	if ( lexi_should_enqueue_assets_for_current_page() ) {
 		return true;
 	}
 

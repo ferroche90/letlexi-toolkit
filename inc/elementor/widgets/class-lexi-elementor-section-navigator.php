@@ -1390,8 +1390,8 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 		$post_id = get_the_ID();
 
 		// Validate post type.
-		if ( ! Toolkit\lexi_is_constitution_article( $post_id ) ) {
-			echo '<div class="lexi-error">' . esc_html__( 'This widget can only be used on constitution article pages.', 'letlexi' ) . '</div>';
+		if ( ! Toolkit\lexi_supports_section_navigation( $post_id ) ) {
+			echo '<div class="lexi-error">' . esc_html__( 'This widget can only be used on posts that have ACF sections and are of a supported post type.', 'letlexi' ) . '</div>';
 			return;
 		}
 

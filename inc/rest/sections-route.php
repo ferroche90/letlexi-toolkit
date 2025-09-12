@@ -146,10 +146,10 @@ function validate_rest_params( $post_id, $index ) {
 	}
 
 	// Validate post type.
-	if ( ! Toolkit\lexi_is_constitution_article( $post_id ) ) {
+	if ( ! Toolkit\lexi_supports_section_navigation( $post_id ) ) {
 		return new \WP_Error(
 			'invalid_post_type',
-			__( 'Invalid post type. Only constitution articles are supported.', 'letlexi' ),
+			__( 'Invalid post type or missing ACF sections. Only posts with ACF sections and supported post types are allowed.', 'letlexi' ),
 			array( 'status' => 400 )
 		);
 	}

@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function lexi_render_section_html( $post_id, $index, $args = array() ) {
 	// Validate post type.
-	if ( ! lexi_is_constitution_article( $post_id ) ) {
+	if ( ! lexi_supports_section_navigation( $post_id ) ) {
 		return '';
 	}
 
@@ -214,8 +214,8 @@ function lexi_render_section_html( $post_id, $index, $args = array() ) {
  */
 function lexi_build_shell_html( $post_id, $settings = array() ) {
 	// Validate post type.
-	if ( ! lexi_is_constitution_article( $post_id ) ) {
-		return '<div class="lexi-error">' . esc_html__( 'Invalid post type for section navigation.', 'letlexi' ) . '</div>';
+	if ( ! lexi_supports_section_navigation( $post_id ) ) {
+		return '<div class="lexi-error">' . esc_html__( 'This post does not support section navigation. Please ensure it has ACF sections and is a supported post type.', 'letlexi' ) . '</div>';
 	}
 
 	// Get sections for TOC and validation.

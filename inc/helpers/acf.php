@@ -29,7 +29,7 @@ function lexi_get_sections( $post_id ) {
 	}
 
 	// Validate post type first.
-	if ( ! lexi_is_constitution_article( $post_id ) ) {
+	if ( ! lexi_supports_section_navigation( $post_id ) ) {
 		return array();
 	}
 
@@ -38,7 +38,9 @@ function lexi_get_sections( $post_id ) {
 		return array();
 	}
 
-	$sections = get_field( 'sections', $post_id );
+	// Get the field name (allows customization via filter).
+	$field_name = apply_filters( 'lexi/sections_field_name', 'sections', $post_id );
+	$sections = get_field( $field_name, $post_id );
 
 	// Ensure we return an array.
 	if ( ! is_array( $sections ) ) {

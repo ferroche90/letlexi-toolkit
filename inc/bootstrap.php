@@ -39,14 +39,15 @@ add_action( 'plugins_loaded', __NAMESPACE__ . '\load_textdomain' );
  */
 function include_helper_files() {
 	$helper_files = array(
-		'inc/helpers/post-types.php',
-		'inc/helpers/acf.php',
-		'inc/helpers/render.php',
-		'inc/helpers/security.php',
-		'inc/assets/enqueue.php',
-		'inc/rest/sections-route.php',
-		'inc/elementor/register.php',
-		'inc/shortcode/section-navigator.php',
+		'inc/config.php',                    // Configuration and filters.
+		'inc/helpers/post-types.php',        // Post type validation.
+		'inc/helpers/acf.php',               // ACF integration.
+		'inc/helpers/render.php',            // HTML rendering.
+		'inc/helpers/security.php',          // Security utilities.
+		'inc/assets/enqueue.php',            // Asset management.
+		'inc/rest/sections-route.php',       // REST API endpoints.
+		'inc/elementor/register.php',        // Elementor integration.
+		'inc/shortcode/section-navigator.php', // Shortcode support.
 	);
 
 	foreach ( $helper_files as $file ) {
