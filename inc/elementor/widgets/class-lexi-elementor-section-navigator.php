@@ -383,6 +383,56 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			)
 		);
 
+		// TOC link backgrounds and radius
+		$this->add_control(
+			'toc_link_bg',
+			array(
+				'label'     => __( 'Link Background', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-toc__link' => 'background-color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->add_control(
+			'toc_link_bg_hover',
+			array(
+				'label'     => __( 'Link Background (Hover)', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-toc__link:hover' => 'background-color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->add_control(
+			'toc_link_bg_active',
+			array(
+				'label'     => __( 'Link Background (Active)', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-toc__link.active' => 'background-color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->add_control(
+			'toc_link_radius',
+			array(
+				'label'     => __( 'Link Border Radius', 'letlexi' ),
+				'type'      => Controls_Manager::SLIDER,
+				'size_units'=> array( 'px', '%' ),
+				'range'     => array(
+					'px' => array( 'min' => 0, 'max' => 30 ),
+					'%'  => array( 'min' => 0, 'max' => 100 ),
+				),
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-toc__link' => 'border-radius: {{SIZE}}{{UNIT}};',
+				),
+			)
+		);
+
 		$this->add_responsive_control(
 			'toc_item_spacing',
 			array(
