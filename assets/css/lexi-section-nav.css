@@ -403,16 +403,6 @@
     box-shadow: none;
 }
 
-.lexi-nav__prev::before {
-    content: '←';
-    font-size: 1.2em;
-}
-
-.lexi-nav__next::after {
-    content: '→';
-    font-size: 1.2em;
-}
-
 /* Jump Select */
 .lexi-jump {
     display: flex;
