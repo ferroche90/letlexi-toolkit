@@ -275,7 +275,18 @@ function lexi_build_shell_html( $post_id, $settings = array() ) {
 	} else {
 		$doc_classes[] = 'lexi-toc-left';
 	}
-	$html = '<div class="' . esc_attr( implode( ' ', $doc_classes ) ) . '">';
+	// Allow widget/site to define an extra sticky offset for scrolling (e.g., sticky headers)
+	$widget_offset = 0;
+	if ( isset( $resolved_settings['sticky_scroll_offset'] ) && $resolved_settings['sticky_scroll_offset'] !== '' ) {
+		$widget_offset = intval( $resolved_settings['sticky_scroll_offset'] );
+	}
+	$sticky_offset = apply_filters( 'letlexi/sticky_offset', $widget_offset, $post_id );
+	$sticky_attr = '';
+	if ( is_numeric( $sticky_offset ) && intval( $sticky_offset ) > 0 ) {
+		$sticky_attr = ' data-sticky-offset="' . esc_attr( intval( $sticky_offset ) ) . '"';
+	}
+
+	$html = '<div class="' . esc_attr( implode( ' ', $doc_classes ) ) . '"' . $sticky_attr . '>';
 
 	// TOC Pane.
 	$html .= '<div class="lexi-toc">';
@@ -292,6 +303,12 @@ function lexi_build_shell_html( $post_id, $settings = array() ) {
 	
 	// Document info and controls above content.
 	$html .= $header_html;
+
+	// View mode toggle: Full Text / Single Section
+	$html .= '<div class="lexi-view-toggle" role="group" aria-label="View mode">';
+	$html .= '<button type="button" class="lexi-view-toggle__btn is-active" data-view="full">' . esc_html__( 'Full text', 'letlexi' ) . '</button>';
+	$html .= '<button type="button" class="lexi-view-toggle__btn" data-view="single">' . esc_html__( 'Single section', 'letlexi' ) . '</button>';
+	$html .= '</div>';
 	
 	// Top navigation.
 	$html .= $top_nav_html;
@@ -546,24 +563,29 @@ function lexi_build_toc_structure( $sections, $settings ) {
  * @return string Content area HTML.
  */
 function lexi_build_content_area( $post_id, $display_args, $settings, $sections = null ) {
-	// If manual sections mode, always SSR first section from provided data.
+	// Determine sections source.
 	$has_manual = isset( $settings['manual_sections'] ) && is_array( $settings['manual_sections'] );
 
 	if ( $has_manual ) {
-		$display_args['manual_sections'] = $settings['manual_sections'];
-		return lexi_render_section_html( $post_id, 0, $display_args );
+		$sections = $settings['manual_sections'];
 	}
 
-	// Build initial section content based on loading strategy.
-	if ( $settings['loading_strategy'] === 'preload' ) {
-		// Server-side render first section.
-		return lexi_render_section_html( $post_id, 0, $display_args );
-	} else {
-		// AJAX loading - show loading state.
-		return '<div class="lexi-loading" aria-live="polite">' . 
-			   esc_html__( 'Loading section...', 'letlexi' ) . 
-			   '</div>';
+	if ( null === $sections ) {
+		$sections = lexi_get_sections( $post_id );
 	}
+
+	if ( empty( $sections ) || ! is_array( $sections ) ) {
+		return '<div class="lexi-error">' . esc_html__( 'No sections found for this document.', 'letlexi' ) . '</div>';
+	}
+
+	// Render all sections server-side for full-text view.
+	$html = '';
+	$count = count( $sections );
+	for ( $i = 0; $i < $count; $i++ ) {
+		$html .= lexi_render_section_html( $post_id, $i, $display_args );
+	}
+
+	return $html;
 }
 
 /**

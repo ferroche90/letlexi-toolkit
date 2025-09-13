@@ -586,6 +586,166 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 		$this->end_controls_section();
 
 
+		// STYLE: View Toggle (Full text / Single section)
+		$this->start_controls_section(
+			'lexi_style_view_toggle_section',
+			array(
+				'label' => __( 'View Toggle', 'letlexi' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			)
+		);
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Typography::get_type(),
+			array(
+				'name'     => 'view_toggle_typo',
+				'selector' => '{{WRAPPER}} .lexi-view-toggle__btn, {{WRAPPER}} .lexi-view-toggle--floating .lexi-view-toggle__btn',
+			)
+		);
+
+		$this->add_responsive_control(
+			'view_toggle_gap',
+			array(
+				'label'      => __( 'Button Gap', 'letlexi' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => array( 'px', 'em', 'rem' ),
+				'range'      => array( 'px' => array( 'min' => 0, 'max' => 50 ) ),
+				'selectors'  => array(
+					'{{WRAPPER}} .lexi-view-toggle, {{WRAPPER}} .lexi-view-toggle--floating' => 'gap: {{SIZE}}{{UNIT}};',
+				),
+			)
+		);
+
+		$this->add_responsive_control(
+			'view_toggle_margin',
+			array(
+				'label'      => __( 'Container Margin', 'letlexi' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', 'em', 'rem' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .lexi-view-toggle' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+
+		$this->start_controls_tabs( 'view_toggle_style_tabs' );
+
+		$this->start_controls_tab(
+			'view_toggle_tab_normal',
+			array( 'label' => __( 'Normal', 'letlexi' ) )
+		);
+		$this->add_control(
+			'view_toggle_text_color',
+			array(
+				'label'     => __( 'Text Color', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-view-toggle__btn, {{WRAPPER}} .lexi-view-toggle--floating .lexi-view-toggle__btn' => 'color: {{VALUE}};',
+				),
+			)
+		);
+		$this->add_control(
+			'view_toggle_bg_color',
+			array(
+				'label'     => __( 'Background', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-view-toggle__btn, {{WRAPPER}} .lexi-view-toggle--floating .lexi-view-toggle__btn' => 'background-color: {{VALUE}};',
+				),
+			)
+		);
+		$this->end_controls_tab();
+
+		$this->start_controls_tab(
+			'view_toggle_tab_hover',
+			array( 'label' => __( 'Hover', 'letlexi' ) )
+		);
+		$this->add_control(
+			'view_toggle_text_color_hover',
+			array(
+				'label'     => __( 'Text Color', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-view-toggle__btn:hover, {{WRAPPER}} .lexi-view-toggle--floating .lexi-view-toggle__btn:hover' => 'color: {{VALUE}};',
+				),
+			)
+		);
+		$this->add_control(
+			'view_toggle_bg_color_hover',
+			array(
+				'label'     => __( 'Background', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-view-toggle__btn:hover, {{WRAPPER}} .lexi-view-toggle--floating .lexi-view-toggle__btn:hover' => 'background-color: {{VALUE}};',
+				),
+			)
+		);
+		$this->end_controls_tab();
+
+		$this->start_controls_tab(
+			'view_toggle_tab_active',
+			array( 'label' => __( 'Active', 'letlexi' ) )
+		);
+		$this->add_control(
+			'view_toggle_text_color_active',
+			array(
+				'label'     => __( 'Text Color', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-view-toggle__btn.is-active, {{WRAPPER}} .lexi-view-toggle--floating .lexi-view-toggle__btn.is-active' => 'color: {{VALUE}};',
+				),
+			)
+		);
+		$this->add_control(
+			'view_toggle_bg_color_active',
+			array(
+				'label'     => __( 'Background', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-view-toggle__btn.is-active, {{WRAPPER}} .lexi-view-toggle--floating .lexi-view-toggle__btn.is-active' => 'background-color: {{VALUE}};',
+				),
+			)
+		);
+		$this->end_controls_tab();
+
+		$this->end_controls_tabs();
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Border::get_type(),
+			array(
+				'name'     => 'view_toggle_border',
+				'selector' => '{{WRAPPER}} .lexi-view-toggle__btn, {{WRAPPER}} .lexi-view-toggle--floating .lexi-view-toggle__btn',
+			)
+		);
+
+		$this->add_control(
+			'view_toggle_radius',
+			array(
+				'label'     => __( 'Border Radius', 'letlexi' ),
+				'type'      => Controls_Manager::SLIDER,
+				'size_units'=> array( 'px', '%' ),
+				'range'     => array( 'px' => array( 'min' => 0, 'max' => 50 ) ),
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-view-toggle__btn, {{WRAPPER}} .lexi-view-toggle--floating .lexi-view-toggle__btn' => 'border-radius: {{SIZE}}{{UNIT}};',
+				),
+			)
+		);
+
+		$this->add_responsive_control(
+			'view_toggle_padding',
+			array(
+				'label'      => __( 'Padding', 'letlexi' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', 'em', 'rem' ),
+				'selectors'  => array(
+					'{{WRAPPER}} .lexi-view-toggle__btn, {{WRAPPER}} .lexi-view-toggle--floating .lexi-view-toggle__btn' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+
+		$this->end_controls_section();
+
+
 		// STYLE: Section Content & Commentary
 		$this->start_controls_section(
 			'lexi_style_section_content',
@@ -1016,6 +1176,19 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 				'label' => __( 'Navigation Controls', 'letlexi' ),
 				'type'  => Controls_Manager::HEADING,
 				'separator' => 'before',
+			)
+		);
+
+		// Sticky Scroll Offset (for sticky headers)
+		$this->add_control(
+			'sticky_scroll_offset',
+			array(
+				'label'      => __( 'Sticky Scroll Offset (px)', 'letlexi' ),
+				'type'       => Controls_Manager::NUMBER,
+				'placeholder'=> 0,
+				'min'        => 0,
+				'default'    => '',
+				'description'=> __( 'Additional top offset when scrolling to sections (e.g., sticky header height).', 'letlexi' ),
 			)
 		);
 
@@ -1595,6 +1768,7 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			'show_print_button'     => 'yes',
 			'show_copy_button'      => 'yes',
 			'loading_strategy'      => 'ajax',
+			'sticky_scroll_offset'  => '',
 			'acf_toggle_commentary' => '',
 			'acf_toggle_crossrefs'  => '',
 			'acf_toggle_caselaw'    => '',

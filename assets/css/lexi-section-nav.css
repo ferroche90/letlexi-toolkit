@@ -1,3 +1,14 @@
+.lexi-view-toggle{display:flex;gap:.5rem;margin:.5rem 0}
+.lexi-view-toggle__btn{background:#f3f4f6;border:1px solid #d1d5db;border-radius:4px;padding:.25rem .5rem;cursor:pointer}
+.lexi-view-toggle__btn.is-active{background:#e5e7eb;border-color:#9ca3af}
+
+/* Single-section view: leave hiding to JS via [hidden] */
+.lexi-doc.lexi-view--single .lexi-section[hidden]{display:none!important}
+
+/* Floating view toggle */
+.lexi-view-toggle--floating{position:fixed;right:16px;bottom:16px;z-index:10000;background:rgba(255,255,255,.95);border:1px solid #d1d5db;border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,.15);padding:8px}
+.lexi-view-toggle--floating .lexi-view-toggle__btn{background:#f9fafb}
+.lexi-view-toggle--floating .lexi-view-toggle__btn.is-active{background:#e5e7eb}
 /**
  * Lexi Section Navigator Styles
  *
