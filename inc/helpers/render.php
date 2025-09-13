@@ -250,7 +250,6 @@ function lexi_build_shell_html( $post_id, $settings = array() ) {
 	// Build components.
 	$header_html = lexi_build_reader_header( $post_id, $resolved_settings );
 	$toc_html = lexi_build_toc_structure( $sections, $resolved_settings );
-	$font_controls_html = lexi_build_font_controls( $resolved_settings );
 	$content_html = lexi_build_content_area( $post_id, $display_args, $resolved_settings, $sections );
 	$footer_nav_html = lexi_build_footer_navigation( $post_id, $resolved_settings, count( $sections ) );
 
@@ -281,7 +280,6 @@ function lexi_build_shell_html( $post_id, $settings = array() ) {
 	
 	// Document info and controls above content.
 	$html .= $header_html;
-	$html .= $font_controls_html;
 	
 	// Main content area.
 	$html .= '<div class="lexi-doc__body">';
@@ -331,9 +329,6 @@ function lexi_resolve_shell_settings( $settings ) {
 		'show_case_law'         => true,
 		'show_amendments'       => true,
 		'loading_strategy'      => 'ajax',
-		'font_increase_label'   => __( 'Increase Font Size', 'letlexi' ),
-		'font_decrease_label'   => __( 'Decrease Font Size', 'letlexi' ),
-		'font_reset_label'      => __( 'Reset Font Size', 'letlexi' ),
 	);
 
 	return wp_parse_args( $settings, $defaults );
@@ -543,34 +538,6 @@ function lexi_build_toc_structure( $sections, $settings ) {
 	return $html;
 }
 
-/**
- * Build font size controls
- *
- * @since 1.0.0
- *
- * @param array $settings Resolved settings.
- * @return string Font controls HTML.
- */
-function lexi_build_font_controls( $settings ) {
-	$html = '<div class="lexi-font-controls lexi-font">';
-	$html .= '<span class="lexi-font-label">' . esc_html__( 'Font Size:', 'letlexi' ) . '</span>';
-
-	$html .= '<button type="button" class="lexi-font__dec" aria-label="' . esc_attr( $settings['font_decrease_label'] ) . '">';
-	$html .= '<span aria-hidden="true">A</span>';
-	$html .= '</button>';
-
-	$html .= '<button type="button" class="lexi-font__inc" aria-label="' . esc_attr( $settings['font_increase_label'] ) . '">';
-	$html .= '<span aria-hidden="true">A</span>';
-	$html .= '</button>';
-
-	$html .= '<button type="button" class="lexi-font__reset" aria-label="' . esc_attr( $settings['font_reset_label'] ) . '">';
-	$html .= esc_html__( 'Reset', 'letlexi' );
-	$html .= '</button>';
-
-	$html .= '</div>';
-
-	return $html;
-}
 
 /**
  * Build content area with initial section

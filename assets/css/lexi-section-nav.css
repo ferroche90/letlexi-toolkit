@@ -8,7 +8,6 @@
 /* Lexi Section Navigator Styles */
 .lexi-doc {
     /* Typography Variables */
-    --lexi-font-scale: 1;
     --lexi-font-size-base: 16px;
     --lexi-font-size-sm: 0.875em;
     --lexi-font-size-lg: 1.125em;
@@ -83,7 +82,7 @@
     --lexi-z-index-modal: 10000;
     
     /* Apply base styles */
-    font-size: calc(var(--lexi-font-size-base) * var(--lexi-font-scale));
+    font-size: var(--lexi-font-size-base);
     line-height: var(--lexi-line-height-base);
     display: flex;
     gap: var(--lexi-spacing-2xl);
@@ -282,18 +281,6 @@
     box-shadow: var(--lexi-shadow-md);
 }
 
-/* Font Controls (above content) */
-.lexi-font-controls {
-    display: flex;
-    align-items: center;
-    gap: var(--lexi-spacing-sm);
-    margin: var(--lexi-spacing-sm) 0 var(--lexi-spacing-lg);
-}
-
-.lexi-font-label { 
-    color: var(--lexi-color-text-muted); 
-    font-size: var(--lexi-font-size-sm); 
-}
 
 /* Section Content */
 .lexi-section {
@@ -424,40 +411,6 @@
     outline-offset: 2px;
 }
 
-/* Font Controls */
-.lexi-font {
-    display: flex;
-    align-items: center;
-    gap: var(--lexi-spacing-sm);
-    margin: var(--lexi-spacing-lg) 0;
-}
-
-.lexi-font__inc,
-.lexi-font__dec,
-.lexi-font__reset {
-    background: var(--lexi-color-secondary);
-    color: var(--lexi-color-bg-primary);
-    border: none;
-    padding: var(--lexi-spacing-sm) var(--lexi-spacing-md);
-    border-radius: var(--lexi-radius-sm);
-    cursor: pointer;
-    font-size: 0.8em;
-    min-width: 2rem;
-    transition: background-color var(--lexi-transition-fast);
-}
-
-.lexi-font__inc:hover,
-.lexi-font__dec:hover,
-.lexi-font__reset:hover {
-    background: var(--lexi-color-secondary-hover);
-}
-
-.lexi-font__inc:focus,
-.lexi-font__dec:focus,
-.lexi-font__reset:focus {
-    outline: 2px solid var(--lexi-color-primary);
-    outline-offset: 2px;
-}
 
 /* Commentary */
 .lexi-commentary-toggle {
@@ -491,6 +444,10 @@
 
 .lexi-commentary-content[aria-hidden='true'] {
     display: none;
+}
+
+.lexi-commentary-content[aria-hidden='false'] {
+    display: block;
 }
 
 /* Loading and Error States */
@@ -628,9 +585,6 @@
     .lexi-toc__link:focus,
     .lexi-nav__prev:focus,
     .lexi-nav__next:focus,
-    .lexi-font__inc:focus,
-    .lexi-font__dec:focus,
-    .lexi-font__reset:focus,
     .lexi-commentary-toggle:focus,
     .lexi-print-btn:focus,
     .lexi-copy-citation-btn:focus,
@@ -645,9 +599,6 @@
     .lexi-toc__link,
     .lexi-nav__prev,
     .lexi-nav__next,
-    .lexi-font__inc,
-    .lexi-font__dec,
-    .lexi-font__reset,
     .lexi-commentary-toggle,
     .lexi-print-btn,
     .lexi-copy-citation-btn,

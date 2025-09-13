@@ -15,6 +15,12 @@
     var totalSections = config.totalSections || 0;
     var i18n = config.i18n || {};
     
+    // Fallback i18n strings for Elementor editor context
+    if (!i18n.showCommentary) {
+        i18n.showCommentary = 'Show Commentary';
+        i18n.hideCommentary = 'Hide Commentary';
+    }
+    
     // State management
     var currentIndex = 0;
     var cache = {};
@@ -27,9 +33,6 @@
     var prevBtn = document.querySelector('.lexi-nav__prev');
     var nextBtn = document.querySelector('.lexi-nav__next');
     var jumpSelect = document.querySelector('.lexi-jump__select');
-    var fontIncBtn = document.querySelector('.lexi-font__inc');
-    var fontDecBtn = document.querySelector('.lexi-font__dec');
-    var fontResetBtn = document.querySelector('.lexi-font__reset');
     var tocToggle = document.querySelector('.lexi-toc__toggle');
     var tocList = document.querySelector('.lexi-toc__list');
     var toc = document.querySelector('.lexi-toc');
@@ -38,7 +41,19 @@
     
     // Initialize on DOM ready
     function init() {
-        if (!docWrapper || !contentBody) return;
+        // In Elementor editor, we might not have the main wrapper elements
+        // but we should still initialize commentary toggles if they exist
+        if (!docWrapper && !contentBody) {
+            // Try to find elements in the current context
+            docWrapper = document.querySelector('.lexi-doc');
+            contentBody = document.querySelector('.lexi-doc__body');
+        }
+        
+        // If we still don't have the main elements, just initialize commentary toggles
+        if (!docWrapper || !contentBody) {
+            bindCommentaryToggles();
+            return;
+        }
         
         // Read initial section from URL
         var initialIndex = getInitialSectionIndex();
@@ -64,8 +79,6 @@
             requestIdleCallback(prefetchNext);
         }
         
-        // Restore font scale from localStorage
-        restoreFontScale();
     }
     
     // Get initial section index from URL
@@ -136,24 +149,6 @@
             });
         }
         
-        // Font size controls
-        if (fontIncBtn) {
-            fontIncBtn.addEventListener('click', function() {
-                adjustFontSize(2);
-            });
-        }
-        
-        if (fontDecBtn) {
-            fontDecBtn.addEventListener('click', function() {
-                adjustFontSize(-2);
-            });
-        }
-        
-        if (fontResetBtn) {
-            fontResetBtn.addEventListener('click', function() {
-                resetFontSize();
-            });
-        }
         
         // TOC toggle for mobile
         if (tocToggle && tocList) {
@@ -182,6 +177,9 @@
             });
         }
         
+        // Commentary toggle functionality
+        bindCommentaryToggles();
+        
         // Browser back/forward
         window.addEventListener('popstate', function(e) {
             if (e.state && typeof e.state.sectionIndex === 'number') {
@@ -209,6 +207,34 @@
                     break;
             }
         });
+    }
+    
+    // Bind commentary toggle functionality
+    function bindCommentaryToggles() {
+        var commentaryToggles = document.querySelectorAll('.lexi-commentary-toggle');
+        commentaryToggles.forEach(function(toggle) {
+            // Check if already bound to prevent duplicates
+            if (!toggle.hasAttribute('data-lexi-bound')) {
+                toggle.addEventListener('click', handleCommentaryToggle);
+                toggle.setAttribute('data-lexi-bound', 'true');
+            }
+        });
+    }
+    
+    // Handle commentary toggle click
+    function handleCommentaryToggle() {
+        var isExpanded = this.getAttribute('aria-expanded') === 'true';
+        var targetId = this.getAttribute('aria-controls');
+        var targetContent = document.getElementById(targetId);
+        
+        if (targetContent) {
+            // Toggle aria-expanded
+            this.setAttribute('aria-expanded', !isExpanded);
+            // Toggle aria-hidden on content
+            targetContent.setAttribute('aria-hidden', isExpanded);
+            // Update button text using i18n strings
+            this.textContent = isExpanded ? (i18n.showCommentary || 'Show Commentary') : (i18n.hideCommentary || 'Hide Commentary');
+        }
     }
     
     // Navigate to specific section
@@ -300,6 +326,9 @@
         
         contentBody.innerHTML = html;
         
+        // Bind commentary toggles for newly loaded content
+        bindCommentaryToggles();
+        
         // Move focus to main heading
         var heading = contentBody.querySelector('h1, h2, h3');
         if (heading) {
@@ -360,28 +389,6 @@
         }
     }
     
-    // Font size adjustment
-    function adjustFontSize(delta) {
-        var currentSize = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--lexi-font-scale') || '1');
-        var newSize = Math.max(0.75, Math.min(1.5, currentSize + (delta / 100)));
-        
-        document.documentElement.style.setProperty('--lexi-font-scale', newSize);
-        localStorage.setItem('lexi-font-scale', newSize);
-    }
-    
-    // Reset font size
-    function resetFontSize() {
-        document.documentElement.style.setProperty('--lexi-font-scale', '1');
-        localStorage.setItem('lexi-font-scale', '1');
-    }
-    
-    // Restore font scale from localStorage
-    function restoreFontScale() {
-        var savedScale = localStorage.getItem('lexi-font-scale');
-        if (savedScale) {
-            document.documentElement.style.setProperty('--lexi-font-scale', savedScale);
-        }
-    }
     
     // Print current section
     function printCurrentSection() {
@@ -546,5 +553,37 @@
         document.addEventListener('DOMContentLoaded', init);
     } else {
         init();
+    }
+    
+    // Also initialize commentary toggles immediately for Elementor editor
+    // This ensures they work even if the main init doesn't run
+    bindCommentaryToggles();
+    
+    // Watch for dynamically added commentary toggles (Elementor editor)
+    if (typeof MutationObserver !== 'undefined') {
+        var observer = new MutationObserver(function(mutations) {
+            var shouldRebind = false;
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'childList') {
+                    mutation.addedNodes.forEach(function(node) {
+                        if (node.nodeType === 1) { // Element node
+                            if (node.classList && node.classList.contains('lexi-commentary-toggle')) {
+                                shouldRebind = true;
+                            } else if (node.querySelector && node.querySelector('.lexi-commentary-toggle')) {
+                                shouldRebind = true;
+                            }
+                        }
+                    });
+                }
+            });
+            if (shouldRebind) {
+                bindCommentaryToggles();
+            }
+        });
+        
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
     }
 })();

@@ -95,9 +95,6 @@ function enqueue_assets() {
 			'section'           => __( 'Section', 'letlexi' ),
 			'showCommentary'    => __( 'Show Commentary', 'letlexi' ),
 			'hideCommentary'    => __( 'Hide Commentary', 'letlexi' ),
-			'increaseFontSize'  => __( 'Increase Font Size', 'letlexi' ),
-			'decreaseFontSize'  => __( 'Decrease Font Size', 'letlexi' ),
-			'resetFontSize'     => __( 'Reset Font Size', 'letlexi' ),
 			'printSuccess'      => __( 'Print dialog opened', 'letlexi' ),
 			'citationCopied'    => __( 'Citation copied!', 'letlexi' ),
 		),
@@ -217,6 +214,15 @@ add_action( 'init', __NAMESPACE__ . '\register_assets' );
 add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\register_assets', 1 );
 add_action( 'elementor/frontend/after_register_styles', __NAMESPACE__ . '\register_assets' );
 add_action( 'elementor/frontend/after_register_scripts', __NAMESPACE__ . '\register_assets' );
+
+// Ensure localized data is available in Elementor editor
+add_action( 'elementor/editor/before_enqueue_scripts', function() {
+	// Only localize if the script is being enqueued
+	if ( wp_script_is( 'letlexi-section-nav', 'enqueued' ) || wp_script_is( 'letlexi-section-nav', 'done' ) ) {
+		$localize_data = get_localize_data();
+		wp_localize_script( 'letlexi-section-nav', 'letlexiSectionNav', $localize_data );
+	}
+} );
 
 // Hook enqueue on frontend where needed.
 add_action( 'wp_enqueue_scripts', function() {
