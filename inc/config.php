@@ -73,14 +73,14 @@ add_filter( 'lexi/default_display_settings', function( $settings ) {
 });
 
 /**
- * Configure default widget/shortcode settings
+ * Configure default widget settings
  *
- * You can set default values for widget and shortcode attributes.
+ * You can set default values for widget attributes.
  *
  * @since 1.1.0
  */
 add_filter( 'lexi/default_widget_settings', function( $settings ) {
-	// Customize default widget/shortcode settings.
+	// Customize default widget settings.
 	$custom_defaults = array(
 		'document_label'        => __( 'Document:', 'letlexi' ),
 		'query_format'          => '%constitution% Art. %article%, Section %section%',

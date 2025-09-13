@@ -216,7 +216,7 @@ function lexi_render_section_html( $post_id, $index, $args = array() ) {
  * @since 1.0.0
  *
  * @param int   $post_id  The post ID containing the sections.
- * @param array $settings Widget/shortcode settings for customization.
+ * @param array $settings Widget settings for customization.
  * @return string The complete HTML shell structure.
  */
 function lexi_build_shell_html( $post_id, $settings = array() ) {
@@ -244,7 +244,7 @@ function lexi_build_shell_html( $post_id, $settings = array() ) {
 	// Get article-level display settings.
 	$display_args = lexi_get_article_display_args( $post_id );
 
-	// Override with widget/shortcode settings if provided.
+	// Override with widget settings if provided.
 	$display_args = lexi_merge_display_settings( $display_args, $resolved_settings );
 
 	// Build components.
@@ -390,11 +390,11 @@ function lexi_get_article_display_args( $post_id ) {
  * @since 1.0.0
  *
  * @param array $article_settings Article-level ACF settings.
- * @param array $widget_settings  Widget/shortcode settings.
+ * @param array $widget_settings  Widget settings.
  * @return array Merged display settings.
  */
 function lexi_merge_display_settings( $article_settings, $widget_settings ) {
-	// Widget/shortcode settings take precedence.
+	// Widget settings take precedence.
 	if ( isset( $widget_settings['show_commentary'] ) ) {
 		$article_settings['show_commentary'] = lexi_bool( $widget_settings['show_commentary'] );
 	}

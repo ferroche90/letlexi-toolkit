@@ -1,5 +1,5 @@
 === LetLexi Toolkit ===
-Contributors: yourname
+Contributors: Fernando Roche
 Tags: elementor, legal, constitution, sections, navigation, acf, rest-api
 Requires at least: 5.0
 Tested up to: 6.4
@@ -23,7 +23,6 @@ LetLexi Toolkit provides a comprehensive solution for displaying structured docu
 * **REST API Endpoints** - Dynamic section loading via AJAX
 * **ACF Integration** - Works with ACF repeater fields for content management
 * **Configurable Field Names** - Use custom ACF field names for different post types
-* **Shortcode Support** - Fallback shortcode for non-Elementor usage
 * **Responsive Design** - Mobile-friendly two-pane layout
 * **Accessibility** - ARIA support, keyboard navigation, screen reader friendly
 * **Font Controls** - User-adjustable font scaling with persistence
@@ -48,20 +47,20 @@ LetLexi Toolkit provides a comprehensive solution for displaying structured docu
 3. Ensure Advanced Custom Fields (ACF) is installed and activated
 4. Create ACF repeater fields named 'sections' with subfields for content (or configure custom field names)
 5. Add your post types to the supported list (or use the default supported types)
-6. Use the Elementor widget or shortcode to display your content
+6. Use the Elementor widget to display your content
 
 = Requirements =
 
 * WordPress 5.0 or higher
 * PHP 7.4 or higher
 * Advanced Custom Fields (ACF) plugin
-* Elementor plugin (optional, for widget functionality)
+* Elementor plugin (required, for widget functionality)
 
 == Frequently Asked Questions ==
 
 = Does this work without Elementor? =
 
-Yes! The plugin includes a shortcode `[lexi_section_navigator]` that provides the same functionality without requiring Elementor.
+This plugin is designed specifically for Elementor and requires Elementor to be installed and activated.
 
 = What ACF fields are required? =
 
@@ -175,32 +174,6 @@ Major update with auto-loading widget system and enhanced CSS customization. The
 = 1.0.0 =
 Initial release of LetLexi Toolkit. No upgrade required.
 
-== Shortcode Usage ==
-
-The plugin provides a shortcode for displaying section navigation without Elementor:
-
-`[lexi_section_navigator]`
-
-= Shortcode Attributes =
-
-* `document_label` - Label for document information (default: "Document:")
-* `query_format` - Format string for document query (default: "%constitution% Art. %article%, Section %section%")
-* `print_label` - Label for print button (default: "Print")
-* `copy_citation_label` - Label for copy citation button (default: "Copy Citation")
-* `toc_heading` - Table of contents heading (default: "Table of Contents")
-* `previous_label` - Previous section button label (default: "Previous")
-* `next_label` - Next section button label (default: "Next")
-* `show_commentary` - Show/hide commentary sections (default: "yes")
-* `show_cross_refs` - Show/hide cross-references (default: "yes")
-* `show_case_law` - Show/hide case law (default: "yes")
-* `show_amendments` - Show/hide amendments (default: "yes")
-* `loading_strategy` - Loading strategy: "ajax" or "preload" (default: "preload")
-
-= Example Usage =
-
-```
-[lexi_section_navigator document_label="Constitution:" show_commentary="no"]
-```
 
 == REST API Usage ==
 

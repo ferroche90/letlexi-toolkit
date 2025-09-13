@@ -50,7 +50,6 @@ function include_helper_files() {
 		'inc/elementor/register.php',        // Elementor integration.
 		'inc/elementor/queries.php',         // Elementor custom queries.
 		'inc/admin/page-icons.php',          // Admin page icons UI.
-		'inc/shortcode/section-navigator.php', // Shortcode support.
 	);
 
 	foreach ( $helper_files as $file ) {

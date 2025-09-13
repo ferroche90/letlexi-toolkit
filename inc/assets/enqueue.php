@@ -152,11 +152,6 @@ function should_enqueue_assets() {
 		return true;
 	}
 
-	// Check if the current post has the shortcode.
-	$post = get_post();
-	if ( $post && has_shortcode( $post->post_content, 'lexi_section_navigator' ) ) {
-		return true;
-	}
 
 	// Allow external control via filter (e.g., for Elementor widgets).
 	$post_id = get_the_ID();
