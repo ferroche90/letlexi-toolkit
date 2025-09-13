@@ -45,8 +45,11 @@ function include_helper_files() {
 		'inc/helpers/render.php',            // HTML rendering.
 		'inc/helpers/security.php',          // Security utilities.
 		'inc/assets/enqueue.php',            // Asset management.
+		'inc/rewrite/permalinks.php',        // Permalinks and rewrite rules.
 		'inc/rest/sections-route.php',       // REST API endpoints.
 		'inc/elementor/register.php',        // Elementor integration.
+		'inc/elementor/queries.php',         // Elementor custom queries.
+		'inc/admin/page-icons.php',          // Admin page icons UI.
 		'inc/shortcode/section-navigator.php', // Shortcode support.
 	);
 

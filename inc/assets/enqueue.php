@@ -21,6 +21,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 function register_assets() {
 	// Register CSS.
 	wp_register_style(
+		'letlexi-fa',
+		'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
+		array(),
+		'6.4.0'
+	);
+
+	// Include FA v4 shims to support legacy icon names (e.g., times, volume-up, user-cog).
+	wp_register_style(
+		'letlexi-fa-v4-shims',
+		'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/v4-shims.min.css',
+		array('letlexi-fa'),
+		'6.4.0'
+	);
+
+	wp_register_style(
 		'letlexi-section-nav',
 		LEXI_URL . 'assets/css/lexi-section-nav.css',
 		array(),
@@ -162,6 +177,46 @@ function enqueue_admin_assets( $hook ) {
 	// This is a placeholder for future admin functionality.
 }
 
+/**
+ * Force Font Awesome to load from our CDN handle only.
+ *
+ * Dequeue/deregister common non-CDN FA handles (including Elementor's FA packs)
+ * and ensure our CDN-based 'letlexi-fa' is enqueued.
+ */
+function enforce_font_awesome_cdn() {
+	// Ensure our FA is registered.
+	register_assets();
+
+	$non_cdn_fa_handles = array(
+		'font-awesome',
+		'fontawesome',
+		'fa',
+		'elementor-icons-fa',
+		'elementor-icons-fa-solid',
+		'elementor-icons-fa-regular',
+		'elementor-icons-fa-brands',
+		'elementor-font-awesome',
+	);
+
+	foreach ( $non_cdn_fa_handles as $handle ) {
+		if ( wp_style_is( $handle, 'enqueued' ) ) {
+			wp_dequeue_style( $handle );
+		}
+		if ( wp_style_is( $handle, 'registered' ) ) {
+			wp_deregister_style( $handle );
+		}
+	}
+
+	// Enqueue our CDN FA as the primary source.
+	if ( ! wp_style_is( 'letlexi-fa', 'enqueued' ) ) {
+		wp_enqueue_style( 'letlexi-fa' );
+	}
+	// Enqueue v4 shim to allow legacy icon names used in the picker data.
+	if ( ! wp_style_is( 'letlexi-fa-v4-shims', 'enqueued' ) ) {
+		wp_enqueue_style( 'letlexi-fa-v4-shims' );
+	}
+}
+
 // Hook registrations so Elementor editor can find handles.
 add_action( 'init', __NAMESPACE__ . '\register_assets' );
 add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\register_assets', 1 );
@@ -169,5 +224,11 @@ add_action( 'elementor/frontend/after_register_styles', __NAMESPACE__ . '\regist
 add_action( 'elementor/frontend/after_register_scripts', __NAMESPACE__ . '\register_assets' );
 
 // Hook enqueue on frontend where needed.
-add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\enqueue_assets' );
-add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\enqueue_admin_assets' );
+add_action( 'wp_enqueue_scripts', function() {
+	enforce_font_awesome_cdn();
+	enqueue_assets();
+}, 20 );
+add_action( 'admin_enqueue_scripts', function( $hook ) {
+	enforce_font_awesome_cdn();
+	enqueue_admin_assets( $hook );
+}, 20 );
