@@ -1179,18 +1179,22 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			)
 		);
 
-		// Sticky Scroll Offset (for sticky headers)
-		$this->add_control(
+		// Sticky Scroll Offset (for sticky headers) – responsive slider like Sticky TOC Top Offset
+		$this->add_responsive_control(
 			'sticky_scroll_offset',
 			array(
-				'label'      => __( 'Sticky Scroll Offset (px)', 'letlexi' ),
-				'type'       => Controls_Manager::NUMBER,
-				'placeholder'=> 0,
-				'min'        => 0,
-				'default'    => '',
+				'label'      => __( 'Sticky Scroll Offset', 'letlexi' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => array( 'px', 'rem' ),
+				'range'      => array(
+					'px'  => array( 'min' => 0, 'max' => 200 ),
+					'rem' => array( 'min' => 0, 'max' => 10 ),
+				),
 				'description'=> __( 'Additional top offset when scrolling to sections (e.g., sticky header height).', 'letlexi' ),
 			)
 		);
+
+
 
 		// Show Top Navigation.
 		$this->add_control(

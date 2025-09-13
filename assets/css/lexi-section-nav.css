@@ -9,6 +9,17 @@
 .lexi-view-toggle--floating{position:fixed;right:16px;bottom:16px;z-index:10000;background:rgba(255,255,255,.95);border:1px solid #d1d5db;border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,.15);padding:8px}
 .lexi-view-toggle--floating .lexi-view-toggle__btn{background:#f9fafb}
 .lexi-view-toggle--floating .lexi-view-toggle__btn.is-active{background:#e5e7eb}
+
+/* TOC long list: make list scrollable without showing scrollbar */
+.lexi-toc{overflow:hidden}
+.lexi-toc__list{
+  max-height: calc(100vh - var(--lexi-toc-sticky-top, 0px) - 96px);
+  overflow: auto;
+  scrollbar-width: none; /* Firefox: hide scrollbar */
+  -ms-overflow-style: none; /* IE/Edge: hide scrollbar */
+}
+/* WebKit browsers: hide scrollbar */
+.lexi-toc__list::-webkit-scrollbar{display:none}
 /**
  * Lexi Section Navigator Styles
  *
@@ -503,8 +514,14 @@
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
-    .lexi-doc {
-        flex-direction: column;
+    .lexi-doc,
+    .lexi-toc-left .lexi-doc,
+    .lexi-toc-right .lexi-doc,
+    .lexi-toc-below .lexi-doc,
+    .elementor-widget-lexi_section_navigator.lexi-toc-left .lexi-doc,
+    .elementor-widget-lexi_section_navigator.lexi-toc-right .lexi-doc,
+    .elementor-widget-lexi_section_navigator.lexi-toc-below .lexi-doc {
+        flex-direction: column !important;
         padding: var(--lexi-spacing-sm);
         gap: var(--lexi-spacing-lg);
     }
@@ -512,6 +529,7 @@
     .lexi-toc {
         position: static;
         order: -1;
+        width: 100%;
     }
     
     .lexi-toc__toggle {

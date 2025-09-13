@@ -61,6 +61,7 @@
             return;
         }
         
+        
         // Mark whether content was server-rendered (full text available)
         isSSR = hasContent();
         console.log('[LexiNav] init: isSSR=', isSSR, 'totalSections(before)=', totalSections);
@@ -132,6 +133,16 @@
                 e.preventDefault();
                 var index = parseInt(this.dataset.index, 10);
                 if (isNaN(index)) return;
+                
+                // Handle Article link (index -1) - scroll to top
+                if (index === -1) {
+                    console.log('[LexiNav] Article link clicked -> scroll to top');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    // Update navigation state to show Article as active
+                    updateNavigation();
+                    return;
+                }
+                
                 if (docWrapper && docWrapper.classList.contains('lexi-view--single')) {
                     console.log('[LexiNav] TOC click (single view) -> navigateTo', index);
                     navigateTo(index);
@@ -235,6 +246,17 @@
             }
         });
         
+        // Scroll listener to update Article link active state
+        window.addEventListener('scroll', function() {
+            // Throttle scroll updates for performance
+            if (window.scrollTimeout) {
+                clearTimeout(window.scrollTimeout);
+            }
+            window.scrollTimeout = setTimeout(function() {
+                updateNavigation();
+            }, 100);
+        });
+        
         // Keyboard navigation
         document.addEventListener('keydown', function(e) {
             if (!docWrapper.contains(document.activeElement)) return;
@@ -256,6 +278,7 @@
         });
     }
     
+
     // Bind commentary toggle functionality
     function bindCommentaryToggles() {
         var commentaryToggles = document.querySelectorAll('.lexi-commentary-toggle');
@@ -450,11 +473,31 @@
     
     // Update navigation state
     function updateNavigation() {
+        // Check if we're in single section view
+        var isSingleView = docWrapper && docWrapper.classList.contains('lexi-view--single');
+        
+        // Check if we're at the top of the page (Article link should be active)
+        var isAtTop = (window.pageYOffset || document.documentElement.scrollTop) < 100;
+        
         // Update TOC active state
         tocLinks.forEach(function(link) {
             var index = parseInt(link.dataset.index, 10);
-            link.classList.toggle('active', index === currentIndex);
-            link.setAttribute('aria-current', index === currentIndex ? 'page' : 'false');
+            var isActive = false;
+            
+            // Handle Article link (index -1)
+            if (index === -1) {
+                // In single view, Article link is never active
+                // In full view, Article link is active when at top of page
+                isActive = !isSingleView && isAtTop;
+            } else {
+                // Section links are active when they match currentIndex
+                // In single view, always show current section as active
+                // In full view, only show as active when not at top
+                isActive = index === currentIndex && (isSingleView || !isAtTop);
+            }
+            
+            link.classList.toggle('active', isActive);
+            link.setAttribute('aria-current', isActive ? 'page' : 'false');
         });
         
         // Update prev/next buttons (all instances) - only if navigation exists

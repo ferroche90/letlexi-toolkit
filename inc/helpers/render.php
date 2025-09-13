@@ -249,7 +249,7 @@ function lexi_build_shell_html( $post_id, $settings = array() ) {
 
 	// Build components.
 	$header_html = lexi_build_reader_header( $post_id, $resolved_settings );
-	$toc_html = lexi_build_toc_structure( $sections, $resolved_settings );
+	$toc_html = lexi_build_toc_structure( $sections, $resolved_settings, $post_id );
 	
 	// Build navigation components based on visibility settings
 	$top_nav_html = '';
@@ -278,7 +278,20 @@ function lexi_build_shell_html( $post_id, $settings = array() ) {
 	// Allow widget/site to define an extra sticky offset for scrolling (e.g., sticky headers)
 	$widget_offset = 0;
 	if ( isset( $resolved_settings['sticky_scroll_offset'] ) && $resolved_settings['sticky_scroll_offset'] !== '' ) {
-		$widget_offset = intval( $resolved_settings['sticky_scroll_offset'] );
+		$raw_offset = $resolved_settings['sticky_scroll_offset'];
+		if ( is_array( $raw_offset ) ) {
+			$size = isset( $raw_offset['size'] ) ? floatval( $raw_offset['size'] ) : 0;
+			$unit = isset( $raw_offset['unit'] ) ? strtolower( (string) $raw_offset['unit'] ) : 'px';
+			if ( $size > 0 ) {
+				if ( 'rem' === $unit ) {
+					$widget_offset = (int) round( $size * 16 ); // assume 1rem = 16px
+				} else {
+					$widget_offset = (int) round( $size );
+				}
+			}
+		} else {
+			$widget_offset = intval( $raw_offset );
+		}
 	}
 	$sticky_offset = apply_filters( 'letlexi/sticky_offset', $widget_offset, $post_id );
 	$sticky_attr = '';
@@ -496,10 +509,22 @@ function lexi_build_reader_header( $post_id, $settings ) {
  *
  * @param array $sections Array of sections.
  * @param array $settings Resolved settings.
+ * @param int   $post_id  The post ID to get the document title from.
  * @return string TOC HTML.
  */
-function lexi_build_toc_structure( $sections, $settings ) {
+function lexi_build_toc_structure( $sections, $settings, $post_id ) {
 	$html = '';
+
+	// Get the document title
+	$post = get_post( $post_id );
+	$document_title = $post ? $post->post_title : __( 'Article', 'letlexi' );
+
+	// Add Article link at the top
+	$html .= '<li>';
+	$html .= '<a href="#" class="lexi-toc__link lexi-toc__link--article" data-index="-1" aria-label="' . esc_attr( sprintf( __( 'Go to top of %s', 'letlexi' ), $document_title ) ) . '">';
+	$html .= esc_html( $document_title );
+	$html .= '</a>';
+	$html .= '</li>';
 
 	foreach ( $sections as $index => $section ) {
 		$section_number = isset( $section['section_number'] ) ? sanitize_text_field( $section['section_number'] ) : '';
