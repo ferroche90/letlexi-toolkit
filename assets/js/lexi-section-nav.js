@@ -30,14 +30,17 @@
     var docWrapper = document.querySelector('.lexi-doc');
     var contentBody = document.querySelector('.lexi-doc__body');
     var tocLinks = document.querySelectorAll('.lexi-toc__link');
-    var prevBtn = document.querySelector('.lexi-nav__prev');
-    var nextBtn = document.querySelector('.lexi-nav__next');
-    var jumpSelect = document.querySelector('.lexi-jump__select');
+    var prevBtns = document.querySelectorAll('.lexi-nav__prev');
+    var nextBtns = document.querySelectorAll('.lexi-nav__next');
+    var jumpSelects = document.querySelectorAll('.lexi-jump__select');
     var tocToggle = document.querySelector('.lexi-toc__toggle');
     var tocList = document.querySelector('.lexi-toc__list');
     var toc = document.querySelector('.lexi-toc');
     var printBtn = document.querySelector('.lexi-print-btn');
     var copyCitationBtn = document.querySelector('.lexi-copy-citation-btn');
+    
+    // Check if navigation elements exist (they might be hidden by widget settings)
+    var hasNavigation = prevBtns.length > 0 || nextBtns.length > 0;
     
     // Initialize on DOM ready
     function init() {
@@ -120,32 +123,34 @@
             });
         });
         
-        // Previous/Next buttons
-        if (prevBtn) {
-            prevBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                if (currentIndex > 0) {
-                    navigateTo(currentIndex - 1);
-                }
+        // Previous/Next buttons (handle all instances) - only if navigation exists
+        if (hasNavigation) {
+            prevBtns.forEach(function(prevBtn) {
+                prevBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (currentIndex > 0) {
+                        navigateTo(currentIndex - 1);
+                    }
+                });
             });
-        }
-        
-        if (nextBtn) {
-            nextBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                if (currentIndex < totalSections - 1) {
-                    navigateTo(currentIndex + 1);
-                }
+            
+            nextBtns.forEach(function(nextBtn) {
+                nextBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (currentIndex < totalSections - 1) {
+                        navigateTo(currentIndex + 1);
+                    }
+                });
             });
-        }
-        
-        // Jump select
-        if (jumpSelect) {
-            jumpSelect.addEventListener('change', function() {
-                var index = parseInt(this.value, 10);
-                if (!isNaN(index)) {
-                    navigateTo(index);
-                }
+            
+            // Jump selects (handle all instances)
+            jumpSelects.forEach(function(jumpSelect) {
+                jumpSelect.addEventListener('change', function() {
+                    var index = parseInt(this.value, 10);
+                    if (!isNaN(index)) {
+                        navigateTo(index);
+                    }
+                });
             });
         }
         
@@ -348,20 +353,22 @@
             link.setAttribute('aria-current', index === currentIndex ? 'page' : 'false');
         });
         
-        // Update prev/next buttons
-        if (prevBtn) {
-            prevBtn.disabled = currentIndex <= 0;
-            prevBtn.setAttribute('aria-label', (i18n.previous || 'Previous') + ' ' + (i18n.section || 'Section'));
-        }
-        
-        if (nextBtn) {
-            nextBtn.disabled = currentIndex >= totalSections - 1;
-            nextBtn.setAttribute('aria-label', (i18n.next || 'Next') + ' ' + (i18n.section || 'Section'));
-        }
-        
-        // Update jump select
-        if (jumpSelect) {
-            jumpSelect.value = currentIndex;
+        // Update prev/next buttons (all instances) - only if navigation exists
+        if (hasNavigation) {
+            prevBtns.forEach(function(prevBtn) {
+                prevBtn.disabled = currentIndex <= 0;
+                prevBtn.setAttribute('aria-label', (i18n.previous || 'Previous') + ' ' + (i18n.section || 'Section'));
+            });
+            
+            nextBtns.forEach(function(nextBtn) {
+                nextBtn.disabled = currentIndex >= totalSections - 1;
+                nextBtn.setAttribute('aria-label', (i18n.next || 'Next') + ' ' + (i18n.section || 'Section'));
+            });
+            
+            // Update jump selects (all instances)
+            jumpSelects.forEach(function(jumpSelect) {
+                jumpSelect.value = currentIndex;
+            });
         }
     }
     

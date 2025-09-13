@@ -250,8 +250,20 @@ function lexi_build_shell_html( $post_id, $settings = array() ) {
 	// Build components.
 	$header_html = lexi_build_reader_header( $post_id, $resolved_settings );
 	$toc_html = lexi_build_toc_structure( $sections, $resolved_settings );
+	
+	// Build navigation components based on visibility settings
+	$top_nav_html = '';
+	$footer_nav_html = '';
+	
+	if ( isset( $resolved_settings['show_top_navigation'] ) && $resolved_settings['show_top_navigation'] === 'yes' ) {
+		$top_nav_html = lexi_build_top_navigation( $post_id, $resolved_settings, count( $sections ) );
+	}
+	
+	if ( isset( $resolved_settings['show_bottom_navigation'] ) && $resolved_settings['show_bottom_navigation'] === 'yes' ) {
+		$footer_nav_html = lexi_build_footer_navigation( $post_id, $resolved_settings, count( $sections ) );
+	}
+	
 	$content_html = lexi_build_content_area( $post_id, $display_args, $resolved_settings, $sections );
-	$footer_nav_html = lexi_build_footer_navigation( $post_id, $resolved_settings, count( $sections ) );
 
 	// Assemble the complete shell; add layout classes.
 	$doc_classes = array( 'lexi-doc' );
@@ -280,6 +292,9 @@ function lexi_build_shell_html( $post_id, $settings = array() ) {
 	
 	// Document info and controls above content.
 	$html .= $header_html;
+	
+	// Top navigation.
+	$html .= $top_nav_html;
 	
 	// Main content area.
 	$html .= '<div class="lexi-doc__body">';
@@ -318,7 +333,6 @@ function lexi_build_shell_html( $post_id, $settings = array() ) {
 function lexi_resolve_shell_settings( $settings ) {
 	$defaults = array(
 		'document_label'        => __( 'Document:', 'letlexi' ),
-		'query_format'          => '%constitution% Art. %article%, Section %section%',
 		'print_label'           => __( 'Print', 'letlexi' ),
 		'copy_citation_label'   => __( 'Copy Citation', 'letlexi' ),
 		'toc_heading'           => __( 'Table of Contents', 'letlexi' ),
@@ -429,52 +443,34 @@ function lexi_build_reader_header( $post_id, $settings ) {
 	$html .= '<h1 class="lexi-document-title">' . esc_html( $post->post_title ) . '</h1>';
 	$html .= '</div>';
 
-	// Query format display.
-	if ( ! empty( $settings['query_format'] ) ) {
-		$query_display = lexi_format_query_string( $settings['query_format'], $post );
-		$html .= '<div class="lexi-query-display">';
-		$html .= '<span class="lexi-query-label">' . esc_html__( 'Query:', 'letlexi' ) . '</span>';
-		$html .= '<span class="lexi-query-text">' . esc_html( $query_display ) . '</span>';
+
+	// Action buttons (conditional based on settings).
+	$show_print = ! isset( $settings['show_print_button'] ) || $settings['show_print_button'] === 'yes';
+	$show_copy = ! isset( $settings['show_copy_button'] ) || $settings['show_copy_button'] === 'yes';
+	
+	if ( $show_print || $show_copy ) {
+		$html .= '<div class="lexi-document-actions">';
+		
+		if ( $show_print ) {
+			$html .= '<button type="button" class="lexi-print-btn" aria-label="' . esc_attr( $settings['print_label'] ) . '">';
+			$html .= esc_html( $settings['print_label'] );
+			$html .= '</button>';
+		}
+		
+		if ( $show_copy ) {
+			$html .= '<button type="button" class="lexi-copy-citation-btn" aria-label="' . esc_attr( $settings['copy_citation_label'] ) . '">';
+			$html .= esc_html( $settings['copy_citation_label'] );
+			$html .= '</button>';
+		}
+		
 		$html .= '</div>';
 	}
-
-	// Action buttons.
-	$html .= '<div class="lexi-document-actions">';
-	$html .= '<button type="button" class="lexi-print-btn" aria-label="' . esc_attr( $settings['print_label'] ) . '">';
-	$html .= esc_html( $settings['print_label'] );
-	$html .= '</button>';
-	$html .= '<button type="button" class="lexi-copy-citation-btn" aria-label="' . esc_attr( $settings['copy_citation_label'] ) . '">';
-	$html .= esc_html( $settings['copy_citation_label'] );
-	$html .= '</button>';
-	$html .= '</div>';
 
 	$html .= '</div>';
 
 	return $html;
 }
 
-/**
- * Format query string with placeholders
- *
- * @since 1.0.0
- *
- * @param string $query_format The query format string.
- * @param WP_Post $post The post object.
- * @return string Formatted query string.
- */
-function lexi_format_query_string( $query_format, $post ) {
-	// Get post meta for placeholders.
-	$constitution = get_post_meta( $post->ID, 'constitution', true );
-	$article = get_post_meta( $post->ID, 'article', true );
-	$section = get_post_meta( $post->ID, 'section', true );
-
-	// Replace placeholders.
-	$formatted = str_replace( '%constitution%', $constitution ?: __( 'Constitution', 'letlexi' ), $query_format );
-	$formatted = str_replace( '%article%', $article ?: '1', $formatted );
-	$formatted = str_replace( '%section%', $section ?: '1', $formatted );
-
-	return $formatted;
-}
 
 /**
  * Build Table of Contents structure
@@ -568,6 +564,54 @@ function lexi_build_content_area( $post_id, $display_args, $settings, $sections 
 			   esc_html__( 'Loading section...', 'letlexi' ) . 
 			   '</div>';
 	}
+}
+
+/**
+ * Build top navigation controls
+ *
+ * @since 1.0.0
+ *
+ * @param int   $post_id        The post ID for unique element IDs.
+ * @param array $settings       Resolved settings.
+ * @param int   $total_sections Total number of sections.
+ * @return string Top navigation HTML.
+ */
+function lexi_build_top_navigation( $post_id, $settings, $total_sections ) {
+	$html = '<div class="lexi-nav lexi-top-nav">';
+
+	// Previous button.
+	$html .= '<button type="button" class="lexi-nav__prev" disabled aria-label="' . esc_attr( $settings['previous_label'] ) . '">';
+	$html .= '<span aria-hidden="true">←</span> ';
+	$html .= esc_html( $settings['previous_label'] );
+	$html .= '</button>';
+
+	// Jump select.
+	$html .= '<div class="lexi-jump">';
+	$html .= '<label for="lexi-jump-select-top-' . esc_attr( $post_id ) . '">' . esc_html__( 'Jump to:', 'letlexi' ) . '</label>';
+	$html .= '<select id="lexi-jump-select-top-' . esc_attr( $post_id ) . '" class="lexi-jump__select" aria-label="' . esc_attr__( 'Select section to jump to', 'letlexi' ) . '">';
+
+	for ( $i = 0; $i < $total_sections; $i++ ) {
+		$html .= '<option value="' . esc_attr( $i ) . '">';
+		$html .= sprintf(
+			/* translators: %d: section number */
+			esc_html__( 'Section %d', 'letlexi' ),
+			$i + 1
+		);
+		$html .= '</option>';
+	}
+
+	$html .= '</select>';
+	$html .= '</div>';
+
+	// Next button.
+	$html .= '<button type="button" class="lexi-nav__next" aria-label="' . esc_attr( $settings['next_label'] ) . '">';
+	$html .= esc_html( $settings['next_label'] );
+	$html .= ' <span aria-hidden="true">→</span>';
+	$html .= '</button>';
+
+	$html .= '</div>';
+
+	return $html;
 }
 
 /**

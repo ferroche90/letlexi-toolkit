@@ -83,7 +83,6 @@ add_filter( 'lexi/default_widget_settings', function( $settings ) {
 	// Customize default widget settings.
 	$custom_defaults = array(
 		'document_label'        => __( 'Document:', 'letlexi' ),
-		'query_format'          => '%constitution% Art. %article%, Section %section%',
 		'print_label'           => __( 'Print', 'letlexi' ),
 		'copy_citation_label'   => __( 'Copy Citation', 'letlexi' ),
 		'toc_heading'           => __( 'Table of Contents', 'letlexi' ),

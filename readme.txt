@@ -79,7 +79,7 @@ Yes! The Elementor widget includes comprehensive styling controls in the Style t
 * **Spacing**: Margins, padding, gaps between elements
 * **Borders & Shadows**: Custom borders and box shadows for TOC and sections
 * **Navigation**: Button styling, padding, border radius, hover effects
-* **Header & Document Info**: Header backgrounds, typography for document/query labels, padding
+* **Header & Document Info**: Header backgrounds, typography for document labels, padding
 * **Section Headers**: Background colors, border colors, padding, margins
 * **Status Badges**: Typography, padding, border radius, and individual colors for Active, Repealed, Superseded, and Pending states
 * **Commentary**: Background colors, border colors, padding, border radius

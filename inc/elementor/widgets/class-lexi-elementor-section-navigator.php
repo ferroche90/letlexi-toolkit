@@ -205,19 +205,6 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			)
 		);
 
-		// Query Format.
-		$this->add_control(
-			'query_format',
-			array(
-				'label'       => __( 'Query Format', 'letlexi' ),
-				'type'        => Controls_Manager::TEXT,
-				'default'     => '%constitution% Art. %article%, Section %section%',
-				'description' => __( 'Use placeholders: %constitution%, %article%, %section%', 'letlexi' ),
-				'dynamic'     => array(
-					'active' => true,
-				),
-			)
-		);
 
 		// Print Label.
 		$this->add_control(
@@ -497,45 +484,6 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			)
 		);
 
-		$this->add_group_control(
-			\Elementor\Group_Control_Typography::get_type(),
-			array(
-				'name'     => 'query_label_typo_new',
-				'label'    => __( 'Query Label Typography', 'letlexi' ),
-				'selector' => '{{WRAPPER}} .lexi-query-label',
-			)
-		);
-
-		$this->add_control(
-			'query_label_color_new',
-			array(
-				'label'     => __( 'Query Label Color', 'letlexi' ),
-				'type'      => Controls_Manager::COLOR,
-				'selectors' => array(
-					'{{WRAPPER}} .lexi-query-label' => 'color: {{VALUE}}',
-				),
-			)
-		);
-
-		$this->add_group_control(
-			\Elementor\Group_Control_Typography::get_type(),
-			array(
-				'name'     => 'query_text_typo_new',
-				'label'    => __( 'Query Text Typography', 'letlexi' ),
-				'selector' => '{{WRAPPER}} .lexi-query-text',
-			)
-		);
-
-		$this->add_control(
-			'query_text_color_new',
-			array(
-				'label'     => __( 'Query Text Color', 'letlexi' ),
-				'type'      => Controls_Manager::COLOR,
-				'selectors' => array(
-					'{{WRAPPER}} .lexi-query-text' => 'color: {{VALUE}}',
-				),
-			)
-		);
 
 		$this->add_responsive_control(
 			'header_spacing_stack',
@@ -1061,6 +1009,70 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			)
 		);
 
+		// Navigation Controls Section
+		$this->add_control(
+			'navigation_controls_heading',
+			array(
+				'label' => __( 'Navigation Controls', 'letlexi' ),
+				'type'  => Controls_Manager::HEADING,
+				'separator' => 'before',
+			)
+		);
+
+		// Show Top Navigation.
+		$this->add_control(
+			'show_top_navigation',
+			array(
+				'label'   => __( 'Show Top Navigation', 'letlexi' ),
+				'type'    => Controls_Manager::SWITCHER,
+				'default' => 'yes',
+				'description' => __( 'Show Previous/Next buttons above the content', 'letlexi' ),
+			)
+		);
+
+		// Show Bottom Navigation.
+		$this->add_control(
+			'show_bottom_navigation',
+			array(
+				'label'   => __( 'Show Bottom Navigation', 'letlexi' ),
+				'type'    => Controls_Manager::SWITCHER,
+				'default' => 'yes',
+				'description' => __( 'Show Previous/Next buttons below the content', 'letlexi' ),
+			)
+		);
+
+		// Action Buttons Section
+		$this->add_control(
+			'action_buttons_heading',
+			array(
+				'label' => __( 'Action Buttons', 'letlexi' ),
+				'type'  => Controls_Manager::HEADING,
+				'separator' => 'before',
+			)
+		);
+
+		// Show Print Button.
+		$this->add_control(
+			'show_print_button',
+			array(
+				'label'   => __( 'Show Print Button', 'letlexi' ),
+				'type'    => Controls_Manager::SWITCHER,
+				'default' => 'yes',
+				'description' => __( 'Show print button in the document header', 'letlexi' ),
+			)
+		);
+
+		// Show Copy Button.
+		$this->add_control(
+			'show_copy_button',
+			array(
+				'label'   => __( 'Show Copy Citation Button', 'letlexi' ),
+				'type'    => Controls_Manager::SWITCHER,
+				'default' => 'yes',
+				'description' => __( 'Show copy citation button in the document header', 'letlexi' ),
+			)
+		);
+
 		$this->end_controls_section();
 
 		// ACF Field Mapping Section.
@@ -1569,7 +1581,6 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			'data_source'             => 'acf',
 			'manual_sections'         => array(),
 			'document_label'        => '',
-			'query_format'          => '',
 			'print_label'           => '',
 			'copy_citation_label'   => '',
 			'toc_heading'           => '',
@@ -1579,6 +1590,10 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			'show_cross_refs'       => 'yes',
 			'show_case_law'         => 'yes',
 			'show_amendments'       => 'yes',
+			'show_top_navigation'   => 'yes',
+			'show_bottom_navigation' => 'yes',
+			'show_print_button'     => 'yes',
+			'show_copy_button'      => 'yes',
 			'loading_strategy'      => 'ajax',
 			'acf_toggle_commentary' => '',
 			'acf_toggle_crossrefs'  => '',
