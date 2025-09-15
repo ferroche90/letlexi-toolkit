@@ -14,7 +14,7 @@
  * Tested up to: 6.4
  * Requires PHP: 7.4
  * Network: false
- * Requires Plugins: elementor, advanced-custom-fields
+ * Requires Plugins: elementor, advanced-custom-fields-pro
  *
  * @package LetLexi\Toolkit
  * @version 1.0.0
