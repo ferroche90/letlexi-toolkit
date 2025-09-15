@@ -527,9 +527,12 @@
     }
     
     .lexi-toc {
-        position: static;
+        position: sticky;
+        top: var(--lexi-toc-sticky-top, 4rem);
         order: -1;
-        width: 100%;
+        width: 100vw;
+        margin-left: calc(-50vw + 50%);
+        --lexi-toc-width: auto;
     }
     
     .lexi-toc__toggle {
