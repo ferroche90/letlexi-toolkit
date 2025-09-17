@@ -17,8 +17,8 @@
     
     // Fallback i18n strings for Elementor editor context
     if (!i18n.showCommentary) {
-        i18n.showCommentary = 'Show Commentary';
-        i18n.hideCommentary = 'Hide Commentary';
+        i18n.showCommentary = 'Show sectionAnnotations';
+        i18n.hideCommentary = 'Hide sectionAnnotations';
     }
     
     // State management
@@ -346,7 +346,7 @@
             // Toggle aria-hidden on content
             targetContent.setAttribute('aria-hidden', isExpanded);
             // Update button text using i18n strings
-            this.textContent = isExpanded ? (i18n.showCommentary || 'Show Commentary') : (i18n.hideCommentary || 'Hide Commentary');
+            this.textContent = isExpanded ? (i18n.showCommentary || 'Show sectionAnnotations') : (i18n.hideCommentary || 'Hide sectionAnnotations');
         }
     }
     

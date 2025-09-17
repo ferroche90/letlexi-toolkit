@@ -1115,21 +1115,21 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			)
 		);
 
-		// Show Commentary.
+		// Show Commentary (Section Annotations).
 		$this->add_control(
 			'show_commentary',
 			array(
-				'label'   => __( 'Show Commentary', 'letlexi' ),
+				'label'   => __( 'Show Section Annotations', 'letlexi' ),
 				'type'    => Controls_Manager::SWITCHER,
 				'default' => 'yes',
 			)
 		);
 
-		// Show Cross References.
+		// Show Cross References (Research References & Practice Aids).
 		$this->add_control(
 			'show_cross_refs',
 			array(
-				'label'   => __( 'Show Cross References', 'letlexi' ),
+				'label'   => __( 'Show Research References & Practice Aids', 'letlexi' ),
 				'type'    => Controls_Manager::SWITCHER,
 				'default' => 'yes',
 			)
@@ -1261,47 +1261,47 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			)
 		);
 
-		// Article-level Toggle Fields.
+		// Article-level Fields.
 		$this->add_control(
-			'acf_toggle_commentary',
+			'acf_field_article_commentary',
 			array(
-				'label'       => __( 'ACF Toggle: Commentary', 'letlexi' ),
+				'label'       => __( 'ACF Field: Article Commentary', 'letlexi' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => '',
-				'description' => __( 'ACF field name for article-level commentary toggle', 'letlexi' ),
+				'default'     => 'article_commentary',
+				'description' => __( 'ACF field name for article-level commentary', 'letlexi' ),
 				'dynamic'     => array( 'active' => true ),
 			)
 		);
 
 		$this->add_control(
-			'acf_toggle_crossrefs',
+			'acf_field_article_cross_references',
 			array(
-				'label'       => __( 'ACF Toggle: Cross References', 'letlexi' ),
+				'label'       => __( 'ACF Field: Article Cross References', 'letlexi' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => '',
-				'description' => __( 'ACF field name for article-level cross references toggle', 'letlexi' ),
+				'default'     => 'article_cross_references',
+				'description' => __( 'ACF field name for article-level cross references', 'letlexi' ),
 				'dynamic'     => array( 'active' => true ),
 			)
 		);
 
 		$this->add_control(
-			'acf_toggle_caselaw',
+			'acf_field_article_status',
 			array(
-				'label'       => __( 'ACF Toggle: Case Law', 'letlexi' ),
+				'label'       => __( 'ACF Field: Article Status', 'letlexi' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => '',
-				'description' => __( 'ACF field name for article-level case law toggle', 'letlexi' ),
+				'default'     => 'article_status',
+				'description' => __( 'ACF field name for article status', 'letlexi' ),
 				'dynamic'     => array( 'active' => true ),
 			)
 		);
 
 		$this->add_control(
-			'acf_toggle_amendments',
+			'acf_field_display_style',
 			array(
-				'label'       => __( 'ACF Toggle: Amendments', 'letlexi' ),
+				'label'       => __( 'ACF Field: Display Style', 'letlexi' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => '',
-				'description' => __( 'ACF field name for article-level amendments toggle', 'letlexi' ),
+				'default'     => 'display_style',
+				'description' => __( 'ACF field name for display style setting', 'letlexi' ),
 				'dynamic'     => array( 'active' => true ),
 			)
 		);
@@ -1312,7 +1312,7 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			array(
 				'label'       => __( 'ACF Repeater: Sections', 'letlexi' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => '',
+				'default'     => 'sections',
 				'description' => __( 'ACF repeater field name for sections', 'letlexi' ),
 				'dynamic'     => array( 'active' => true ),
 			)
@@ -1324,7 +1324,7 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			array(
 				'label'       => __( 'ACF Field: Section Number', 'letlexi' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => '',
+				'default'     => 'section_number',
 				'description' => __( 'ACF subfield name for section number', 'letlexi' ),
 				'dynamic'     => array( 'active' => true ),
 			)
@@ -1335,19 +1335,8 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			array(
 				'label'       => __( 'ACF Field: Section Title', 'letlexi' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => '',
+				'default'     => 'section_title',
 				'description' => __( 'ACF subfield name for section title', 'letlexi' ),
-				'dynamic'     => array( 'active' => true ),
-			)
-		);
-
-		$this->add_control(
-			'acf_field_section_status',
-			array(
-				'label'       => __( 'ACF Field: Section Status', 'letlexi' ),
-				'type'        => Controls_Manager::TEXT,
-				'default'     => '',
-				'description' => __( 'ACF subfield name for section status', 'letlexi' ),
 				'dynamic'     => array( 'active' => true ),
 			)
 		);
@@ -1357,7 +1346,7 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			array(
 				'label'       => __( 'ACF Field: Section Content', 'letlexi' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => '',
+				'default'     => 'section_content',
 				'description' => __( 'ACF subfield name for section content', 'letlexi' ),
 				'dynamic'     => array( 'active' => true ),
 			)
@@ -1368,8 +1357,30 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			array(
 				'label'       => __( 'ACF Field: Section Commentary', 'letlexi' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => '',
-				'description' => __( 'ACF subfield name for section commentary', 'letlexi' ),
+				'default'     => 'section_commentary',
+				'description' => __( 'ACF subfield name for section commentary/annotations', 'letlexi' ),
+				'dynamic'     => array( 'active' => true ),
+			)
+		);
+
+		$this->add_control(
+			'acf_field_section_source_note',
+			array(
+				'label'       => __( 'ACF Field: Section Source Note', 'letlexi' ),
+				'type'        => Controls_Manager::TEXT,
+				'default'     => 'source_note',
+				'description' => __( 'ACF subfield name for section source note', 'letlexi' ),
+				'dynamic'     => array( 'active' => true ),
+			)
+		);
+
+		$this->add_control(
+			'acf_field_section_cross_references',
+			array(
+				'label'       => __( 'ACF Field: Section Cross References', 'letlexi' ),
+				'type'        => Controls_Manager::TEXT,
+				'default'     => 'section_cross_references',
+				'description' => __( 'ACF subfield name for section cross references', 'letlexi' ),
 				'dynamic'     => array( 'active' => true ),
 			)
 		);
@@ -1773,16 +1784,17 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			'show_copy_button'      => 'yes',
 			'loading_strategy'      => 'ajax',
 			'sticky_scroll_offset'  => '',
-			'acf_toggle_commentary' => '',
-			'acf_toggle_crossrefs'  => '',
-			'acf_toggle_caselaw'    => '',
-			'acf_toggle_amendments' => '',
+			'acf_field_article_commentary' => '',
+			'acf_field_article_cross_references' => '',
+			'acf_field_article_status' => '',
+			'acf_field_display_style' => '',
 			'acf_repeater_sections' => '',
 			'acf_field_section_number'     => '',
 			'acf_field_section_title'      => '',
-			'acf_field_section_status'     => '',
 			'acf_field_section_content'    => '',
 			'acf_field_section_commentary' => '',
+			'acf_field_section_source_note' => '',
+			'acf_field_section_cross_references' => '',
 			'acf_field_cross_references'   => '',
 			'acf_field_case_law_references' => '',
 			'acf_field_amendment_history'  => '',
