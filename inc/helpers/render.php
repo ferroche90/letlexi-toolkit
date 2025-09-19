@@ -52,11 +52,11 @@ function lexi_render_section_html( $post_id, $index, $args = array() ) {
 
 	// Parse arguments with defaults.
 	$defaults = array(
-		'show_commentary'  => true,
-		'show_cross_refs'  => true,
-		'show_case_law'    => true,
-		'show_amendments'  => true,
-		'classes'          => 'lexi-section',
+		'show_commentary'   => true,
+		'show_cross_refs'   => true,
+		'classes'           => 'lexi-section',
+		'history_heading'   => __( 'History', 'letlexi' ),
+		'annotations_label' => __( 'Annotations', 'letlexi' ),
 	);
 
 	$args = wp_parse_args( $args, $defaults );
@@ -64,8 +64,6 @@ function lexi_render_section_html( $post_id, $index, $args = array() ) {
 	// Normalize boolean arguments.
 	$args['show_commentary'] = lexi_bool( $args['show_commentary'] );
 	$args['show_cross_refs'] = lexi_bool( $args['show_cross_refs'] );
-	$args['show_case_law']   = lexi_bool( $args['show_case_law'] );
-	$args['show_amendments'] = lexi_bool( $args['show_amendments'] );
 
 	// Extract and sanitize section fields.
 	$section_number   = isset( $section['section_number'] ) ? sanitize_text_field( $section['section_number'] ) : '';
@@ -75,16 +73,14 @@ function lexi_render_section_html( $post_id, $index, $args = array() ) {
 	$section_source_note = isset( $section['source_note'] ) ? sanitize_textarea_field( $section['source_note'] ) : '';
 	$section_cross_references = isset( $section['section_cross_references'] ) ? wp_kses_post( $section['section_cross_references'] ) : '';
 
-	// Extract repeater fields (legacy support).
+	// Extract repeater fields (legacy support for cross references only).
 	$cross_references = isset( $section['cross_references'] ) && is_array( $section['cross_references'] ) ? $section['cross_references'] : array();
-	$case_law_references = isset( $section['case_law_references'] ) && is_array( $section['case_law_references'] ) ? $section['case_law_references'] : array();
-	$amendment_history = isset( $section['amendment_history'] ) && is_array( $section['amendment_history'] ) ? $section['amendment_history'] : array();
 
 	// Sanitize wrapper classes.
 	$classes = sanitize_html_class( $args['classes'] );
 
 	// Start building HTML.
-	$html = '<div class="' . esc_attr( $classes ) . '" data-section-index="' . esc_attr( $index ) . '"';
+	$html = '<div class="' . esc_attr( $classes ) . '" data-section-index="' . esc_attr( $index ) . '" data-index="' . esc_attr( $index ) . '"';
 
 	if ( ! empty( $section_number ) ) {
 		$html .= ' id="sec-' . esc_attr( $post_id ) . '-' . esc_attr( $section_number ) . '"';
@@ -119,88 +115,83 @@ function lexi_render_section_html( $post_id, $index, $args = array() ) {
 		$html .= '</div>';
 	}
 
-	// Main content.
+	// Main content (the law text)
 	if ( ! empty( $section_content ) ) {
 		$html .= '<div class="lexi-section-content">';
 		$html .= $section_content; // Already sanitized with wp_kses_post.
 		$html .= '</div>';
 	}
 
-	// Section source note.
+	// Section History (source note) under its own heading, separate from Annotations
 	if ( ! empty( $section_source_note ) ) {
-		$html .= '<div class="lexi-section-source-note">';
+		$history_heading = isset( $args['history_heading'] ) && $args['history_heading'] !== '' ? sanitize_text_field( $args['history_heading'] ) : __( 'History', 'letlexi' );
+		$html .= '<div class="lexi-section-history">';
+		$html .= '<h3>' . esc_html( $history_heading ) . '</h3>';
 		$html .= '<p class="lexi-source-note">' . esc_html( $section_source_note ) . '</p>';
 		$html .= '</div>';
 	}
 
-	// Section cross references (new WYSIWYG field).
-	if ( $args['show_cross_refs'] && ! empty( $section_cross_references ) ) {
-		$html .= '<div class="lexi-section-cross-references">';
-		$html .= '<h3>' . esc_html__( 'Research References & Practice Aids', 'letlexi' ) . '</h3>';
-		$html .= '<div class="lexi-cross-refs-content">';
-		$html .= $section_cross_references; // Already sanitized with wp_kses_post.
-		$html .= '</div>';
-		$html .= '</div>';
-	}
+	// Annotations tab: includes State Notes, Annotation, and Research References within a full-width tab UI.
+	$has_annotations = ( $args['show_commentary'] && ! empty( $section_commentary ) ) || ( $args['show_cross_refs'] && ( ! empty( $section_cross_references ) || ! empty( $cross_references ) ) );
+	if ( $has_annotations ) {
+		$tab_label = isset( $args['annotations_label'] ) && $args['annotations_label'] !== '' ? sanitize_text_field( $args['annotations_label'] ) : __( 'Annotations', 'letlexi' );
+		$tab_id    = 'annotations-tab-' . $post_id . '-' . $index;
+		$panel_id  = 'annotations-panel-' . $post_id . '-' . $index;
 
-	// Commentary (collapsible) - Section Annotations.
-	if ( $args['show_commentary'] && ! empty( $section_commentary ) ) {
-		$html .= '<div class="lexi-commentary-section">';
-		$html .= '<button type="button" class="lexi-commentary-toggle" aria-expanded="false" aria-controls="commentary-' . esc_attr( $post_id ) . '-' . esc_attr( $index ) . '">';
-		$html .= esc_html__( 'Hide sectionAnnotations', 'letlexi' );
+		$html .= '<div class="lexi-annotations">';
+		// Tab header (full width, active by default)
+		$html .= '<div class="lexi-tabs" role="tablist">';
+		$html .= '<button type="button" class="lexi-tab is-active" id="' . esc_attr( $tab_id ) . '" role="tab" aria-selected="true" aria-controls="' . esc_attr( $panel_id ) . '">';
+		$html .= esc_html( $tab_label );
 		$html .= '</button>';
-		$html .= '<div class="lexi-commentary-content" id="commentary-' . esc_attr( $post_id ) . '-' . esc_attr( $index ) . '" aria-hidden="true">';
-		$html .= $section_commentary; // Already sanitized with wp_kses_post.
 		$html .= '</div>';
-		$html .= '</div>';
-	}
 
-	// Cross references (legacy repeater support).
-	if ( $args['show_cross_refs'] && ! empty( $cross_references ) ) {
-		$html .= '<div class="lexi-cross-references">';
-		$html .= '<h3>' . esc_html__( 'Research References & Practice Aids', 'letlexi' ) . '</h3>';
-		$html .= '<ul>';
+		// Tab panel content
+		$html .= '<div id="' . esc_attr( $panel_id ) . '" class="lexi-tab-panel is-active" role="tabpanel" aria-labelledby="' . esc_attr( $tab_id ) . '">';
 
-		foreach ( $cross_references as $ref ) {
-			if ( isset( $ref['reference_text'] ) && ! empty( $ref['reference_text'] ) ) {
-				$html .= '<li>' . esc_html( sanitize_text_field( $ref['reference_text'] ) ) . '</li>';
-			}
+		$need_divider = false;
+
+		// Annotation (commentary)
+		if ( $args['show_commentary'] && ! empty( $section_commentary ) ) {
+			if ( $need_divider ) { $html .= '<div class="lexi-divider" role="separator" aria-hidden="true"></div>'; }
+			$html .= '<div class="lexi-annotation-block lexi-annotation--commentary">';
+			$html .= '<div class="lexi-commentary-content">';
+			$html .= $section_commentary; // Already sanitized with wp_kses_post.
+			$html .= '</div>';
+			$html .= '</div>';
+			$need_divider = false;
 		}
 
-		$html .= '</ul>';
-		$html .= '</div>';
-	}
-
-	// Case law references.
-	if ( $args['show_case_law'] && ! empty( $case_law_references ) ) {
-		$html .= '<div class="lexi-case-law">';
-		$html .= '<h3>' . esc_html__( 'Case Law', 'letlexi' ) . '</h3>';
-		$html .= '<ul>';
-
-		foreach ( $case_law_references as $case ) {
-			if ( isset( $case['case_title'] ) && ! empty( $case['case_title'] ) ) {
-				$html .= '<li>' . esc_html( sanitize_text_field( $case['case_title'] ) ) . '</li>';
+		// Research References & Practice Aids (new WYSIWYG and legacy fallback)
+		if ( $args['show_cross_refs'] && ( ! empty( $section_cross_references ) || ! empty( $cross_references ) ) ) {
+			if ( $need_divider ) {
+				$html .= '<div class="lexi-divider" role="separator" aria-hidden="true"></div>';
 			}
+			$html .= '<div class="lexi-annotation-block lexi-annotation--references">';
+			$html .= '<h3>' . esc_html__( 'Research References & Practice Aids', 'letlexi' ) . '</h3>';
+
+			$html .= '<div class="lexi-cross-refs-content">';
+			if ( ! empty( $section_cross_references ) ) {
+				$html .= $section_cross_references; // Already sanitized with wp_kses_post.
+			}
+			if ( empty( $section_cross_references ) && ! empty( $cross_references ) ) {
+				$html .= '<ul>';
+				foreach ( $cross_references as $ref ) {
+					if ( isset( $ref['reference_text'] ) && ! empty( $ref['reference_text'] ) ) {
+						$html .= '<li>' . esc_html( sanitize_text_field( $ref['reference_text'] ) ) . '</li>';
+					}
+				}
+				$html .= '</ul>';
+			}
+			$html .= '</div>';
+			$html .= '</div>';
 		}
 
-		$html .= '</ul>';
-		$html .= '</div>';
-	}
+		// Add section divider for clear separation between sections (inside tab panel so it hides with annotations)
+		$html .= '<div class="lexi-section-divider" role="separator" aria-hidden="true"></div>';
 
-	// Amendment history.
-	if ( $args['show_amendments'] && ! empty( $amendment_history ) ) {
-		$html .= '<div class="lexi-amendments">';
-		$html .= '<h3>' . esc_html__( 'Amendment History', 'letlexi' ) . '</h3>';
-		$html .= '<ul>';
-
-		foreach ( $amendment_history as $amendment ) {
-			if ( isset( $amendment['amendment_text'] ) && ! empty( $amendment['amendment_text'] ) ) {
-				$html .= '<li>' . esc_html( sanitize_text_field( $amendment['amendment_text'] ) ) . '</li>';
-			}
-		}
-
-		$html .= '</ul>';
-		$html .= '</div>';
+		$html .= '</div>'; // .lexi-tab-panel
+		$html .= '</div>'; // .lexi-annotations
 	}
 
 	$html .= '</div>';
@@ -255,9 +246,16 @@ function lexi_build_shell_html( $post_id, $settings = array() ) {
 	// Override with widget settings if provided.
 	$display_args = lexi_merge_display_settings( $display_args, $resolved_settings );
 
+	// Pass through UI labels (History and Annotations) to section renderer
+	if ( isset( $resolved_settings['history_heading'] ) ) {
+		$display_args['history_heading'] = $resolved_settings['history_heading'];
+	}
+	if ( isset( $resolved_settings['annotations_label'] ) ) {
+		$display_args['annotations_label'] = $resolved_settings['annotations_label'];
+	}
+
 	// Build components.
 	$header_html = lexi_build_reader_header( $post_id, $resolved_settings );
-	$article_info_html = lexi_build_article_info( $post_id, $resolved_settings );
 	$toc_html = lexi_build_toc_structure( $sections, $resolved_settings, $post_id );
 	
 	// Build navigation components based on visibility settings
@@ -325,9 +323,6 @@ function lexi_build_shell_html( $post_id, $settings = array() ) {
 	
 	// Document info and controls above content.
 	$html .= $header_html;
-	
-	// Article-level information.
-	$html .= $article_info_html;
 
 	// View mode toggle: Full Text / Single Section
 	$html .= '<div class="lexi-view-toggle" role="group" aria-label="View mode">';
@@ -382,8 +377,6 @@ function lexi_resolve_shell_settings( $settings ) {
 		'next_label'            => __( 'Next', 'letlexi' ),
 		'show_commentary'       => true,
 		'show_cross_refs'       => true,
-		'show_case_law'         => true,
-		'show_amendments'       => true,
 		'loading_strategy'      => 'ajax',
 	);
 
@@ -402,8 +395,6 @@ function lexi_get_article_display_args( $post_id ) {
 	$args = array(
 		'show_commentary'  => true,
 		'show_cross_refs'  => true,
-		'show_case_law'    => true,
-		'show_amendments'  => true,
 	);
 
 	// Check if ACF is available.
@@ -425,32 +416,22 @@ function lexi_get_article_display_args( $post_id ) {
 			case 'full':
 				$args['show_commentary'] = true;
 				$args['show_cross_refs'] = true;
-				$args['show_case_law'] = true;
-				$args['show_amendments'] = true;
 				break;
 			case 'sections_only':
 				$args['show_commentary'] = false;
 				$args['show_cross_refs'] = false;
-				$args['show_case_law'] = false;
-				$args['show_amendments'] = false;
 				break;
 			case 'commentary_only':
 				$args['show_commentary'] = true;
 				$args['show_cross_refs'] = false;
-				$args['show_case_law'] = false;
-				$args['show_amendments'] = false;
 				break;
 			case 'combined':
 				$args['show_commentary'] = true;
 				$args['show_cross_refs'] = true;
-				$args['show_case_law'] = false;
-				$args['show_amendments'] = false;
 				break;
 			case 'minimal':
 				$args['show_commentary'] = false;
 				$args['show_cross_refs'] = false;
-				$args['show_case_law'] = false;
-				$args['show_amendments'] = false;
 				break;
 		}
 	}
@@ -483,12 +464,6 @@ function lexi_merge_display_settings( $article_settings, $widget_settings ) {
 	if ( isset( $widget_settings['show_cross_refs'] ) ) {
 		$article_settings['show_cross_refs'] = lexi_bool( $widget_settings['show_cross_refs'] );
 	}
-	if ( isset( $widget_settings['show_case_law'] ) ) {
-		$article_settings['show_case_law'] = lexi_bool( $widget_settings['show_case_law'] );
-	}
-	if ( isset( $widget_settings['show_amendments'] ) ) {
-		$article_settings['show_amendments'] = lexi_bool( $widget_settings['show_amendments'] );
-	}
 
 	return $article_settings;
 }
@@ -513,7 +488,7 @@ function lexi_build_reader_header( $post_id, $settings ) {
 	// Document label and title.
 	$html .= '<div class="lexi-document-info">';
 	$html .= '<span class="lexi-document-label">' . esc_html( $settings['document_label'] ) . '</span>';
-	$html .= '<h1 class="lexi-document-title">' . esc_html( $post->post_title ) . '</h1>';
+	$html .= '<h1 class="lexi-document-title">' . esc_html( lexi_extract_article_name( $post->post_title ) ) . '</h1>';
 	$html .= '</div>';
 
 
@@ -544,6 +519,28 @@ function lexi_build_reader_header( $post_id, $settings ) {
 	return $html;
 }
 
+/**
+ * Extract article name from post title format: "%constitution_type% - %Article name%"
+ *
+ * @since 1.0.0
+ *
+ * @param string $post_title The full post title.
+ * @return string The article name only.
+ */
+function lexi_extract_article_name( $post_title ) {
+	if ( empty( $post_title ) ) {
+		return __( 'Article', 'letlexi' );
+	}
+	
+	// Split by " - " and take the last part (article name)
+	$parts = explode( ' - ', $post_title );
+	if ( count( $parts ) > 1 ) {
+		return trim( end( $parts ) );
+	}
+	
+	// If no " - " found, return the original title
+	return $post_title;
+}
 
 /**
  * Build Table of Contents structure
@@ -558,16 +555,31 @@ function lexi_build_reader_header( $post_id, $settings ) {
 function lexi_build_toc_structure( $sections, $settings, $post_id ) {
 	$html = '';
 
-	// Get the document title
+	// Get the document title and extract article name
 	$post = get_post( $post_id );
-	$document_title = $post ? $post->post_title : __( 'Article', 'letlexi' );
+	$full_title = $post ? $post->post_title : __( 'Article', 'letlexi' );
+	$document_title = lexi_extract_article_name( $full_title );
 
-	// Add Article link at the top
-	$html .= '<li>';
-	$html .= '<a href="#" class="lexi-toc__link lexi-toc__link--article" data-index="-1" aria-label="' . esc_attr( sprintf( __( 'Go to top of %s', 'letlexi' ), $document_title ) ) . '">';
-	$html .= esc_html( $document_title );
-	$html .= '</a>';
-	$html .= '</li>';
+	// Check if article has content that should be treated as a section
+	$has_article_content = lexi_has_article_content( $post_id );
+
+	// Add Article link at the top (only if no article content section)
+	if ( ! $has_article_content ) {
+		$html .= '<li>';
+		$html .= '<a href="#" class="lexi-toc__link lexi-toc__link--article" data-index="-1" aria-label="' . esc_attr( sprintf( __( 'Go to top of %s', 'letlexi' ), $full_title ) ) . '">';
+		$html .= esc_html( $document_title );
+		$html .= '</a>';
+		$html .= '</li>';
+	}
+
+	// Add article content as first section if it exists
+	if ( $has_article_content ) {
+		$html .= '<li>';
+		$html .= '<a href="#" class="lexi-toc__link lexi-toc__link--article" data-index="-1" aria-label="' . esc_attr( sprintf( __( 'Go to %s', 'letlexi' ), $full_title ) ) . '">';
+		$html .= esc_html( $document_title );
+		$html .= '</a>';
+		$html .= '</li>';
+	}
 
 	foreach ( $sections as $index => $section ) {
 		$section_number = isset( $section['section_number'] ) ? sanitize_text_field( $section['section_number'] ) : '';
@@ -648,6 +660,13 @@ function lexi_build_content_area( $post_id, $display_args, $settings, $sections 
 
 	// Render all sections server-side for full-text view.
 	$html = '';
+	
+	// First, render article content as a section if it exists
+	if ( lexi_has_article_content( $post_id ) ) {
+		$html .= lexi_render_article_section_html( $post_id, $display_args );
+	}
+	
+	// Then render regular sections
 	$count = count( $sections );
 	for ( $i = 0; $i < $count; $i++ ) {
 		$html .= lexi_render_section_html( $post_id, $i, $display_args );
@@ -788,46 +807,10 @@ function lexi_build_article_info( $post_id, $settings ) {
 		$html .= '<div class="lexi-article-info">';
 		$has_content = true;
 
-		// Article metadata.
-		if ( ! empty( $constitution_type ) || ! empty( $article_name ) || ! empty( $article_number ) || ! empty( $article_status ) ) {
-			$html .= '<div class="lexi-article-meta">';
-			
-			if ( ! empty( $constitution_type ) ) {
-				$html .= '<span class="lexi-meta-item lexi-constitution-type">';
-				$html .= '<strong>' . esc_html__( 'Type:', 'letlexi' ) . '</strong> ';
-				$html .= esc_html( $constitution_type );
-				$html .= '</span>';
-			}
-			
-			if ( ! empty( $article_name ) ) {
-				$html .= '<span class="lexi-meta-item lexi-article-name">';
-				$html .= '<strong>' . esc_html__( 'Article:', 'letlexi' ) . '</strong> ';
-				$html .= esc_html( $article_name );
-				$html .= '</span>';
-			}
-			
-			if ( ! empty( $article_number ) ) {
-				$html .= '<span class="lexi-meta-item lexi-article-number">';
-				$html .= '<strong>' . esc_html__( 'Number:', 'letlexi' ) . '</strong> ';
-				$html .= esc_html( $article_number );
-				$html .= '</span>';
-			}
-			
-			if ( ! empty( $article_status ) ) {
-				$status_slug = strtolower( $article_status );
-				$html .= '<span class="lexi-meta-item lexi-article-status lexi-status-' . esc_attr( $status_slug ) . '">';
-				$html .= '<strong>' . esc_html__( 'Status:', 'letlexi' ) . '</strong> ';
-				$html .= '<span class="lexi-status-badge">' . esc_html( $article_status ) . '</span>';
-				$html .= '</span>';
-			}
-			
-			$html .= '</div>';
-		}
-
 		// Article commentary (Editor's Note).
 		if ( ! empty( $article_commentary ) ) {
 			$html .= '<div class="lexi-article-commentary">';
-			$html .= '<h3>' . esc_html__( 'Editor\'s note:', 'letlexi' ) . '</h3>';
+			$html .= '<h3>' . esc_html__( 'Notes:', 'letlexi' ) . '</h3>';
 			$html .= '<div class="lexi-commentary-content">';
 			$html .= wp_kses_post( $article_commentary );
 			$html .= '</div>';
@@ -873,18 +856,134 @@ function lexi_build_article_info( $post_id, $settings ) {
 				$html .= '</span>';
 			}
 			
-			if ( ! empty( $version ) ) {
-				$html .= '<span class="lexi-meta-item lexi-version">';
-				$html .= '<strong>' . esc_html__( 'Version:', 'letlexi' ) . '</strong> ';
-				$html .= esc_html( $version );
-				$html .= '</span>';
-			}
-			
 			$html .= '</div>';
 		}
 
 		$html .= '</div>';
 	}
+
+	return $html;
+}
+
+/**
+ * Check if article has content that should be treated as a section
+ *
+ * @since 1.0.0
+ *
+ * @param int $post_id The post ID to check.
+ * @return bool True if article has content to display as a section.
+ */
+function lexi_has_article_content( $post_id ) {
+	// Check if ACF is available.
+	if ( ! function_exists( 'get_field' ) ) {
+		return false;
+	}
+
+	// Check if any article-level fields have content.
+	$article_commentary = get_field( 'article_commentary', $post_id );
+	$article_source_note = get_field( 'article_source_note', $post_id );
+	$article_cross_references = get_field( 'article_cross_references', $post_id );
+
+	return ! empty( $article_commentary ) || ! empty( $article_source_note ) || ! empty( $article_cross_references );
+}
+
+/**
+ * Render article content as a section with History/Annotations structure
+ *
+ * @since 1.0.0
+ *
+ * @param int   $post_id      The post ID.
+ * @param array $display_args Display arguments.
+ * @return string Article section HTML.
+ */
+function lexi_render_article_section_html( $post_id, $display_args ) {
+	// Check if ACF is available.
+	if ( ! function_exists( 'get_field' ) ) {
+		return '';
+	}
+
+	// Get article-level fields.
+	$article_commentary = get_field( 'article_commentary', $post_id );
+	$article_source_note = get_field( 'article_source_note', $post_id );
+	$article_cross_references = get_field( 'article_cross_references', $post_id );
+
+	// Get the document title for the section heading
+	$post = get_post( $post_id );
+	$full_title = $post ? $post->post_title : __( 'Article', 'letlexi' );
+	$document_title = lexi_extract_article_name( $full_title );
+
+	// Generate unique IDs for this article section
+	$section_id = 'lexi-article-section-' . $post_id;
+	$tab_id = 'lexi-article-tab-' . $post_id;
+	$panel_id = 'lexi-article-panel-' . $post_id;
+
+	// Get tab label from settings
+	$tab_label = isset( $display_args['annotations_label'] ) ? $display_args['annotations_label'] : __( 'Annotations', 'letlexi' );
+
+	$html = '<div id="' . esc_attr( $section_id ) . '" class="lexi-section" data-index="-1">';
+
+	// Main content (if any) - this would be the actual article text if it exists
+	// For now, we'll focus on the annotations structure
+
+	// Annotations container with tab
+	if ( ( $display_args['show_commentary'] && ! empty( $article_commentary ) ) || 
+		 ( $display_args['show_cross_refs'] && ! empty( $article_cross_references ) ) ||
+		 ! empty( $article_source_note ) ) {
+
+		$html .= '<div class="lexi-annotations">';
+		$html .= '<div class="lexi-tabs" role="tablist">';
+		$html .= '<button type="button" class="lexi-tab is-active" id="' . esc_attr( $tab_id ) . '" role="tab" aria-selected="true" aria-controls="' . esc_attr( $panel_id ) . '">';
+		$html .= esc_html( $tab_label );
+		$html .= '</button>';
+		$html .= '</div>';
+
+		// Tab panel content
+		$html .= '<div id="' . esc_attr( $panel_id ) . '" class="lexi-tab-panel is-active" role="tabpanel" aria-labelledby="' . esc_attr( $tab_id ) . '">';
+
+		$need_divider = false;
+
+		// Notes (h4) - appears first
+		if ( ! empty( $article_source_note ) ) {
+			$html .= '<div class="lexi-annotation-block lexi-annotation--notes">';
+			$html .= '<h4>' . esc_html__( 'Notes', 'letlexi' ) . '</h4>';
+			$html .= '<p class="lexi-source-note">' . esc_html( $article_source_note ) . '</p>';
+			$html .= '</div>';
+			$need_divider = true;
+		}
+
+		// Editor's note (article commentary)
+		if ( $display_args['show_commentary'] && ! empty( $article_commentary ) ) {
+			if ( $need_divider ) { $html .= '<div class="lexi-divider" role="separator" aria-hidden="true"></div>'; }
+			$html .= '<div class="lexi-annotation-block lexi-annotation--commentary">';
+			$html .= '<h3>' . esc_html__( 'Notes:', 'letlexi' ) . '</h3>';
+			$html .= '<div class="lexi-commentary-content">';
+			$html .= wp_kses_post( $article_commentary );
+			$html .= '</div>';
+			$html .= '</div>';
+			$need_divider = true;
+		}
+
+		// Research References & Practice Aids (article cross references)
+		if ( $display_args['show_cross_refs'] && ! empty( $article_cross_references ) ) {
+			if ( $need_divider ) {
+				$html .= '<div class="lexi-divider" role="separator" aria-hidden="true"></div>';
+			}
+			$html .= '<div class="lexi-annotation-block lexi-annotation--references">';
+			$html .= '<h3>' . esc_html__( 'Research References & Practice Aids', 'letlexi' ) . '</h3>';
+			$html .= '<div class="lexi-cross-refs-content">';
+			$html .= wp_kses_post( $article_cross_references );
+			$html .= '</div>';
+			$html .= '</div>';
+		}
+
+		// Add final divider after all content for clear section separation (inside tab panel so it hides with annotations)
+		$html .= '<div class="lexi-section-divider" role="separator" aria-hidden="true"></div>';
+
+		$html .= '</div>'; // .lexi-tab-panel
+		$html .= '</div>'; // .lexi-annotations
+	}
+
+	$html .= '</div>'; // .lexi-section
 
 	return $html;
 }

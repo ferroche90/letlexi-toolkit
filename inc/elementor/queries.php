@@ -36,4 +36,18 @@ add_action( 'elementor/query/children_of_current', function( $query ) {
 	$query->set( 'post_parent', $parent_id );
 } );
 
-
+/**
+ * Elementor Loop Grid: Show articles in order of article_order
+ *
+ * Custom Elementor query action to display articles in order of article_order.
+ * Use in Elementor Loop Grid: Advanced > Query > Custom Query ID = article_order
+ *
+ * @since 1.2.0
+ * @param \WP_Query $query The WordPress query object to modify.
+ * @return void
+ */
+add_action( 'elementor/query/article_order', function( $query ) {
+	$query->set( 'orderby', 'meta_value_num' );
+	$query->set( 'meta_key', 'article_order' );
+	$query->set( 'order', 'ASC' );
+} );

@@ -134,10 +134,17 @@
                 var index = parseInt(this.dataset.index, 10);
                 if (isNaN(index)) return;
                 
-                // Handle Article link (index -1) - scroll to top
+                // Handle Article link (index -1)
                 if (index === -1) {
-                    console.log('[LexiNav] Article link clicked -> scroll to top');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    console.log('[LexiNav] Article link clicked -> index -1');
+                    currentIndex = -1;
+                    if (docWrapper && docWrapper.classList.contains('lexi-view--single')) {
+                        console.log('[LexiNav] Article click (single view) -> navigateTo -1');
+                        navigateTo(-1);
+                    } else {
+                        console.log('[LexiNav] Article click (full view) -> scroll to top');
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
                     // Update navigation state to show Article as active
                     updateNavigation();
                     return;
@@ -158,7 +165,8 @@
             prevBtns.forEach(function(prevBtn) {
                 prevBtn.addEventListener('click', function(e) {
                     e.preventDefault();
-                    if (currentIndex > 0) {
+                    // Allow going to article section (index -1) from section 0
+                    if (currentIndex > -1) {
                         if (docWrapper && docWrapper.classList.contains('lexi-view--single')) {
                             console.log('[LexiNav] Prev click (single) from', currentIndex, '->', currentIndex - 1);
                             navigateTo(currentIndex - 1);
@@ -173,6 +181,7 @@
             nextBtns.forEach(function(nextBtn) {
                 nextBtn.addEventListener('click', function(e) {
                     e.preventDefault();
+                    // Allow going from article section (-1) to section 0, and regular section navigation
                     if (currentIndex < totalSections - 1) {
                         if (docWrapper && docWrapper.classList.contains('lexi-view--single')) {
                             console.log('[LexiNav] Next click (single) from', currentIndex, '->', currentIndex + 1);
@@ -226,6 +235,9 @@
         
         // Commentary toggle functionality
         bindCommentaryToggles();
+        
+        // Annotations tab functionality
+        bindAnnotationsTabs();
 
         // View toggle functionality
         if (viewToggle) {
@@ -291,6 +303,56 @@
         });
     }
 
+    // Bind annotations tab functionality
+    function bindAnnotationsTabs() {
+        var annotationTabs = document.querySelectorAll('.lexi-tab');
+        annotationTabs.forEach(function(tab) {
+            // Check if already bound to prevent duplicates
+            if (!tab.hasAttribute('data-lexi-bound')) {
+                tab.addEventListener('click', handleAnnotationTabClick);
+                tab.setAttribute('data-lexi-bound', 'true');
+            }
+        });
+    }
+
+    // Handle annotation tab click
+    function handleAnnotationTabClick(e) {
+        e.preventDefault();
+        var tabId = this.getAttribute('id');
+        var panelId = this.getAttribute('aria-controls');
+        var panel = document.getElementById(panelId);
+        
+        if (!panel) return;
+        
+        // Check if this tab is already active (toggle behavior)
+        var isCurrentlyActive = this.classList.contains('is-active');
+        
+        // Remove active class from all tabs and panels in this section
+        var annotationsContainer = this.closest('.lexi-annotations');
+        
+        if (annotationsContainer) {
+            var allTabs = annotationsContainer.querySelectorAll('.lexi-tab');
+            var allPanels = annotationsContainer.querySelectorAll('.lexi-tab-panel');
+            
+            allTabs.forEach(function(tab) {
+                tab.classList.remove('is-active');
+                tab.setAttribute('aria-selected', 'false');
+            });
+            
+            allPanels.forEach(function(panel) {
+                panel.classList.remove('is-active');
+            });
+        }
+        
+        // Toggle behavior: if clicking the same tab, hide it; otherwise show it
+        if (!isCurrentlyActive) {
+            // Activate clicked tab and panel
+            this.classList.add('is-active');
+            this.setAttribute('aria-selected', 'true');
+            panel.classList.add('is-active');
+        }
+    }
+
     // Create a floating view toggle and show it when the main toggle is out of view
     function initFloatingViewToggle() {
         if (!viewToggle) return;
@@ -352,7 +414,8 @@
     
     // Navigate to specific section
     function navigateTo(index, updateHistory) {
-        if (isNavigating || index < 0 || index >= totalSections) return;
+        // Allow index -1 for article section, and check bounds for regular sections
+        if (isNavigating || (index < -1) || (index >= totalSections)) return;
         console.log('[LexiNav] navigateTo ->', index, 'updateHistory=', updateHistory, 'isSSR=', isSSR, 'singleView=', !!(docWrapper && docWrapper.classList.contains('lexi-view--single')));
 
         isNavigating = true;
@@ -461,6 +524,9 @@
         // Bind commentary toggles for newly loaded content
         bindCommentaryToggles();
         
+        // Bind annotations tabs for newly loaded content
+        bindAnnotationsTabs();
+        
         // Move focus to main heading
         var heading = contentBody.querySelector('h1, h2, h3');
         if (heading) {
@@ -486,9 +552,9 @@
             
             // Handle Article link (index -1)
             if (index === -1) {
-                // In single view, Article link is never active
+                // In single view, Article link is active when currentIndex is -1
                 // In full view, Article link is active when at top of page
-                isActive = !isSingleView && isAtTop;
+                isActive = (isSingleView && currentIndex === -1) || (!isSingleView && isAtTop);
             } else {
                 // Section links are active when they match currentIndex
                 // In single view, always show current section as active
@@ -546,7 +612,7 @@
     
     // Print current section
     function printCurrentSection() {
-        var currentSection = contentBody.querySelector('.lexi-section[data-section-index="' + currentIndex + '"]');
+        var currentSection = contentBody.querySelector('.lexi-section[data-index="' + currentIndex + '"]');
         if (!currentSection) {
             announceToScreenReader(i18n.error || 'Error: Section not found');
             return;
@@ -562,7 +628,7 @@
         // Get the document title and current section title
         var docTitle = document.title;
         var sectionTitle = currentSection.querySelector('h1, h2, h3, h4, h5, h6');
-        var sectionTitleText = sectionTitle ? sectionTitle.textContent : 'Section ' + (currentIndex + 1);
+        var sectionTitleText = sectionTitle ? sectionTitle.textContent : (currentIndex === -1 ? 'Article' : 'Section ' + (currentIndex + 1));
 
         // Build print content
         var printContent = '<!DOCTYPE html><html><head><title>' + 
@@ -614,7 +680,7 @@
 
     // Smooth scroll to a section title in full view
     function scrollToSection(index) {
-        var section = contentBody && contentBody.querySelector('[data-section-index="' + index + '"]');
+        var section = contentBody && contentBody.querySelector('[data-index="' + index + '"]');
         if (!section) return;
         // Prefer header/title inside the section
         var header = section.querySelector('.lexi-section-header') || section.querySelector('.lexi-section-title') || section;
@@ -652,7 +718,9 @@
     function applySingleView(index) {
         var sections = contentBody ? contentBody.querySelectorAll('.lexi-section') : [];
         sections.forEach(function(sec, i){
-            if (i === index) {
+            // Handle article section (index -1) - it has data-index="-1"
+            var sectionIndex = parseInt(sec.getAttribute('data-index') || i);
+            if (sectionIndex === index) {
                 sec.removeAttribute('hidden');
             } else {
                 sec.setAttribute('hidden', 'hidden');
@@ -671,7 +739,7 @@
 
     // Copy citation to clipboard
     function copyCitationToClipboard() {
-        var currentSection = contentBody.querySelector('.lexi-section[data-section-index="' + currentIndex + '"]');
+        var currentSection = contentBody.querySelector('.lexi-section[data-index="' + currentIndex + '"]');
         if (!currentSection) {
             announceToScreenReader(i18n.error || 'Error: Section not found');
             return;
@@ -679,7 +747,7 @@
 
         // Get section title
         var sectionTitle = currentSection.querySelector('h1, h2, h3, h4, h5, h6');
-        var sectionTitleText = sectionTitle ? sectionTitle.textContent : 'Section ' + (currentIndex + 1);
+        var sectionTitleText = sectionTitle ? sectionTitle.textContent : (currentIndex === -1 ? 'Article' : 'Section ' + (currentIndex + 1));
 
         // Get document title and URL
         var docTitle = document.title;
@@ -788,6 +856,7 @@
     // Also initialize commentary toggles immediately for Elementor editor
     // This ensures they work even if the main init doesn't run
     bindCommentaryToggles();
+    bindAnnotationsTabs();
     
     // Watch for dynamically added commentary toggles (Elementor editor)
     if (typeof MutationObserver !== 'undefined') {
@@ -797,9 +866,9 @@
                 if (mutation.type === 'childList') {
                     mutation.addedNodes.forEach(function(node) {
                         if (node.nodeType === 1) { // Element node
-                            if (node.classList && node.classList.contains('lexi-commentary-toggle')) {
+                            if (node.classList && (node.classList.contains('lexi-commentary-toggle') || node.classList.contains('lexi-tab'))) {
                                 shouldRebind = true;
-                            } else if (node.querySelector && node.querySelector('.lexi-commentary-toggle')) {
+                            } else if (node.querySelector && (node.querySelector('.lexi-commentary-toggle') || node.querySelector('.lexi-tab'))) {
                                 shouldRebind = true;
                             }
                         }
@@ -808,6 +877,7 @@
             });
             if (shouldRebind) {
                 bindCommentaryToggles();
+                bindAnnotationsTabs();
             }
         });
         

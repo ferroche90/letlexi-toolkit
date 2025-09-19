@@ -65,8 +65,6 @@ add_filter( 'lexi/default_display_settings', function( $settings ) {
 	$custom_defaults = array(
 		'show_commentary'  => true,  // Show commentary sections by default.
 		'show_cross_refs'  => true,  // Show cross-references by default.
-		'show_case_law'    => true,  // Show case law by default.
-		'show_amendments'  => true,  // Show amendments by default.
 	);
 	
 	return wp_parse_args( $custom_defaults, $settings );

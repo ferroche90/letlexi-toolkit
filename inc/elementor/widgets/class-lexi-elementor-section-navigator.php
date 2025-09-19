@@ -796,9 +796,60 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 		$this->add_group_control(
 			\Elementor\Group_Control_Typography::get_type(),
 			array(
-				'name'     => 'section_text_typo',
-				'label'    => __( 'Text Typography', 'letlexi' ),
-				'selector' => '{{WRAPPER}} .lexi-section',
+				'name'     => 'section_main_heading_typo',
+				'label'    => __( 'Main Section Heading Typography', 'letlexi' ),
+				'selector' => '{{WRAPPER}} .lexi-section-title, {{WRAPPER}} .lexi-section h1, {{WRAPPER}} .lexi-section h2',
+			)
+		);
+
+		$this->add_control(
+			'section_main_heading_color',
+			array(
+				'label'     => __( 'Main Section Heading Color', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-section-title, {{WRAPPER}} .lexi-section h1, {{WRAPPER}} .lexi-section h2' => 'color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Typography::get_type(),
+			array(
+				'name'     => 'section_sub_heading_typo',
+				'label'    => __( 'Sub Heading Typography', 'letlexi' ),
+				'selector' => '{{WRAPPER}} .lexi-section h3, {{WRAPPER}} .lexi-section h4, {{WRAPPER}} .lexi-section h5, {{WRAPPER}} .lexi-section h6',
+			)
+		);
+
+		$this->add_control(
+			'section_sub_heading_color',
+			array(
+				'label'     => __( 'Sub Heading Color', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-section h3, {{WRAPPER}} .lexi-section h4, {{WRAPPER}} .lexi-section h5, {{WRAPPER}} .lexi-section h6' => 'color: {{VALUE}}',
+				),
+			)
+		);
+
+		$this->add_group_control(
+			\Elementor\Group_Control_Typography::get_type(),
+			array(
+				'name'     => 'section_content_typo',
+				'label'    => __( 'Section Content Typography', 'letlexi' ),
+				'selector' => '{{WRAPPER}} .lexi-section p, {{WRAPPER}} .lexi-section div, {{WRAPPER}} .lexi-section span, {{WRAPPER}} .lexi-section li, {{WRAPPER}} .lexi-section td, {{WRAPPER}} .lexi-section th',
+			)
+		);
+
+		$this->add_control(
+			'section_content_color',
+			array(
+				'label'     => __( 'Content Color', 'letlexi' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .lexi-section p, {{WRAPPER}} .lexi-section div, {{WRAPPER}} .lexi-section span, {{WRAPPER}} .lexi-section li, {{WRAPPER}} .lexi-section td, {{WRAPPER}} .lexi-section th' => 'color: {{VALUE}}',
+				),
 			)
 		);
 
@@ -1115,6 +1166,27 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			)
 		);
 
+		// History and Annotations labels
+		$this->add_control(
+			'history_heading',
+			array(
+				'label'   => __( 'History Heading', 'letlexi' ),
+				'type'    => Controls_Manager::TEXT,
+				'default' => __( 'History', 'letlexi' ),
+				'dynamic' => array( 'active' => true ),
+			)
+		);
+
+		$this->add_control(
+			'annotations_label',
+			array(
+				'label'   => __( 'Annotations Tab Label', 'letlexi' ),
+				'type'    => Controls_Manager::TEXT,
+				'default' => __( 'Annotations', 'letlexi' ),
+				'dynamic' => array( 'active' => true ),
+			)
+		);
+
 		// Show Commentary (Section Annotations).
 		$this->add_control(
 			'show_commentary',
@@ -1135,25 +1207,6 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			)
 		);
 
-		// Show Case Law.
-		$this->add_control(
-			'show_case_law',
-			array(
-				'label'   => __( 'Show Case Law', 'letlexi' ),
-				'type'    => Controls_Manager::SWITCHER,
-				'default' => 'yes',
-			)
-		);
-
-		// Show Amendments.
-		$this->add_control(
-			'show_amendments',
-			array(
-				'label'   => __( 'Show Amendments', 'letlexi' ),
-				'type'    => Controls_Manager::SWITCHER,
-				'default' => 'yes',
-			)
-		);
 
 		// Loading Strategy.
 		$this->add_control(
@@ -1396,27 +1449,6 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			)
 		);
 
-		$this->add_control(
-			'acf_field_case_law_references',
-			array(
-				'label'       => __( 'ACF Field: Case Law References', 'letlexi' ),
-				'type'        => Controls_Manager::TEXT,
-				'default'     => '',
-				'description' => __( 'ACF subfield name for case law references', 'letlexi' ),
-				'dynamic'     => array( 'active' => true ),
-			)
-		);
-
-		$this->add_control(
-			'acf_field_amendment_history',
-			array(
-				'label'       => __( 'ACF Field: Amendment History', 'letlexi' ),
-				'type'        => Controls_Manager::TEXT,
-				'default'     => '',
-				'description' => __( 'ACF subfield name for amendment history', 'letlexi' ),
-				'dynamic'     => array( 'active' => true ),
-			)
-		);
 
 		$this->end_controls_section();
 
@@ -1776,13 +1808,13 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			'next_label'            => '',
 			'show_commentary'       => 'yes',
 			'show_cross_refs'       => 'yes',
-			'show_case_law'         => 'yes',
-			'show_amendments'       => 'yes',
 			'show_top_navigation'   => 'yes',
 			'show_bottom_navigation' => 'yes',
 			'show_print_button'     => 'yes',
 			'show_copy_button'      => 'yes',
 			'loading_strategy'      => 'ajax',
+			'history_heading'       => '',
+			'annotations_label'     => '',
 			'sticky_scroll_offset'  => '',
 			'acf_field_article_commentary' => '',
 			'acf_field_article_cross_references' => '',
@@ -1796,8 +1828,6 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			'acf_field_section_source_note' => '',
 			'acf_field_section_cross_references' => '',
 			'acf_field_cross_references'   => '',
-			'acf_field_case_law_references' => '',
-			'acf_field_amendment_history'  => '',
 		);
 
 		return wp_parse_args( $settings, $defaults );
@@ -1825,8 +1855,6 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 				'section_content'    => isset( $section['m_section_content'] ) ? $section['m_section_content'] : '',
 				'section_commentary' => isset( $section['m_section_commentary'] ) ? $section['m_section_commentary'] : '',
 				'cross_references'   => array(),
-				'case_law_references'=> array(),
-				'amendment_history'  => array(),
 			);
 		}
 
