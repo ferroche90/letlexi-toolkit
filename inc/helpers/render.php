@@ -488,7 +488,9 @@ function lexi_build_reader_header( $post_id, $settings ) {
 	// Document label and title.
 	$html .= '<div class="lexi-document-info">';
 	$html .= '<span class="lexi-document-label">' . esc_html( $settings['document_label'] ) . '</span>';
-	$html .= '<h1 class="lexi-document-title">' . esc_html( lexi_extract_article_name( $post->post_title ) ) . '</h1>';
+	$html .= '<span><h1 class="lexi-document-title">' . esc_html( lexi_extract_article_name( $post->post_title ) ) . '</h1></span>';
+	
+
 	$html .= '</div>';
 
 
@@ -541,6 +543,7 @@ function lexi_extract_article_name( $post_title ) {
 	// If no " - " found, return the original title
 	return $post_title;
 }
+
 
 /**
  * Build Table of Contents structure

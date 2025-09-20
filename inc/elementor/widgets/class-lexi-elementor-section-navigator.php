@@ -271,6 +271,7 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 			)
 		);
 
+
 		$this->end_controls_section();
 
 		// STYLE: TOC
@@ -434,6 +435,7 @@ class Lexi_Elementor_Section_Navigator extends Widget_Base {
 		);
 
 		$this->end_controls_section();
+
 
 		// STYLE: Header (Document & Query)
 		$this->start_controls_section(

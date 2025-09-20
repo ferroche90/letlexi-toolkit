@@ -805,3 +805,165 @@
     clear: both;
     border-radius: 2px;
 }
+
+/* Document Header */
+.lexi-reader-header {
+    margin-bottom: var(--lexi-spacing-2xl);
+    padding-bottom: var(--lexi-spacing-xl);
+    border-bottom: 1px solid var(--lexi-color-border);
+}
+
+.lexi-document-info {
+    margin-bottom: var(--lexi-spacing-lg);
+}
+
+.lexi-document-label {
+    display: block;
+    font-size: var(--lexi-font-size-sm);
+    font-weight: var(--lexi-font-weight-medium);
+    color: var(--lexi-color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: var(--lexi-spacing-xs);
+}
+
+.lexi-document-title {
+    margin: 0 0 var(--lexi-spacing-md) 0;
+    font-size: var(--lexi-font-size-2xl);
+    font-weight: var(--lexi-font-weight-semibold);
+    color: var(--lexi-color-text-primary);
+}
+
+.lexi-commentary-content p,
+.lexi-section-content p {
+    margin-bottom: 20px;
+}
+
+/* Legal Document Outline Structure - High Specificity */
+/* Match normal class tokens and mis-encoded tokens that include quotes */
+.lexi-doc .lexi-section-content [class*='outline-l'],
+.lexi-doc .lexi-section-content [class*='"outline-l'],
+.lexi-doc .lexi-section-content [class*='&quot;outline-l'] { display: block; }
+
+/* Paragraph-level outline fallback (JS enhancer adds outline-p-lN) */
+.lexi-doc .lexi-section-content p.outline-p-l1 { margin-left: 0 !important; }
+.lexi-doc .lexi-section-content p.outline-p-l2 { margin-left: 1.5rem !important; }
+.lexi-doc .lexi-section-content p.outline-p-l3 { margin-left: 3rem !important; }
+.lexi-doc .lexi-section-content p.outline-p-l4 { margin-left: 4.5rem !important; }
+.lexi-doc .lexi-section-content p.outline-p-l5 { margin-left: 6rem !important; }
+.lexi-doc .lexi-section-content p.outline-p-l6 { margin-left: 7.5rem !important; }
+.lexi-doc .lexi-section-content .outline-l1,
+.lexi-doc .lexi-section-content p .outline-l1 {
+    display: block !important;
+    margin-left: 0 !important;
+    margin-bottom: 0.5rem !important;
+    font-weight: 500 !important;
+    color: #1f2937 !important;
+    text-indent: 0 !important;
+}
+
+.lexi-doc .lexi-section-content .outline-l2,
+.lexi-doc .lexi-section-content p .outline-l2 {
+    display: block !important;
+    margin-left: 1.5rem !important;
+    margin-bottom: 0.5rem !important;
+    font-weight: 400 !important;
+    color: #1f2937 !important;
+    text-indent: 0 !important;
+}
+
+.lexi-doc .lexi-section-content .outline-l3,
+.lexi-doc .lexi-section-content p .outline-l3 {
+    display: block !important;
+    margin-left: 3rem !important;
+    margin-bottom: 0.5rem !important;
+    font-weight: 400 !important;
+    color: #1f2937 !important;
+    text-indent: 0 !important;
+}
+
+.lexi-doc .lexi-section-content .outline-l4,
+.lexi-doc .lexi-section-content p .outline-l4 {
+    display: block !important;
+    margin-left: 4.5rem !important;
+    margin-bottom: 0.5rem !important;
+    font-weight: 400 !important;
+    color: #1f2937 !important;
+    text-indent: 0 !important;
+}
+
+.lexi-doc .lexi-section-content .outline-l5,
+.lexi-doc .lexi-section-content p .outline-l5 {
+    display: block !important;
+    margin-left: 6rem !important;
+    margin-bottom: 0.5rem !important;
+    font-weight: 400 !important;
+    color: #1f2937 !important;
+    text-indent: 0 !important;
+}
+
+.lexi-doc .lexi-section-content .outline-l6,
+.lexi-doc .lexi-section-content p .outline-l6 {
+    display: block !important;
+    margin-left: 7.5rem !important;
+    margin-bottom: 0.5rem !important;
+    font-weight: 400 !important;
+    color: #1f2937 !important;
+    text-indent: 0 !important;
+}
+
+/* Override paragraph styles for outline content */
+.lexi-doc .lexi-section-content p:has(.outline-l1),
+.lexi-doc .lexi-section-content p:has(.outline-l2),
+.lexi-doc .lexi-section-content p:has(.outline-l3),
+.lexi-doc .lexi-section-content p:has(.outline-l4),
+.lexi-doc .lexi-section-content p:has(.outline-l5),
+.lexi-doc .lexi-section-content p:has(.outline-l6) {
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+}
+
+/* Fallback for browsers that don't support :has() */
+.lexi-doc .lexi-section-content p.outline-paragraph {
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+}
+
+/* Additional outline debugging and fallback styles */
+.lexi-doc .lexi-section-content span[class*="outline-l"] {
+    display: block !important;
+    line-height: 1.5 !important;
+}
+
+/* Ensure all outline levels are visible and properly indented */
+.lexi-doc .lexi-section-content .outline-l1 { margin-left: 0 !important; }
+.lexi-doc .lexi-section-content .outline-l2 { margin-left: 1.5rem !important; }
+.lexi-doc .lexi-section-content .outline-l3 { margin-left: 3rem !important; }
+.lexi-doc .lexi-section-content .outline-l4 { margin-left: 4.5rem !important; }
+.lexi-doc .lexi-section-content .outline-l5 { margin-left: 6rem !important; }
+.lexi-doc .lexi-section-content .outline-l6 { margin-left: 7.5rem !important; }
+
+/* Force outline spans to be block elements with proper spacing */
+.lexi-doc .lexi-section-content p span[class*="outline-l"] {
+    display: block !important;
+    margin-bottom: 0.25rem !important;
+    padding: 0 !important;
+}
+
+/* Remove any conflicting styles from parent paragraphs */
+.lexi-doc .lexi-section-content p {
+    margin-bottom: 0 !important;
+}
+
+.lexi-doc .lexi-section-content p:not(:has(span[class*="outline-l"])) {
+    margin-bottom: 1rem !important;
+}
+
+/* FINAL OVERRIDES: Attribute-based selectors that match mis-encoded classes exactly */
+/* These rules apply to both proper class tokens and strings like "&quot;outline-l2&quot;" */
+.lexi-doc .lexi-section-content [class*="outline-l1"] { display:block !important; margin-left: 0 !important; }
+.lexi-doc .lexi-section-content [class*="outline-l2"] { display:block !important; margin-left: 1.5rem !important; }
+.lexi-doc .lexi-section-content [class*="outline-l3"] { display:block !important; margin-left: 3rem !important; }
+.lexi-doc .lexi-section-content [class*="outline-l4"] { display:block !important; margin-left: 4.5rem !important; }
+.lexi-doc .lexi-section-content [class*="outline-l5"] { display:block !important; margin-left: 6rem !important; }
+.lexi-doc .lexi-section-content [class*="outline-l6"] { display:block !important; margin-left: 7.5rem !important; }

@@ -66,6 +66,12 @@
         isSSR = hasContent();
         console.log('[LexiNav] init: isSSR=', isSSR, 'totalSections(before)=', totalSections);
 
+        // Normalize and enhance outline structure in already-rendered content
+        try {
+            normalizeOutlineClasses(contentBody || document);
+            enhanceOutlineStructure(contentBody || document);
+        } catch (e) { /* no-op */ }
+
         // Read initial section from URL
         var initialIndex = getInitialSectionIndex();
         
@@ -516,6 +522,11 @@
         if (!contentBody) return;
         
         contentBody.innerHTML = html;
+        // Normalize and enhance outline structure in freshly injected content
+        try {
+            normalizeOutlineClasses(contentBody);
+            enhanceOutlineStructure(contentBody);
+        } catch (e) { /* no-op */ }
         // In single view (AJAX path), scroll to top after replacing content
         if (docWrapper && docWrapper.classList.contains('lexi-view--single')) {
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -535,6 +546,57 @@
         
         // Announce to screen readers
         announceToScreenReader((i18n.section || 'Section') + ' ' + (currentIndex + 1) + ' ' + (i18n.loaded || 'loaded'));
+    }
+
+    // Fix mis-encoded outline classes like class="&quot;outline-l2&quot;" and tag parent paragraphs
+    function normalizeOutlineClasses(root) {
+        if (!root || !root.querySelectorAll) return;
+        // Select any element whose class attribute contains outline-l but may include quotes or entities
+        var candidates = root.querySelectorAll('[class*="outline-l"], [class*="&quot;outline-l"], [class*="\"outline-l"]');
+        candidates.forEach(function(el){
+            var cls = el.getAttribute('class');
+            if (!cls) return;
+            var cleaned = cls
+                .replace(/&quot;/g, '"')
+                .replace(/'+/g, '')
+                .replace(/\"/g, '')
+                .replace(/"+/g, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+            // Extract any outline-lN tokens even if quoted/embedded
+            var match = cleaned.match(/outline-l([1-6])/);
+            if (match) {
+                // Ensure the proper class token exists cleanly
+                el.classList.add('outline-l' + match[1]);
+                var p = el.closest('p');
+                if (p) { p.classList.add('outline-p-l' + match[1]); }
+            }
+            // Remove stray quotes from class attribute if present
+            if (cleaned !== cls) {
+                el.setAttribute('class', cleaned);
+            }
+        });
+    }
+
+    // Detect outline markers when spans/classes are missing and tag parent paragraphs
+    function enhanceOutlineStructure(root) {
+        if (!root || !root.querySelectorAll) return;
+        var paras = root.querySelectorAll('.lexi-section-content p');
+        paras.forEach(function(p){
+            // Skip if already tagged
+            if (p.className && /outline-p-l[1-6]/.test(p.className)) return;
+            if (p.querySelector('span.outline-l1, span.outline-l2, span.outline-l3, span.outline-l4, span.outline-l5, span.outline-l6')) return;
+            var text = (p.textContent || '').trim();
+            if (!text) return;
+            var level = 0;
+            if (/^\(\d+(?:\.\d+)*\)/.test(text)) level = 1; // (1) or (2.5)
+            else if (/^\([a-z]\)/.test(text)) level = 2; // (a)
+            else if (/^\(([IVXLCDM]+)\)/.test(text)) level = 3; // (I)
+            else if (/^\([A-Z]\)/.test(text)) level = 4; // (A)
+            if (level > 0) {
+                p.classList.add('outline-p-l' + level);
+            }
+        });
     }
     
     // Update navigation state
